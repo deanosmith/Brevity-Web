@@ -1,7 +1,7 @@
 {
   "date": "Tuesday, August 04",
   "iso_date": "2026-08-04",
-  "generated_at": "2026-08-04 08:34 UTC",
+  "generated_at": "2026-08-04 08:43 UTC",
   "year_percent": 59.178082191780824,
   "weather": {
     "morning": {
@@ -43,10 +43,10 @@
   },
   "stocks": {
     "S&P 500": {
-      "price": 125.4489974975586,
+      "price": 125.447998046875,
       "change": 0.0,
       "percent": 0.0,
-      "return_percent": 26.435191995120533,
+      "return_percent": 26.43418468743701,
       "color": "green",
       "arrow": "↑"
     },
@@ -67,10 +67,10 @@
       "arrow": "↓"
     },
     "Bitcoin": {
-      "price": 63510.1015625,
+      "price": 63500.01171875,
       "change": 0.0,
       "percent": 0.0,
-      "return_percent": -42.08047832447332,
+      "return_percent": -42.08414927656812,
       "color": "green",
       "arrow": "↑"
     },
@@ -156,28 +156,7 @@
       "link": "https://spacenews.com/airbus-and-thales-win-order-for-spainsat-replacement/"
     }
   ],
-  "copenhagen": [
-    {
-      "headline": "Denmark’s AI advantage depends on trust at work. The European Union’s new artificial-intelligence transparency obligations take effect today. They require clearer disclosure in certain AI interactions and for some generated or manipulated content. For Denmark, which already has one of Europe’s most AI-active business communities, the rules should be treated as a starting point rather than a finish line. A label can tell a customer or […]",
-      "link": "https://cphpost.dk/2026-08-04/opinion/denmarks-ai-advantage-depends-on-trust-at-work/"
-    },
-    {
-      "headline": "25 states sue over Trump’s new tariffs. On Monday, 25 US states sued President Donald Trump’s administration, alleging that his latest tariffs exceed his legal authority. All participating states have a Democratic attorney general or governor. On July 24, the administration introduced new tariffs of 10 and 12.5 percent against 60 trading partners, including the EU, citing that these partners do not […]",
-      "link": "https://cphpost.dk/2026-08-04/global/25-states-sue-over-trumps-new-tariffs/"
-    },
-    {
-      "headline": "Sources: AI companies invited to White House meeting. Tech giants Meta and Google, alongside AI pioneers Anthropic and OpenAI, have been invited to a White House meeting on Tuesday to discuss security testing of the most advanced US AI models. The meeting comes after Anthropic and OpenAI disclosed that their AI models had penetrated other companies’ systems, raising concerns among US politicians about […]",
-      "link": "https://cphpost.dk/2026-08-04/global/sources-ai-companies-invited-to-white-house-meeting/"
-    },
-    {
-      "headline": "Trump wants oil companies to cut fuel prices. U.S. President Donald Trump believes oil companies ExxonMobil and Chevron are making too much money from high fuel prices. “They had better lower the retail price, the consumer price,” Trump told journalists, adding that oil prices will “fall through the floor” once the conflict with Iran ends. Gasoline prices in the U.S. have risen by […]",
-      "link": "https://cphpost.dk/2026-08-04/global/trump-wants-oil-companies-to-cut-fuel-prices/"
-    },
-    {
-      "headline": "Romania blasts Danube rock to send water to reactor. On Monday, Romania blasted a rock outcrop in the drought-stricken Danube River to construct a temporary dam and direct more water to its Cernavoda nuclear power plant. One of the plant’s two reactors was taken out of service last week due to a lack of cooling water. In neighboring Hungary, falling Danube water levels also […]",
-      "link": "https://cphpost.dk/2026-08-04/global/romania-blasts-danube-rock-to-send-water-to-reactor/"
-    }
-  ],
+  "copenhagen": [],
   "jesus_quote": {
     "text": "I am the vine; you are the branches. If you remain in me and I in you, you will bear much fruit; apart from me you can do nothing.",
     "author": "John 15:5"
@@ -188,7 +167,7 @@
       [
         {
           "name": "Europe's Quiet Strengths in the AI Race Highlighted",
-          "post_count": "448 posts",
+          "post_count": "476 posts",
           "category": "Other",
           "trending_since": "Now",
           "link": "https://x.com/search?q=Europe%27s%20Quiet%20Strengths%20in%20the%20AI%20Race%20Highlighted"
@@ -209,7 +188,7 @@
         },
         {
           "name": "DeepSeek V4 Flash Model Drives AI Usage Surge with Rock-Bottom Prices",
-          "post_count": "1.2K posts",
+          "post_count": "1.3K posts",
           "category": "News",
           "trending_since": null,
           "link": "https://x.com/search?q=DeepSeek%20V4%20Flash%20Model%20Drives%20AI%20Usage%20Surge%20with%20Rock-Bottom%20Prices"
