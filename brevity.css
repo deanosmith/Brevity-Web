@@ -261,6 +261,43 @@ h2 {
         0 10px 24px rgba(0, 0, 0, 0.28);
 }
 
+/* Temp dial: fixed -5C blue .. 30C red spectrum; progress reveals the arc. */
+.dial-temp {
+    background:
+        radial-gradient(circle at center, #10141a 0 58%, transparent 59%),
+        conic-gradient(from 210deg, rgba(255, 255, 255, 0.08) 0 100%);
+}
+
+.dial-temp::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    /* Hard-coded temperature anchors around the full gauge. */
+    background: conic-gradient(
+        from 210deg,
+        #4094ff 0%,
+        #5ac8ff 25%,
+        #ffd666 50%,
+        #ff8c42 75%,
+        #ff453a 100%
+    );
+    -webkit-mask-image:
+        conic-gradient(from 210deg, #000 0 calc(var(--progress) * 1%), transparent 0),
+        radial-gradient(circle at center, transparent 0 58%, #000 59%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+        conic-gradient(from 210deg, #000 0 calc(var(--progress) * 1%), transparent 0),
+        radial-gradient(circle at center, transparent 0 58%, #000 59%);
+    mask-composite: intersect;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.dial-temp .dial-face {
+    z-index: 1;
+}
+
 .dial::before {
     content: "";
     position: absolute;
@@ -677,16 +714,48 @@ h2 {
     background: linear-gradient(165deg, #15181e 0%, #0e1014 60%, #0b0d11 100%);
 }
 
+.matched-pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-items: stretch;
+}
+
 .x-grid {
-    display: block;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-items: stretch;
 }
 
 .x-group {
-    margin-bottom: 14px;
+    margin-bottom: 0;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(180deg, #171c24 0%, #12161c 100%);
+    border: 1px solid #2a313b;
+    border-radius: 14px;
+    padding: 14px;
 }
 
-.x-group:last-child {
+.x-group-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.x-group-body .trend-card {
     margin-bottom: 0;
+    flex: 1 1 0;
+}
+
+.x-group-body .empty-state.compact {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .x-category {
@@ -727,8 +796,20 @@ h2 {
 }
 
 /* News */
+.news-pair {
+    margin-bottom: 16px;
+}
+
 .news-panel {
     border-color: #2a2f38;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.news-panel .news-list,
+.news-panel .empty-state {
+    flex: 1 1 auto;
 }
 
 .copenhagen-panel {
@@ -742,7 +823,14 @@ h2 {
 }
 
 .news-list {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.news-list .news-item {
+    margin-bottom: 0;
+    flex: 1 1 0;
 }
 
 .news-item {

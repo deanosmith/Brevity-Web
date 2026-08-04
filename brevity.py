@@ -179,7 +179,6 @@ PLASMA_STOPS = (
     (1.0, "#f0f921"),
 )
 
-SITE_DATA_PATH = "resources/brevity.json"
 SITE_HTML_PATH = "index.html"
 PDF_PATH = "brevity.pdf"
 DEFAULT_HEADERS = {"User-Agent": "Brevity/1.0 (+https://deanosmith.github.io/Brevity-Web/)"}
@@ -454,7 +453,7 @@ def safe_number(value, default=None):
 
 
 def format_clock(value):
-    """Extract HH:MM from an ISO timestamp."""
+    """Extract HH:MM from an ISO timestamp (24-hour intermediate form)."""
     if not value or not isinstance(value, str):
         return None
     if "T" in value:
@@ -462,6 +461,40 @@ def format_clock(value):
     if len(value) >= 5 and value[2] == ":":
         return value[:5]
     return value
+
+
+def format_hour_12(hour, with_minutes=False):
+    """Format an hour as 12-hour clock text without am/pm labels."""
+    try:
+        hour_i = int(hour) % 24
+    except (TypeError, ValueError):
+        return None
+    hour_12 = hour_i % 12
+    if hour_12 == 0:
+        hour_12 = 12
+    if with_minutes:
+        return f"{hour_12}:00"
+    return str(hour_12)
+
+
+def format_clock_12(value):
+    """Convert HH:MM or an ISO timestamp to 12-hour time without am/pm."""
+    if isinstance(value, str) and ("T" in value or (len(value) >= 5 and value[2] == ":")):
+        clock = format_clock(value) if "T" in value else value[:5]
+    else:
+        clock = value
+    if not isinstance(clock, str) or ":" not in clock:
+        return format_hour_12(clock, with_minutes=False)
+    try:
+        hour_s, minute_s = clock.split(":", 1)
+        hour_i = int(hour_s)
+        minute_i = int(minute_s[:2])
+    except (TypeError, ValueError):
+        return clock
+    hour_12 = hour_i % 12
+    if hour_12 == 0:
+        hour_12 = 12
+    return f"{hour_12}:{minute_i:02d}"
 
 
 def weekday_label(iso_day, today_iso=None):
@@ -648,7 +681,7 @@ def _peak_rain_time(times, values, day_iso):
             peak_index = index
     if peak_index < 0 or peak_value <= 0:
         return None
-    return format_clock(times[peak_index])
+    return format_clock_12(times[peak_index])
 
 
 def _hourly_rain_points(times, values, day_iso, start_h=0, end_h=24):
@@ -672,10 +705,11 @@ def _hourly_rain_points(times, values, day_iso, start_h=0, end_h=24):
         by_hour[hour] = round(number)
 
     points = []
+    # Sparse 12-hour labels (no am/pm) keep the timeline readable.
+    label_hours = {start_h, 9, 12, 15, 18, 21, end_h - 1}
     for hour in range(start_h, end_h):
         precip = by_hour.get(hour, 0)
-        # Sparse labels keep the timeline readable without crowding.
-        label = f"{hour:02d}" if hour in {start_h, 9, 12, 15, 18, 21, end_h - 1} else None
+        label = format_hour_12(hour, with_minutes=False) if hour in label_hours else None
         points.append(
             {
                 "hour": hour,
@@ -701,7 +735,7 @@ def _rain_timeline(times, values, day_iso, start_h=0, end_h=24, rain_color_value
     peak_time = None
     if max_precip > 0:
         peak_point = max(points, key=lambda point: point.get("precip") or 0)
-        peak_time = f"{int(peak_point.get('hour') or 0):02d}:00"
+        peak_time = format_hour_12(peak_point.get("hour") or 0, with_minutes=True)
 
     color_source = rain_color_value if rain_color_value is not None else max_precip
     return {
@@ -1236,9 +1270,9 @@ def fetch_x_trending(limit=5):
     """
     Fetch trending topics from X.
 
-    Uses the same personalized_trends path that previously worked, then adds a
-    separate United States top-trends column. Each source fails independently so
-    one endpoint cannot blank the whole section.
+    Personalized trends use the exact request/format path that previously
+    succeeded in production. United States trends are fetched as a second
+    column with isolated errors.
     """
     logger.info("Fetching X trending topics...")
 
@@ -1251,6 +1285,50 @@ def fetch_x_trending(limit=5):
         logger.warning("X Trending: Missing OAuth credentials.")
         return []
 
+    def format_trend_item(trend, default_category="N/A"):
+        if not isinstance(trend, dict):
+            return None
+        trend_name = trend.get("trend_name") or trend.get("name")
+        if not trend_name:
+            return None
+        trend_name = strip_html(str(trend_name)).strip()
+        if not trend_name:
+            return None
+        tweet_count = trend.get("tweet_count")
+        if trend.get("post_count") is not None:
+            post_count = trend.get("post_count")
+        elif isinstance(tweet_count, int):
+            post_count = f"{tweet_count:,} posts"
+        else:
+            post_count = tweet_count or "N/A"
+        return {
+            "name": trend_name,
+            "post_count": post_count,
+            "category": trend.get("category") or default_category,
+            "trending_since": format_trending_since(trend.get("trending_since")),
+            "link": f"https://x.com/search?q={quote(trend_name)}",
+        }
+
+    def collect_raw(raw_items, default_category, max_items, seen=None):
+        seen = seen if seen is not None else set()
+        out = []
+        # Some payloads nest trends under data[0]["trends"].
+        items = list(raw_items or [])
+        if len(items) == 1 and isinstance(items[0], dict) and isinstance(items[0].get("trends"), list):
+            items = items[0]["trends"]
+        for trend in items:
+            item = format_trend_item(trend, default_category=default_category)
+            if not item:
+                continue
+            key = item["name"].lower()
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append(item)
+            if len(out) >= max_items:
+                break
+        return out
+
     try:
         from requests_oauthlib import OAuth1Session
 
@@ -1260,85 +1338,80 @@ def fetch_x_trending(limit=5):
             resource_owner_key=access_token,
             resource_owner_secret=access_token_secret,
         )
+
+        groups = []
+
+        # Personalized — proven production path from git history.
+        def _personalized_request():
+            response = oauth.get(
+                "https://api.x.com/2/users/personalized_trends",
+                timeout=REQUEST_TIMEOUT,
+            )
+            if response.status_code != 200:
+                raise RuntimeError(f"X API error {response.status_code}: {response.text}")
+            return response.json()
+
+        payload = retry_call("X trending fetch", _personalized_request)
+        raw_data = (payload or {}).get("data", []) if isinstance(payload, dict) else []
+        logger.info("X API returned %s items total.", len(raw_data or []))
+        personalized = collect_raw(raw_data, "Personalized", limit)
+        if personalized:
+            logger.info("Successfully fetched %s X trending topics", len(personalized))
+            groups.append(("Personalized", personalized))
+        else:
+            logger.warning("X personalized trends returned no usable items.")
+
+        # United States top trends as a matching right-hand column.
+        seen = {(item.get("name") or "").lower() for item in personalized}
+        us_trends = []
+        us_woeids = [
+            ("United States", X_US_WOEID),
+            # Major US city fallback if country WOEID is thin/unavailable.
+            ("United States", 2459115),  # New York
+        ]
+        for label, woeid in us_woeids:
+            if len(us_trends) >= limit:
+                break
+
+            def _us_request(current_woeid=woeid):
+                response = oauth.get(
+                    f"https://api.x.com/2/trends/by/woeid/{current_woeid}",
+                    params={"max_trends": 50},
+                    timeout=REQUEST_TIMEOUT,
+                )
+                if response.status_code != 200:
+                    raise RuntimeError(
+                        f"X WOEID {current_woeid} error {response.status_code}: {response.text}"
+                    )
+                return response.json()
+
+            try:
+                us_payload = retry_call(f"X trends {label} {woeid}", _us_request)
+            except Exception as us_exc:
+                logger.error("United States X trends skipped (%s): %s", woeid, us_exc)
+                continue
+
+            raw_us = []
+            if isinstance(us_payload, dict):
+                raw_us = us_payload.get("data") or us_payload.get("trends") or []
+            elif isinstance(us_payload, list):
+                raw_us = us_payload
+            logger.info("X United States trends (%s) returned %s items.", woeid, len(raw_us or []))
+            us_trends.extend(collect_raw(raw_us, "United States", limit - len(us_trends), seen=seen))
+
+        if us_trends:
+            groups.append(("United States", us_trends[:limit]))
+        else:
+            logger.warning("X United States trends returned no usable items.")
+
+        return groups
+
     except ImportError:
         logger.error("requests_oauthlib not installed - cannot fetch X trends")
         return []
     except Exception as exc:
-        logger.error("Error creating X OAuth session: %s", exc)
+        logger.error("Error fetching X trending: %s", exc)
         return []
-
-    def collect_trends(raw_items, source_label, max_items):
-        collected = []
-        seen = set()
-        for trend in raw_items or []:
-            item = _normalize_trend_item(trend, source_label)
-            if not item:
-                continue
-            key = (item.get("name") or item.get("search_term") or "").lower()
-            if not key or key in seen:
-                continue
-            seen.add(key)
-            collected.append(item)
-            if len(collected) >= max_items:
-                break
-        return collected
-
-    groups = []
-
-    # 1) Personalized trends — keep the request shape that previously succeeded.
-    def _personalized():
-        response = oauth.get(
-            "https://api.x.com/2/users/personalized_trends",
-            timeout=REQUEST_TIMEOUT,
-        )
-        if response.status_code != 200:
-            raise RuntimeError(f"X API error {response.status_code}: {response.text}")
-        return response.json()
-
-    try:
-        payload = retry_call("X personalized trends", _personalized)
-        raw_personalized = (payload or {}).get("data", []) if isinstance(payload, dict) else []
-        logger.info("X personalized trends returned %s items.", len(raw_personalized or []))
-        personalized = collect_trends(raw_personalized, "Personalized", limit)
-        if personalized:
-            groups.append(("Personalized", personalized))
-    except Exception as exc:
-        logger.error("Error fetching personalized X trends: %s", exc)
-
-    # 2) United States top trends as a second column; failures stay isolated.
-    def _us_trends():
-        response = oauth.get(
-            f"https://api.x.com/2/trends/by/woeid/{X_US_WOEID}",
-            params={"max_trends": 50, "trend.fields": "trend_name,tweet_count"},
-            timeout=REQUEST_TIMEOUT,
-        )
-        if response.status_code != 200:
-            # Retry without field filters for broader API compatibility.
-            response = oauth.get(
-                f"https://api.x.com/2/trends/by/woeid/{X_US_WOEID}",
-                params={"max_trends": 50},
-                timeout=REQUEST_TIMEOUT,
-            )
-        if response.status_code != 200:
-            raise RuntimeError(f"X WOEID {X_US_WOEID} error {response.status_code}: {response.text}")
-        return response.json()
-
-    try:
-        us_payload = retry_call("X trends United States", _us_trends)
-        raw_us = (us_payload or {}).get("data", []) if isinstance(us_payload, dict) else []
-        logger.info("X United States trends returned %s items.", len(raw_us or []))
-        us_trends = collect_trends(raw_us, "United States", limit)
-        if us_trends:
-            groups.append(("United States", us_trends))
-    except Exception as exc:
-        logger.error("Error fetching United States X trends: %s", exc)
-
-    if not groups:
-        return []
-
-    total = sum(len(items) for _, items in groups)
-    logger.info("Successfully fetched %s X trending topics", total)
-    return groups
 
 
 def fetch_reflection(seed_date=None):
@@ -1355,8 +1428,7 @@ def fetch_reflection(seed_date=None):
             "focus": "Love and self-knowledge",
         },
         {
-            "text": "When you pray for guidance but already know the answer that would cost you least, are you seeking God or permission?",
-            "focus": "Prayer and will",
+            "text": "When you pray for guidance but already know the answer that would cost you least, are you seeking God or permission?"
         },
         {
             "text": "If forgiveness requires truth, what wound are you calling 'grace' so you never have to name the harm?",
@@ -1436,7 +1508,7 @@ def fetch_reflection(seed_date=None):
 
 
 def render_html(data):
-    """Render the Jinja2 template for the website and optional PDF."""
+    """Render the Jinja2 template for the website (and Slack PDF when enabled)."""
     env = Environment(loader=FileSystemLoader(os.path.dirname(__file__) or "."))
     template = env.get_template("brevity_template.html")
     return template.render(**data)
@@ -1453,22 +1525,6 @@ def write_site_html(data, path=SITE_HTML_PATH):
         return path
     except Exception as exc:
         logger.error("Error writing site HTML: %s", exc)
-        return None
-
-
-def write_site_data(data, path=SITE_DATA_PATH):
-    """Write the machine-readable brief used by the website and debugging."""
-    logger.info("Writing site data to %s...", path)
-    try:
-        os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
-        payload = json_safe(data)
-        with open(path, "w", encoding="utf-8") as file:
-            json.dump(payload, file, ensure_ascii=False, indent=2)
-            file.write("\n")
-        logger.info("Site data written to %s", path)
-        return path
-    except Exception as exc:
-        logger.error("Error writing site data: %s", exc)
         return None
 
 
@@ -1547,7 +1603,6 @@ def build_brief_data(today=None):
         "copenhagen": copenhagen,
         "reflection": reflection,
         "x_trending": x_trending,
-        "pdf_available": False,
     }
 
 
@@ -1560,21 +1615,18 @@ def main():
 
     data = build_brief_data()
 
-    write_site_data(data)
+    # Public GitHub Pages only needs the rendered homepage.
     write_site_html(data)
 
+    # PDF is retained solely for optional Slack delivery.
     pdf_path = None
-    if GENERATE_PDF:
-        pdf_path = generate_pdf(data)
-        data["pdf_available"] = bool(pdf_path)
-        # Re-write site artifacts so the homepage can link the PDF when present.
-        write_site_data(data)
-        write_site_html(data)
-
-    if SEND_TO_SLACK and pdf_path:
-        send_to_slack(pdf_path)
-    elif SEND_TO_SLACK and not pdf_path:
-        logger.warning("SEND_TO_SLACK enabled but no PDF was generated.")
+    if SEND_TO_SLACK:
+        if GENERATE_PDF:
+            pdf_path = generate_pdf(data)
+        if pdf_path:
+            send_to_slack(pdf_path)
+        else:
+            logger.warning("SEND_TO_SLACK enabled but no PDF was generated.")
 
     logger.info("Done.")
 

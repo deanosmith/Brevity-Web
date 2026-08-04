@@ -40,13 +40,26 @@ body {
 }
 
 .reflection-panel,
-.x-panel {
+.x-panel,
+.news-pair {
     grid-column: span 12;
+}
+
+.news-pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    align-items: stretch;
+}
+
+.news-pair > .panel {
+    margin-bottom: 0;
+    min-height: 100%;
 }
 
 .copenhagen-panel,
 .space-panel {
-    grid-column: span 6;
+    grid-column: auto;
 }
 
 .panel {
@@ -160,11 +173,16 @@ h1 {
 @media (max-width: 900px) {
     .weather-panel,
     .markets-panel,
-    .copenhagen-panel,
-    .space-panel,
+    .news-pair,
     .reflection-panel,
     .x-panel {
         grid-column: span 12;
+    }
+
+    .news-pair,
+    .x-grid.matched-pair,
+    .matched-pair {
+        grid-template-columns: 1fr;
     }
 }
 

@@ -41,7 +41,7 @@ jobs:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
           SEND_TO_SLACK: "false"
-          GENERATE_PDF: "true"
+          GENERATE_PDF: "false"
         run: uv run python brevity.py
       - name: Upload outputs
         if: always()
@@ -50,8 +50,6 @@ jobs:
           name: brevity-output
           path: |
             index.html
-            resources/brevity.json
-            brevity.pdf
             brevity.css
             brevity-web.css
           if-no-files-found: warn

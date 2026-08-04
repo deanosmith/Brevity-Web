@@ -14,15 +14,10 @@
 <body>
     <div class="page">
         <header class="site-header panel">
-            <div class="brand-row">
-                <div class="brand">Brevity</div>
-                <div class="header-meta"></div>
-            </div>
             <h1>
                 <span class="date-text">{{ date }}</span>
                 <span class="year-pill">{{ "%.1f"|format(year_percent) }}%</span>
             </h1>
-            <p class="header-sub">Morning brief · Copenhagen</p>
         </header>
 
         <main class="layout">
@@ -68,7 +63,7 @@
 
                         <div class="dial-row">
                             <div class="dial-card">
-                                <div class="dial" style="--progress: {{ ((dials.temp.high_progress * 100) if dials and dials.temp else 50)|round(1) }}; --accent: {{ (dials.temp.high_color if dials and dials.temp else '#ffd166') }};">
+                                <div class="dial dial-temp" style="--progress: {{ ((dials.temp.high_progress * 100) if dials and dials.temp else 50)|round(1) }}; --accent: {{ (dials.temp.high_color if dials and dials.temp else '#ffd166') }};">
                                     <div class="dial-face">
                                         <div class="dial-label">Temp</div>
                                         <div class="dial-value" style="color: {{ today.high_color or '#ffd166' }};">
@@ -240,10 +235,9 @@
                 <div class="panel-head">
                     <div>
                         <h2>Markets</h2>
-                        <p class="panel-sub">Day · 7D · 1M · general watchlist</p>
                     </div>
                     <div class="avg-pill {{ 'green' if market_avg >= 0 else 'red' }}">
-                        {{ "%+.2f"|format(market_avg) }}%
+                        {{ "%+.1f"|format(market_avg) }}%
                     </div>
                 </div>
 
@@ -280,17 +274,17 @@
                         <div class="stock-metrics">
                             <div class="stock-metric">
                                 <div class="stock-change stock-change-day {{ data.color }}">
-                                    {% if data.percent is not none %}{{ "%+.2f"|format(data.percent) }}%{% else %}—{% endif %}
+                                    {% if data.percent is not none %}{{ "%+.1f"|format(data.percent) }}%{% else %}—{% endif %}
                                 </div>
                             </div>
                             <div class="stock-metric">
                                 <div class="stock-change {{ data.color_7d or 'grey' }}">
-                                    {% if data.percent_7d is not none %}{{ "%+.2f"|format(data.percent_7d) }}%{% else %}—{% endif %}
+                                    {% if data.percent_7d is not none %}{{ "%+.1f"|format(data.percent_7d) }}%{% else %}—{% endif %}
                                 </div>
                             </div>
                             <div class="stock-metric">
                                 <div class="stock-change {{ data.color_1m or 'grey' }}">
-                                    {% if data.percent_1m is not none %}{{ "%+.2f"|format(data.percent_1m) }}%{% else %}—{% endif %}
+                                    {% if data.percent_1m is not none %}{{ "%+.1f"|format(data.percent_1m) }}%{% else %}—{% endif %}
                                 </div>
                             </div>
                         </div>
@@ -305,10 +299,6 @@
 
             <section class="panel reflection-panel">
                 <div class="panel-head">
-                    <div>
-                        <h2>Reflection</h2>
-                        <p class="panel-sub">A Christian question worth sitting with</p>
-                    </div>
                 </div>
                 {% if reflection %}
                 <div class="reflection-card">
@@ -326,38 +316,58 @@
                 <div class="panel-head">
                     <div>
                         <h2>Trending on X</h2>
-                        <p class="panel-sub">Personalized and United States · tighter search links</p>
                     </div>
                 </div>
 
-                {% if x_trending %}
-                <div class="x-grid">
-                    {% for category, trends in x_trending %}
+                {% set x_groups = x_trending if x_trending else [] %}
+                {% set x_map = dict(x_groups) if x_groups else {} %}
+                {% set personal_trends = x_map.get('Personalized') or x_map.get('Personalized Trends') or [] %}
+                {% set us_trends = x_map.get('United States') or x_map.get('USA') or [] %}
+                <div class="x-grid matched-pair">
                     <div class="x-group">
-                        <div class="x-category">{{ category }}</div>
-                        {% if trends %}
-                        {% for item in trends %}
-                        <a class="trend-card" href="{{ item.link }}" target="_blank" rel="noopener noreferrer">
-                            <div class="trend-name">{{ item.name }}</div>
-                            <div class="trend-meta">
-                                <span>{{ item.post_count }}</span>
-                                {% if item.trending_since %}
-                                <span>Since {{ item.trending_since }}</span>
-                                {% endif %}
-                            </div>
-                        </a>
-                        {% endfor %}
-                        {% else %}
-                        <div class="empty-state compact">Nothing trending</div>
-                        {% endif %}
+                        <div class="x-category">Personalized</div>
+                        <div class="x-group-body">
+                            {% if personal_trends %}
+                            {% for item in personal_trends[:5] %}
+                            <a class="trend-card" href="{{ item.link }}" target="_blank" rel="noopener noreferrer">
+                                <div class="trend-name">{{ item.name }}</div>
+                                <div class="trend-meta">
+                                    <span>{{ item.post_count }}</span>
+                                    {% if item.trending_since %}
+                                    <span>Since {{ item.trending_since }}</span>
+                                    {% endif %}
+                                </div>
+                            </a>
+                            {% endfor %}
+                            {% else %}
+                            <div class="empty-state compact">Nothing trending</div>
+                            {% endif %}
+                        </div>
                     </div>
-                    {% endfor %}
+                    <div class="x-group">
+                        <div class="x-category">United States</div>
+                        <div class="x-group-body">
+                            {% if us_trends %}
+                            {% for item in us_trends[:5] %}
+                            <a class="trend-card" href="{{ item.link }}" target="_blank" rel="noopener noreferrer">
+                                <div class="trend-name">{{ item.name }}</div>
+                                <div class="trend-meta">
+                                    <span>{{ item.post_count }}</span>
+                                    {% if item.trending_since %}
+                                    <span>Since {{ item.trending_since }}</span>
+                                    {% endif %}
+                                </div>
+                            </a>
+                            {% endfor %}
+                            {% else %}
+                            <div class="empty-state compact">Nothing trending</div>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-                {% else %}
-                <div class="empty-state">No trending topics right now</div>
-                {% endif %}
             </section>
 
+            <div class="news-pair matched-pair">
             <section class="panel news-panel copenhagen-panel">
                 <div class="panel-head">
                     <div>
@@ -397,6 +407,7 @@
                 <div class="empty-state">No space stories available</div>
                 {% endif %}
             </section>
+            </div>
         </main>
 
         <footer class="site-footer">

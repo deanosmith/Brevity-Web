@@ -45,15 +45,17 @@ jobs:
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
           # Primary product is GitHub Pages. Slack is opt-in only.
           SEND_TO_SLACK: "false"
-          GENERATE_PDF: "true"
+          GENERATE_PDF: "false"
         run: uv run python brevity.py
       - name: Commit and Push Changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Publish the GitHub Pages homepage, data payload, and optional PDF archive.
-          git add index.html resources/brevity.json brevity.pdf brevity.css brevity-web.css
+          # Publish only the files the GitHub Pages site actually serves.
+          git add index.html brevity.css brevity-web.css
+          # Drop previously published artifacts that the site no longer uses.
+          git rm -f --ignore-unmatch resources/brevity.json brevity.pdf || true
 
           # Only commit if there are changes
           if git diff --staged --quiet; then
