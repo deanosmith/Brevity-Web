@@ -1,65 +1,69 @@
+/* Shared styles for website + PDF (WeasyPrint-safe). */
+
 @page {
     size: A4;
-    margin: 0.3cm;
-    background-color: #000000;
+    margin: 0.45cm;
+    background-color: #050505;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    color: #ffffff;
-    background-color: #000000;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    color: #f2f2f2;
+    background-color: #050505;
+    background-image: radial-gradient(ellipse at top, #121820 0%, #050505 55%);
     margin: 0;
-    padding: 16px;
-    line-height: 1.45;
-    max-width: 1100px;
-    margin-left: auto;
-    margin-right: auto;
+    padding: 0;
+    line-height: 1.5;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.page {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 16px 28px;
+}
+
+.panel {
+    background: linear-gradient(165deg, #15181d 0%, #0d0f12 55%, #0a0c10 100%);
+    border: 1px solid #24282f;
+    border-radius: 18px;
+    padding: 18px;
+    margin: 0;
 }
 
 .site-header {
-    text-align: center;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
+    padding: 22px 20px;
+    background: linear-gradient(145deg, #171c24 0%, #0e1218 60%, #0a0d12 100%);
+}
+
+.brand-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
 }
 
 .brand {
     font-size: 12px;
-    letter-spacing: 0.28em;
+    letter-spacing: 0.34em;
     text-transform: uppercase;
-    color: #8f8f8f;
-    margin-bottom: 8px;
-}
-
-h1 {
-    font-size: 28px;
-    text-align: center;
-    margin-bottom: 10px;
-    font-weight: 300;
-    margin-top: 0;
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.year-pill {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 4.5ch;
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: #161616;
-    border: 1px solid #333;
-    color: #00e5ff;
-    font-family: 'Courier New', monospace;
-    font-size: 0.72em;
-    font-weight: 700;
+    color: #8d8d8d;
 }
 
 .header-meta {
     display: flex;
-    justify-content: center;
     gap: 8px;
     flex-wrap: wrap;
 }
@@ -68,275 +72,702 @@ h1 {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 5px 10px;
+    padding: 6px 11px;
     border-radius: 999px;
-    background: #151515;
-    border: 1px solid #2d2d2d;
-    color: #bdbdbd;
+    background: linear-gradient(180deg, #1b1f26 0%, #14171c 100%);
+    border: 1px solid #2c313a;
+    color: #c4c4c4;
     font-size: 12px;
 }
 
 a.meta-link {
     color: #dff7ff;
-    border-bottom: none;
-    text-decoration: none;
 }
 
 a.meta-link:hover {
     color: #ffffff;
-    border-color: #4d4d4d;
+}
+
+h1 {
+    font-size: 34px;
+    font-weight: 300;
+    margin: 0;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.date-text {
+    letter-spacing: -0.02em;
+}
+
+.year-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 4.5ch;
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #1a2430 0%, #121820 100%);
+    border: 1px solid #2d3b4a;
+    color: #7ee7ff;
+    font-family: "Courier New", monospace;
+    font-size: 0.48em;
+    font-weight: 700;
+}
+
+.header-sub {
+    margin: 10px 0 0;
+    color: #8a8a8a;
+    font-size: 14px;
+}
+
+.layout {
+    display: block;
+}
+
+.layout > .panel {
+    margin-bottom: 16px;
+}
+
+.panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
 }
 
 h2 {
     font-size: 18px;
-    border-bottom: 2px solid #ffffff;
-    padding-bottom: 5px;
-    margin-top: 15px;
-    margin-bottom: 10px;
+    margin: 0;
     font-weight: 600;
-    letter-spacing: 0.5px;
-    color: #00e5ff;
+    letter-spacing: 0.02em;
+    color: #ffffff;
 }
 
-.container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 12px 0;
+.panel-sub {
+    margin: 5px 0 0;
+    color: #8b8b8b;
+    font-size: 13px;
 }
 
-.section {
-    width: 48%;
-    margin-bottom: 15px;
-    break-inside: auto;
-    page-break-inside: auto;
+.source-link {
+    color: #9fdfff;
+    border-bottom: 1px dotted #456;
+}
+
+.block-title {
+    margin: 18px 0 10px;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8f8f8f;
+    font-weight: 600;
 }
 
 .empty-state {
     text-align: center;
     color: #8f8f8f;
     font-style: italic;
-    background: #1a1a1a;
+    background: linear-gradient(180deg, #171a20 0%, #12151a 100%);
     border: 1px dashed #333;
-    border-radius: 10px;
-    padding: 14px 12px;
+    border-radius: 12px;
+    padding: 18px 14px;
 }
 
-.full-width {
-    width: 100%;
+.empty-state.compact {
+    padding: 12px;
+    font-size: 12px;
 }
 
 /* Weather */
-.wind-arrow {
-    display: inline-block;
-    transform-origin: center;
+.weather-panel {
+    border-color: #243445;
+    background: linear-gradient(160deg, #121a24 0%, #0d1218 45%, #0a0e13 100%);
 }
 
-a {
-    color: inherit;
-    text-decoration: none;
-    border-bottom: 1px dotted #888;
-}
-
-.weather-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    width: 100%;
-}
-
-.weather-item {
-    background-color: #252525;
-    padding: 8px;
-    border-radius: 8px;
-    text-align: center;
-    border: 1px solid #333;
-    box-sizing: border-box;
-}
-
-.weather-grid .weather-item {
-    flex: 1 1 calc((100% - 16px) / 3);
-    max-width: calc((100% - 16px) / 3);
-    min-width: 0;
-}
-
-.weather-item.full-width {
-    flex: 0 0 100%;
-    width: 100%;
-    max-width: 100%;
-}
-
-.weather-value {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 4px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    line-height: 1.1;
-}
-
-.temp-main {
+.weather-top {
     display: block;
 }
 
-.feels-like {
-    color: #888;
-    font-size: 0.6em;
-    font-weight: 600;
-    margin-top: 2px;
-}
-
-.weather-icon {
-    font-size: 28px;
-    margin-bottom: 4px;
-}
-
-.weather-label {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    font-size: 11px;
-    color: #aaa;
-    margin-top: 2px;
-}
-
-.wind-speed {
-    font-size: 9px;
-    color: #8f8f8f;
-}
-
-.weather-meta {
-    display: flex;
-    gap: 8px;
-    padding: 8px 10px;
-    margin-top: 6px;
-    align-items: center;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.weather-meta-item {
+.weather-now-card {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 6px;
-    flex: 1 1 0;
-    min-width: 0;
-    font-size: 12px;
-    font-weight: 600;
-    color: #d8d8d8;
-    background: none;
-    border: none;
-    border-radius: 0;
-    padding: 2px 0;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding: 16px;
+    border-radius: 16px;
+    background: radial-gradient(circle at top left, rgba(70, 120, 170, 0.22) 0%, rgba(20, 28, 38, 0.9) 45%, #121820 100%);
+    border: 1px solid #2a3a4c;
 }
 
-.weather-meta-icon {
-    font-size: 16px;
+.weather-hero-icon {
+    font-size: 48px;
     line-height: 1;
 }
 
-.weather-meta-text {
-    font-size: 12px;
+.weather-now-temp {
+    font-size: 48px;
+    font-weight: 300;
+    letter-spacing: -0.04em;
+    line-height: 1;
 }
 
-/* Stocks */
-.stock-item {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 8ch) 1ch minmax(0, 7ch) 1ch minmax(0, 7ch);
-    column-gap: 0.4ch;
+.weather-now-condition {
+    margin-top: 6px;
+    font-size: 16px;
+    color: #d7d7d7;
+}
+
+.weather-now-feels {
+    margin-top: 4px;
+    font-size: 13px;
+    color: #888;
+}
+
+.dial-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-bottom: 14px;
+    justify-content: center;
+}
+
+.dial-card {
+    flex: 0 0 124px;
+    width: 124px;
+    min-width: 124px;
+    display: flex;
+    justify-content: center;
+    padding: 6px;
+}
+
+.dial {
+    --progress: 0;
+    --accent: #7ee7ff;
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    position: relative;
+    flex-shrink: 0;
+    isolation: isolate;
+    background:
+        radial-gradient(circle at center, #10141a 0 58%, transparent 59%),
+        conic-gradient(from 210deg, var(--accent) calc(var(--progress) * 1%), rgba(255, 255, 255, 0.08) 0);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+        0 0 0 1px rgba(255, 255, 255, 0.04),
+        0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
+.dial::before {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #1b2430 0%, #0d1116 70%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.dial-face {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10px;
+}
+
+.dial-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8f9aaa;
+    margin-bottom: 4px;
+}
+
+.dial-value {
+    font-size: 22px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+}
+
+.dial-sub {
+    margin-top: 5px;
+    font-size: 11px;
+    color: #8a93a0;
+    font-variant-numeric: tabular-nums;
+}
+
+.weather-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.meta-pill {
+    flex: 1 1 140px;
+    min-width: 120px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(180deg, #171c24 0%, #12161c 100%);
+    border: 1px solid #2a313b;
+    border-radius: 999px;
+    padding: 10px 14px;
+}
+
+.meta-k {
+    color: #8a8a8a;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.meta-v {
+    color: #e8e8e8;
+    font-size: 14px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.wind-arrow {
+    display: inline-block;
+    transform-origin: center;
+    margin-right: 4px;
+}
+
+.period-strip {
+    margin-top: 16px;
+    background: linear-gradient(180deg, #171c24 0%, #12161c 100%);
+    border: 1px solid #2a313b;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.period-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0;
+    margin-top: 0;
+}
+
+.period-card {
+    flex: 1 1 0;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 0;
+    padding: 14px 12px 10px;
+    text-align: center;
+}
+
+.period-card:last-child {
+    border-right: none;
+}
+
+.period-label {
+    font-size: 12px;
+    color: #9a9a9a;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+}
+
+.period-icon {
+    font-size: 28px;
+    margin-bottom: 6px;
+}
+
+.period-temp {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.period-feels,
+.period-wind,
+.period-rain,
+.forecast-rain {
+    font-size: 12px;
+    color: #8f8f8f;
+    margin-top: 4px;
+}
+
+.rain-timeline {
+    --rain-color: #40c4ff;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 12px 14px 14px;
+}
+
+.rain-timeline.compact {
+    margin-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 0;
+    padding: 12px 0 0;
+}
+
+.rain-timeline-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.rain-timeline-label {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: #8f9aaa;
+    font-weight: 600;
+}
+
+.rain-timeline-peak {
+    font-size: 11px;
+    color: #a8b3c0;
+    font-variant-numeric: tabular-nums;
+}
+
+.rain-timeline-track {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 42px;
+    padding: 0 1px;
+}
+
+.rain-timeline.compact .rain-timeline-track {
+    height: 34px;
+}
+
+.rain-bar {
+    --rain: 0;
+    flex: 1 1 0;
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    border-radius: 3px 3px 1px 1px;
+    background: rgba(255, 255, 255, 0.04);
+    overflow: hidden;
+}
+
+.rain-bar-fill {
+    display: block;
+    width: 100%;
+    height: max(2px, calc(var(--rain) * 1%));
+    min-height: 2px;
+    background: linear-gradient(180deg, rgba(64, 196, 255, 0.25), var(--rain-color));
+    border-radius: 3px 3px 1px 1px;
+}
+
+.rain-timeline-labels {
+    display: flex;
+    gap: 2px;
+    margin-top: 6px;
+}
+
+.rain-hour {
+    flex: 1 1 0;
+    min-width: 0;
+    text-align: center;
+    font-size: 9px;
+    color: #7d8794;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+}
+
+.rain-hour.is-empty {
+    color: transparent;
+}
+
+.forecast-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.forecast-card {
+    flex: 1 1 180px;
+    min-width: 160px;
+    background: linear-gradient(180deg, #171c24 0%, #12161c 100%);
+    border: 1px solid #2a313b;
+    border-radius: 14px;
+    padding: 14px;
+}
+
+.forecast-day {
+    font-size: 13px;
+    font-weight: 600;
+    color: #d0d0d0;
+    margin-bottom: 8px;
+}
+
+.forecast-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.forecast-icon {
+    font-size: 26px;
+}
+
+.forecast-condition {
+    font-size: 13px;
+    color: #a0a0a0;
+    margin-bottom: 6px;
+}
+
+.forecast-temps {
+    display: flex;
+    gap: 10px;
     align-items: baseline;
-    padding: 6px 0;
-    border-bottom: 1px solid #333;
-    font-size: 15px;
+}
+
+.forecast-temps .hi {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.forecast-temps .lo {
+    font-size: 16px;
+}
+
+/* Markets */
+.markets-panel {
+    border-color: #2a2f38;
+    background: linear-gradient(165deg, #15181e 0%, #0e1014 60%, #0b0d11 100%);
+}
+
+.avg-pill {
+    font-family: "Courier New", monospace;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #1a1f27 0%, #13171d 100%);
+    border: 1px solid #2f3640;
+}
+
+.stock-list {
+    display: block;
+}
+
+.stock-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.6fr);
+    align-items: center;
+    gap: 12px;
+    padding: 14px 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.stock-row:last-child {
+    border-bottom: none;
+    padding-bottom: 2px;
+}
+
+.stock-header {
+    padding-top: 0;
+    padding-bottom: 8px;
+}
+
+.stock-header .stock-identity,
+.stock-metric-label {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: #8a93a0;
+    font-weight: 600;
+}
+
+.stock-identity {
+    min-width: 0;
 }
 
 .stock-name {
-    font-weight: bold;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-size: 16px;
+    font-weight: 600;
+    color: #f0f0f0;
 }
 
-.stock-price-value {
-    color: #888;
+.stock-symbol {
+    margin-top: 2px;
+    font-size: 12px;
+    color: #7f8793;
+    letter-spacing: 0.04em;
+}
+
+.stock-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    align-items: center;
+}
+
+.stock-metric {
     text-align: right;
-    font-family: 'Courier New', monospace;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
     min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
+}
+
+.stock-metric-label {
+    text-align: right;
 }
 
 .stock-change {
-    font-size: 1.05em;
-    font-weight: bold;
-    text-align: right;
-    font-family: 'Courier New', monospace;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.stock-return {
-    font-size: 1.05em;
-    text-align: right;
-    font-family: 'Courier New', monospace;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.stock-delimiter {
-    color: #666;
-    justify-self: center;
-    font-family: 'Courier New', monospace;
+    font-family: "Courier New", monospace;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.1;
     font-variant-numeric: tabular-nums;
 }
 
-.green {
-    color: #4caf50;
+.stock-price {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #8a93a0;
+    font-variant-numeric: tabular-nums;
+    font-family: "Courier New", monospace;
 }
 
-.red {
-    color: #f44336;
+.green { color: #4caf50; }
+.red { color: #f44336; }
+.grey { color: #888; }
+
+/* Reflection */
+.reflection-panel {
+    border-color: #2a2f38;
+    background: linear-gradient(165deg, #16141a 0%, #100f13 55%, #0c0b0f 100%);
 }
 
-.grey {
-    color: #888;
+.reflection-card {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 4px 0 0;
+}
+
+.reflection-text {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 20px;
+    line-height: 1.55;
+    color: #e8e4dc;
+    font-style: italic;
+}
+
+.reflection-focus {
+    margin-top: 14px;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #9a9588;
+    font-weight: 700;
+}
+
+/* X trends */
+.x-panel {
+    border-color: #2a2f38;
+    background: linear-gradient(165deg, #15181e 0%, #0e1014 60%, #0b0d11 100%);
+}
+
+.x-grid {
+    display: block;
+}
+
+.x-group {
+    margin-bottom: 14px;
+}
+
+.x-group:last-child {
+    margin-bottom: 0;
+}
+
+.x-category {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8f8f8f;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.trend-card {
+    display: block;
+    background: linear-gradient(180deg, #171c24 0%, #12161c 100%);
+    border: 1px solid #2a313b;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+}
+
+.trend-card:hover {
+    border-color: #3a4554;
+    background: linear-gradient(180deg, #1b212a 0%, #151a21 100%);
+}
+
+.trend-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #f0f0f0;
+}
+
+.trend-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 8px;
+    font-size: 11px;
+    color: #777;
 }
 
 /* News */
+.news-panel {
+    border-color: #2a2f38;
+}
+
+.copenhagen-panel {
+    border-color: #5a3030;
+    background: linear-gradient(165deg, #2a1719 0%, #1c1012 55%, #140c0e 100%);
+}
+
+.space-panel {
+    border-color: #3a3f48;
+    background: linear-gradient(165deg, #1c1f26 0%, #13161c 55%, #0f1218 100%);
+}
+
+.news-list {
+    display: block;
+}
+
 .news-item {
+    background: linear-gradient(180deg, #171c24 0%, #12161c 100%);
+    border: 1px solid #2a313b;
+    border-radius: 12px;
+    padding: 12px 14px;
     margin-bottom: 8px;
-    background-color: #252525;
-    padding: 10px;
-    border-radius: 8px;
-    border: none;
-    border-left: 2px solid var(--section-accent, #333);
-    break-inside: avoid;
 }
 
-.news-title {
-    font-weight: 500;
-    margin-bottom: 0;
-    font-size: 15px;
-    line-height: 1.6;
+.copenhagen-panel .news-item {
+    background: linear-gradient(180deg, #1c1618 0%, #151012 100%);
+    border-color: #3a2828;
 }
 
-.news-title a {
+.space-panel .news-item {
+    background: linear-gradient(180deg, #171c24 0%, #12161c 100%);
+    border-color: #2a313b;
+}
+
+.news-item a {
     color: #ececec;
-    text-decoration: none;
-    border: none;
+    font-size: 15px;
+    line-height: 1.55;
     display: block;
 }
 
@@ -348,9 +779,9 @@ a {
 }
 
 .keyword-badge {
-    background-color: #ffffff;
-    border: 1px solid #3b3b3b;
-    color: #000000;
+    background-color: var(--kw-bg, #ffffff);
+    border: 1px solid var(--kw-border, #3b3b3b);
+    color: var(--kw-text, #000000);
     display: inline-block;
     border-radius: 999px;
     padding: 2px 8px;
@@ -363,179 +794,14 @@ a {
     display: block;
 }
 
-.news-summary {
-    font-size: 15px;
-    color: #aaa;
-    line-height: 1.6;
-    margin-top: 3px;
-}
-
-.x-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
-
-.columns {
-    width: 100%;
-    break-before: page;
-    page-break-before: always;
-    break-inside: avoid;
-    page-break-inside: avoid;
-}
-
-.section-gap {
-    margin-top: 8px;
-    margin-bottom: 6px;
-}
-
-.jesus-title {
-    border-bottom: 2px solid #ffee00;
-    color: #ffffff;
-}
-
-.jesus-card {
-    text-align: center;
-    margin-bottom: 16px;
-    padding: 16px;
-    background-color: #222;
-    border-radius: 15px;
-    border-left: 6px solid #ffee00;
-    border-right: 6px solid #ffee00;
-}
-
-.jesus-quote-text {
-    font-family: 'Georgia', serif;
-    font-style: italic;
-    font-size: 17px;
-    margin-bottom: 8px;
-    color: #ddd;
-}
-
-.jesus-quote-ref {
-    font-size: 12px;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: #ffee00;
-    letter-spacing: 1px;
-}
-
-.columns::after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-.column {
-    width: 48%;
-    break-inside: avoid;
-    page-break-inside: avoid;
-}
-
-.column-left {
-    float: left;
-}
-
-.column-right {
-    float: right;
-}
-
-.column-section {
-    width: 100%;
-    break-inside: avoid;
-    page-break-inside: avoid;
-}
-
-.world-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.world-column {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.world-column .news-item {
-    margin-bottom: 0;
-}
-
-.x-trending-section {
-    margin-top: 6px;
-    margin-bottom: 6px;
-}
-
-.x-trending h2 {
-    margin-top: 10px;
-    margin-bottom: 8px;
-}
-
-.x-trending .x-grid {
-    gap: 10px;
-}
-
-.quote-card {
-    text-align: center;
-    margin: 18px 0 24px;
-    padding: 20px;
-    background-color: #222;
-    border-radius: 15px;
-    border-left: 6px solid #ffee00;
-    border-right: 6px solid #ffee00;
-}
-
-.quote-text {
-    font-family: 'Georgia', serif;
-    font-style: italic;
-    font-size: 18px;
-    margin-bottom: 8px;
-    color: #ddd;
-}
-
-.quote-author {
-    font-size: 12px;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: #ffee00;
-    letter-spacing: 1px;
-}
-
 .site-footer {
     text-align: center;
     color: #777;
     font-size: 12px;
-    padding: 8px 0 18px;
-    border-top: 1px solid #222;
+    padding: 8px 4px 0;
 }
 
 .site-footer a {
     color: #bdefff;
     margin-left: 8px;
-    border-bottom: none;
-}
-
-/* Screen-only rules live in a separate browser stylesheet so WeasyPrint
-   does not warn on modern CSS it cannot parse. */
-
-.x-trending .news-item {
-    padding: 8px;
-    margin-bottom: 6px;
-}
-
-.x-trending .news-title {
-    font-size: 14px;
-    line-height: 1.45;
-}
-
-.x-trending .news-summary {
-    font-size: 11px;
-}
-
-.x-category {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 4px;
-    letter-spacing: 0.4px;
 }

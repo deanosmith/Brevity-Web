@@ -1,11 +1,503 @@
 {
   "date": "Tuesday, August 04",
   "iso_date": "2026-08-04",
-  "generated_at": "2026-08-04 08:43 UTC",
+  "generated_at": "2026-08-04 11:56 CEST",
   "year_percent": 59.178082191780824,
   "weather": {
+    "location": "Copenhagen",
+    "timezone": "Europe/Copenhagen",
+    "source": {
+      "name": "Open-Meteo",
+      "url": "https://open-meteo.com/",
+      "location": "Copenhagen"
+    },
+    "today": {
+      "date": "2026-08-04",
+      "label": "Today",
+      "high": 22,
+      "low": 17,
+      "rain_chance": 69,
+      "rain_sum_mm": 1.5,
+      "rain_peak_time": "17:00",
+      "rain_timeline": {
+        "points": [
+          {
+            "hour": 6,
+            "precip": 0,
+            "label": "06"
+          },
+          {
+            "hour": 7,
+            "precip": 0,
+            "label": null
+          },
+          {
+            "hour": 8,
+            "precip": 0,
+            "label": null
+          },
+          {
+            "hour": 9,
+            "precip": 0,
+            "label": "09"
+          },
+          {
+            "hour": 10,
+            "precip": 0,
+            "label": null
+          },
+          {
+            "hour": 11,
+            "precip": 0,
+            "label": null
+          },
+          {
+            "hour": 12,
+            "precip": 11,
+            "label": "12"
+          },
+          {
+            "hour": 13,
+            "precip": 27,
+            "label": null
+          },
+          {
+            "hour": 14,
+            "precip": 41,
+            "label": null
+          },
+          {
+            "hour": 15,
+            "precip": 54,
+            "label": "15"
+          },
+          {
+            "hour": 16,
+            "precip": 66,
+            "label": null
+          },
+          {
+            "hour": 17,
+            "precip": 69,
+            "label": null
+          },
+          {
+            "hour": 18,
+            "precip": 57,
+            "label": "18"
+          },
+          {
+            "hour": 19,
+            "precip": 37,
+            "label": null
+          },
+          {
+            "hour": 20,
+            "precip": 20,
+            "label": null
+          },
+          {
+            "hour": 21,
+            "precip": 12,
+            "label": "21"
+          },
+          {
+            "hour": 22,
+            "precip": 7,
+            "label": null
+          },
+          {
+            "hour": 23,
+            "precip": 4,
+            "label": "23"
+          }
+        ],
+        "max_precip": 69,
+        "peak_time": "17:00",
+        "color": "#3d9fd2"
+      },
+      "wind_max": 14,
+      "wind_dir": 106,
+      "wind_color": "#89129d",
+      "uv_max": 4.3,
+      "sunrise": "05:21",
+      "sunset": "21:10",
+      "code": 53,
+      "condition": "Drizzle",
+      "icon": "🌦️",
+      "color": "#4682B4",
+      "current": {
+        "temp": 22,
+        "feels_like": 21,
+        "code": 3,
+        "condition": "Overcast",
+        "icon": "☁️",
+        "color": "#87CEEB",
+        "wind": 12,
+        "wind_dir": 151,
+        "precip": 27
+      },
+      "morning": {
+        "temp": 19,
+        "feels_like": 19,
+        "precip": 0,
+        "wind": 13,
+        "wind_dir": 91,
+        "wind_color": "#810ea0",
+        "color": "#87CEEB",
+        "condition": "Overcast",
+        "icon": "☁️",
+        "code": 3
+      },
+      "afternoon": {
+        "temp": 21,
+        "feels_like": 21,
+        "precip": 69,
+        "wind": 14,
+        "wind_dir": 139,
+        "wind_color": "#89129d",
+        "color": "#87CEEB",
+        "condition": "Overcast",
+        "icon": "☁️",
+        "code": 3
+      },
+      "evening": {
+        "temp": 19,
+        "feels_like": 20,
+        "precip": 57,
+        "wind": 13,
+        "wind_dir": 103,
+        "wind_color": "#7c0ba2",
+        "color": "#FFD700",
+        "condition": "Clear Sky",
+        "icon": "☀️",
+        "code": 0
+      },
+      "dials": {
+        "rain": {
+          "progress": 0.69,
+          "color": "#3d9fd2",
+          "value": "69%",
+          "label": "Rain"
+        },
+        "wind": {
+          "progress": 0.23333333333333334,
+          "color": "#86119e",
+          "value": "14 km/h",
+          "label": "Wind"
+        },
+        "uv": {
+          "progress": 0.3909090909090909,
+          "color": "#ffdd31",
+          "value": "4.3",
+          "label": "UV"
+        },
+        "temp": {
+          "high": 22,
+          "low": 17,
+          "high_color": "#ffa718",
+          "low_color": "#ffbd41",
+          "high_progress": 0.7111111111111111,
+          "low_progress": 0.6,
+          "label": "Temp"
+        }
+      },
+      "high_color": "#ffa718",
+      "low_color": "#ffbd41",
+      "rain_color": "#3d9fd2"
+    },
+    "upcoming": [
+      {
+        "date": "2026-08-05",
+        "label": "Tomorrow",
+        "high": 28,
+        "low": 18,
+        "rain_chance": 71,
+        "wind_max": 19,
+        "code": 51,
+        "condition": "Light Drizzle",
+        "icon": "🌦️",
+        "color": "#4682B4",
+        "high_color": "#ff7f1b",
+        "low_color": "#ffb838",
+        "rain_color": "#3da2d5",
+        "rain_progress": 0.71,
+        "rain_timeline": {
+          "points": [
+            {
+              "hour": 0,
+              "precip": 2,
+              "label": "00"
+            },
+            {
+              "hour": 1,
+              "precip": 1,
+              "label": null
+            },
+            {
+              "hour": 2,
+              "precip": 0,
+              "label": null
+            },
+            {
+              "hour": 3,
+              "precip": 0,
+              "label": null
+            },
+            {
+              "hour": 4,
+              "precip": 0,
+              "label": null
+            },
+            {
+              "hour": 5,
+              "precip": 0,
+              "label": null
+            },
+            {
+              "hour": 6,
+              "precip": 12,
+              "label": null
+            },
+            {
+              "hour": 7,
+              "precip": 28,
+              "label": null
+            },
+            {
+              "hour": 8,
+              "precip": 43,
+              "label": null
+            },
+            {
+              "hour": 9,
+              "precip": 56,
+              "label": "09"
+            },
+            {
+              "hour": 10,
+              "precip": 67,
+              "label": null
+            },
+            {
+              "hour": 11,
+              "precip": 71,
+              "label": null
+            },
+            {
+              "hour": 12,
+              "precip": 61,
+              "label": "12"
+            },
+            {
+              "hour": 13,
+              "precip": 43,
+              "label": null
+            },
+            {
+              "hour": 14,
+              "precip": 29,
+              "label": null
+            },
+            {
+              "hour": 15,
+              "precip": 22,
+              "label": "15"
+            },
+            {
+              "hour": 16,
+              "precip": 19,
+              "label": null
+            },
+            {
+              "hour": 17,
+              "precip": 16,
+              "label": null
+            },
+            {
+              "hour": 18,
+              "precip": 12,
+              "label": "18"
+            },
+            {
+              "hour": 19,
+              "precip": 7,
+              "label": null
+            },
+            {
+              "hour": 20,
+              "precip": 4,
+              "label": null
+            },
+            {
+              "hour": 21,
+              "precip": 2,
+              "label": "21"
+            },
+            {
+              "hour": 22,
+              "precip": 0,
+              "label": null
+            },
+            {
+              "hour": 23,
+              "precip": 0,
+              "label": "23"
+            }
+          ],
+          "max_precip": 71,
+          "peak_time": "11:00",
+          "color": "#3da2d5"
+        },
+        "rain_peak_time": "11:00"
+      },
+      {
+        "date": "2026-08-06",
+        "label": "In 2 days",
+        "high": 24,
+        "low": 17,
+        "rain_chance": 39,
+        "wind_max": 25,
+        "code": 3,
+        "condition": "Overcast",
+        "icon": "☁️",
+        "color": "#87CEEB",
+        "high_color": "#ff9d0b",
+        "low_color": "#ffbe44",
+        "rain_color": "#3b7ca7",
+        "rain_progress": 0.39,
+        "rain_timeline": {
+          "points": [
+            {
+              "hour": 0,
+              "precip": 2,
+              "label": "00"
+            },
+            {
+              "hour": 1,
+              "precip": 5,
+              "label": null
+            },
+            {
+              "hour": 2,
+              "precip": 6,
+              "label": null
+            },
+            {
+              "hour": 3,
+              "precip": 5,
+              "label": null
+            },
+            {
+              "hour": 4,
+              "precip": 2,
+              "label": null
+            },
+            {
+              "hour": 5,
+              "precip": 0,
+              "label": null
+            },
+            {
+              "hour": 6,
+              "precip": 0,
+              "label": null
+            },
+            {
+              "hour": 7,
+              "precip": 0,
+              "label": null
+            },
+            {
+              "hour": 8,
+              "precip": 0,
+              "label": null
+            },
+            {
+              "hour": 9,
+              "precip": 5,
+              "label": "09"
+            },
+            {
+              "hour": 10,
+              "precip": 13,
+              "label": null
+            },
+            {
+              "hour": 11,
+              "precip": 18,
+              "label": null
+            },
+            {
+              "hour": 12,
+              "precip": 19,
+              "label": "12"
+            },
+            {
+              "hour": 13,
+              "precip": 17,
+              "label": null
+            },
+            {
+              "hour": 14,
+              "precip": 18,
+              "label": null
+            },
+            {
+              "hour": 15,
+              "precip": 25,
+              "label": "15"
+            },
+            {
+              "hour": 16,
+              "precip": 35,
+              "label": null
+            },
+            {
+              "hour": 17,
+              "precip": 39,
+              "label": null
+            },
+            {
+              "hour": 18,
+              "precip": 33,
+              "label": "18"
+            },
+            {
+              "hour": 19,
+              "precip": 22,
+              "label": null
+            },
+            {
+              "hour": 20,
+              "precip": 12,
+              "label": null
+            },
+            {
+              "hour": 21,
+              "precip": 6,
+              "label": "21"
+            },
+            {
+              "hour": 22,
+              "precip": 3,
+              "label": null
+            },
+            {
+              "hour": 23,
+              "precip": 0,
+              "label": "23"
+            }
+          ],
+          "max_precip": 39,
+          "peak_time": "17:00",
+          "color": "#3b7ca7"
+        },
+        "rain_peak_time": "17:00"
+      }
+    ],
     "morning": {
-      "temp": 20,
+      "temp": 19,
       "feels_like": 19,
       "precip": 0,
       "wind": 13,
@@ -13,199 +505,193 @@
       "wind_color": "#810ea0",
       "color": "#87CEEB",
       "condition": "Overcast",
-      "icon": "☁️"
+      "icon": "☁️",
+      "code": 3
     },
     "afternoon": {
-      "temp": 22,
-      "feels_like": 23,
+      "temp": 21,
+      "feels_like": 21,
       "precip": 69,
-      "wind": 18,
-      "wind_dir": 141,
-      "wind_color": "#a02096",
+      "wind": 14,
+      "wind_dir": 139,
+      "wind_color": "#89129d",
       "color": "#87CEEB",
       "condition": "Overcast",
-      "icon": "☁️"
+      "icon": "☁️",
+      "code": 3
     },
     "evening": {
-      "temp": 20,
-      "feels_like": 21,
+      "temp": 19,
+      "feels_like": 20,
       "precip": 57,
-      "wind": 16,
-      "wind_dir": 110,
-      "wind_color": "#961a99",
-      "color": "#87CEEB",
-      "condition": "Overcast",
-      "icon": "☁️"
+      "wind": 13,
+      "wind_dir": 103,
+      "wind_color": "#7c0ba2",
+      "color": "#FFD700",
+      "condition": "Clear Sky",
+      "icon": "☀️",
+      "code": 0
     },
     "sunrise": "2026-08-04T05:21",
     "sunset": "2026-08-04T21:10",
-    "daily_precip": 69
+    "daily_precip": 69,
+    "rain_peak_time": "17:00"
   },
   "stocks": {
-    "S&P 500": {
-      "price": 125.447998046875,
-      "change": 0.0,
-      "percent": 0.0,
-      "return_percent": 26.43418468743701,
-      "color": "green",
-      "arrow": "↑"
-    },
     "Tesla": {
-      "price": NaN,
-      "change": NaN,
-      "percent": NaN,
-      "return_percent": NaN,
+      "symbol": "TSLA",
+      "price": 311.2099914550781,
+      "change": 2.3599853515625,
+      "percent": 0.7641202217660038,
+      "color": "green",
+      "arrow": "↑",
+      "percent_7d": -0.5814162640373499,
+      "color_7d": "red",
+      "arrow_7d": "↓",
+      "percent_1m": -26.825769953567068,
+      "color_1m": "red",
+      "arrow_1m": "↓"
+    },
+    "SPCX": {
+      "symbol": "SPCX",
+      "price": 108.37000274658203,
+      "change": -3.8299942016601562,
+      "percent": -3.4135421620616717,
       "color": "red",
-      "arrow": "↓"
+      "arrow": "↓",
+      "percent_7d": -5.82254016338852,
+      "color_7d": "red",
+      "arrow_7d": "↓",
+      "percent_1m": -31.211116310158488,
+      "color_1m": "red",
+      "arrow_1m": "↓"
     },
     "Nvidia": {
-      "price": NaN,
-      "change": NaN,
-      "percent": NaN,
-      "return_percent": NaN,
-      "color": "red",
-      "arrow": "↓"
-    },
-    "Bitcoin": {
-      "price": 63500.01171875,
-      "change": 0.0,
-      "percent": 0.0,
-      "return_percent": -42.08414927656812,
+      "symbol": "NVDA",
+      "price": 200.75,
+      "change": 5.7100067138671875,
+      "percent": 2.927608137009285,
       "color": "green",
-      "arrow": "↑"
+      "arrow": "↑",
+      "percent_7d": -2.944303058264467,
+      "color_7d": "red",
+      "arrow_7d": "↓",
+      "percent_1m": 1.604412460556556,
+      "color_1m": "green",
+      "arrow_1m": "↑"
     },
-    "United Health": {
-      "price": NaN,
-      "change": NaN,
-      "percent": NaN,
-      "return_percent": NaN,
+    "Oklo": {
+      "symbol": "OKLO",
+      "price": 38.83000183105469,
+      "change": -2.259998321533203,
+      "percent": -5.500117578828643,
       "color": "red",
-      "arrow": "↓"
+      "arrow": "↓",
+      "percent_7d": -3.5279457613548137,
+      "color_7d": "red",
+      "arrow_7d": "↓",
+      "percent_1m": -25.967585765048252,
+      "color_1m": "red",
+      "arrow_1m": "↓"
     },
-    "Echo Star": {
-      "price": 0.0,
-      "change": 0.0,
-      "percent": 0.0,
-      "return_percent": 0.0,
-      "color": "grey",
-      "arrow": "-"
+    "Micron": {
+      "symbol": "MU",
+      "price": 823.030029296875,
+      "change": -51.62994384765625,
+      "percent": -5.902858874636621,
+      "color": "red",
+      "arrow": "↓",
+      "percent_7d": -10.632497053286716,
+      "color_7d": "red",
+      "arrow_7d": "↓",
+      "percent_1m": -20.258403824987838,
+      "color_1m": "red",
+      "arrow_1m": "↓"
     },
-    "average_percent": NaN
+    "Palantir": {
+      "symbol": "PLTR",
+      "price": 123.05999755859375,
+      "change": 0.7999954223632812,
+      "percent": 0.6543394473949636,
+      "color": "green",
+      "arrow": "↑",
+      "percent_7d": 0.11389472155378469,
+      "color_7d": "green",
+      "arrow_7d": "↑",
+      "percent_1m": -2.1236027416304064,
+      "color_1m": "red",
+      "arrow_1m": "↓"
+    },
+    "average_percent": -1.7450751348927807
   },
-  "world_news": [
-    {
-      "headline": "EU calls for stronger borders after Ceuta migrant crossings. Ursula von der Leyen has called for action ahead of an urgent EU interior ministers meeting to discuss the issue",
-      "link": "https://www.bbc.co.uk/news/articles/cyvl84zmgyro?at_medium=RSS&at_campaign=rss"
-    },
-    {
-      "headline": "Analysis: Trump challenged by cold reality from top allies. A president used to bending US politics to his will faces two stinging losses in a matter of days, writes the BBC's Anthony Zurcher",
-      "link": "https://www.bbc.co.uk/news/articles/cgjed2q2l0xo?at_medium=RSS&at_campaign=rss"
-    },
-    {
-      "headline": "Russia says seven killed and 40 injured by Ukrainian drone hitting busy beach. Three children were killed when the drone crashed at a popular resort on the Black Sea",
-      "link": "https://www.bbc.co.uk/news/articles/cr7kmnyrdn7o?at_medium=RSS&at_campaign=rss"
-    },
-    {
-      "headline": "Five dead in Moscow region as Ukraine continues warehouse strikes. Facilities in St Petersburg and Tver were also hit, while at least one was killed in Russian strikes on Ukraine",
-      "link": "https://www.bbc.co.uk/news/articles/c151pkww79zo?at_medium=RSS&at_campaign=rss"
-    },
-    {
-      "headline": "Iran says it is in talks with Oman but not the US after Trump says negotiations to resume. Iran's remarks that there were no talks with the US prompts Donald Trump to issue a strong condemnation of its leadership",
-      "link": "https://www.bbc.co.uk/news/articles/c23579jzv08o?at_medium=RSS&at_campaign=rss"
-    },
-    {
-      "headline": "Ariana Grande has had enough of body comments, but 'scrutiny' will linger. The star has taken a \"step back\" from the spotlight after appearances led to \"endless, ongoing public scrutiny\"",
-      "link": "https://www.bbc.co.uk/news/articles/c3ek7g857q4o?at_medium=RSS&at_campaign=rss"
-    },
-    {
-      "headline": "France wildfires reveal hundreds of WW2 shells in village. Explosions heard in Le Porge as the wildfires raged are believed to have have been the old munitions",
-      "link": "https://www.bbc.co.uk/news/articles/cgmkxjrrwdvo?at_medium=RSS&at_campaign=rss"
-    },
-    {
-      "headline": "I left my wife and twins behind - why this Nigerian man fled South Africa. Nigerian Richard Itoro is one of tens of thousands who have abandoned their lives in South Africa",
-      "link": "https://www.bbc.co.uk/news/articles/c4gx2y454w5o?at_medium=RSS&at_campaign=rss"
-    },
-    {
-      "headline": "US states sue to block Trump tariffs impacting dozens of countries. The duties were imposed over claims that 60 US trading partners have failed to tackle forced labour",
-      "link": "https://www.bbc.co.uk/news/articles/cy4kp8jd0ppo?at_medium=RSS&at_campaign=rss"
-    },
-    {
-      "headline": "Charity cyclist, 82, dies a day after 3,300 mile ride across Australia. Bob Montgomery died unexpectedly just a day after finishing what he had called 'One Last Ride'",
-      "link": "https://www.bbc.co.uk/news/articles/c4gkpwj2je9o?at_medium=RSS&at_campaign=rss"
-    }
-  ],
   "space_news": [
     {
-      "headline": "Kreios Space to fly VLEO demonstration in NanoAvionics bus. SAN FRANCISCO – Spanish startup Kreios Space announced plans Aug. 4 to conduct the first very low Earth orbit (VLEO) demonstration of its air-breathing electric propulsion (ABEP) in a Kongsberg […] The post Kreios Space to fly VLEO demonstration in NanoAvionics bus appeared first on SpaceNews",
-      "link": "https://spacenews.com/kreios-space-to-fly-vleo-demonstration-in-nanoavionics-bus/"
+      "headline": "Rocketdyne reemerges as standalone space company",
+      "link": "https://spacenews.com/rocketdyne-reemerges-as-standalone-space-company/",
+      "source": "SpaceNews"
     },
     {
-      "headline": "NASA, SpaceX studying how to prevent future upper stage lunar collisions. With a Falcon 9 upper stage set to hit the moon this week, SpaceX says it is working with NASA on ways to prevent similar collisions in the future. The post NASA, SpaceX studying how to prevent future upper stage lunar collisions appeared first on SpaceNews",
-      "link": "https://spacenews.com/nasa-spacex-studying-how-to-prevent-future-upper-stage-lunar-collisions/"
+      "headline": "Kreios Space to fly VLEO demonstration in NanoAvionics bus",
+      "link": "https://spacenews.com/kreios-space-to-fly-vleo-demonstration-in-nanoavionics-bus/",
+      "source": "SpaceNews"
     },
     {
-      "headline": "Hughes files for bankruptcy after GEO business loses ground to Starlink. EchoStar’s Hughes geostationary satellite broadband business has filed for bankruptcy in the United States after years of mounting competition from SpaceX’s Starlink constellation. The post Hughes files for bankruptcy after GEO business loses ground to Starlink appeared first on SpaceNews",
-      "link": "https://spacenews.com/hughes-files-for-bankruptcy-after-geo-business-loses-ground-to-starlink/"
+      "headline": "NASA, SpaceX studying how to prevent future upper stage lunar collisions",
+      "link": "https://spacenews.com/nasa-spacex-studying-how-to-prevent-future-upper-stage-lunar-collisions/",
+      "source": "SpaceNews"
     },
     {
-      "headline": "Xona secures spectrum approval for satellite navigation network. The approval allows the startup to transmit stronger signals in spectrum adjacent to GPS frequencies The post Xona secures spectrum approval for satellite navigation network appeared first on SpaceNews",
-      "link": "https://spacenews.com/xona-secures-spectrum-approval-for-250-satellite-navigation-network/"
+      "headline": "Hughes files for bankruptcy after GEO business loses ground to Starlink",
+      "link": "https://spacenews.com/hughes-files-for-bankruptcy-after-geo-business-loses-ground-to-starlink/",
+      "source": "SpaceNews"
     },
     {
-      "headline": "Airbus and Thales win order for SpainSat replacement. Airbus Defence and Space and Thales Alenia Space will build a replacement military communications satellite for Spain as they, along with Leonardo, continue efforts on a space joint venture. The post Airbus and Thales win order for SpainSat replacement appeared first on SpaceNews",
-      "link": "https://spacenews.com/airbus-and-thales-win-order-for-spainsat-replacement/"
+      "headline": "Xona secures spectrum approval for satellite navigation network",
+      "link": "https://spacenews.com/xona-secures-spectrum-approval-for-250-satellite-navigation-network/",
+      "source": "SpaceNews"
+    },
+    {
+      "headline": "Airbus and Thales win order for SpainSat replacement",
+      "link": "https://spacenews.com/airbus-and-thales-win-order-for-spainsat-replacement/",
+      "source": "SpaceNews"
     }
   ],
-  "copenhagen": [],
-  "jesus_quote": {
-    "text": "I am the vine; you are the branches. If you remain in me and I in you, you will bear much fruit; apart from me you can do nothing.",
-    "author": "John 15:5"
-  },
-  "x_trending": [
-    [
-      "Personalized Trends",
-      [
-        {
-          "name": "Europe's Quiet Strengths in the AI Race Highlighted",
-          "post_count": "476 posts",
-          "category": "Other",
-          "trending_since": "Now",
-          "link": "https://x.com/search?q=Europe%27s%20Quiet%20Strengths%20in%20the%20AI%20Race%20Highlighted"
-        },
-        {
-          "name": "Engineers Debate Topology Optimization's Real-World Limits",
-          "post_count": "2.7K posts",
-          "category": "Other",
-          "trending_since": null,
-          "link": "https://x.com/search?q=Engineers%20Debate%20Topology%20Optimization%27s%20Real-World%20Limits"
-        },
-        {
-          "name": "Jon Bernthal Calls Pit Bull Fear 'Dog Racism' on Howard Stern",
-          "post_count": "99K posts",
-          "category": "Other",
-          "trending_since": null,
-          "link": "https://x.com/search?q=Jon%20Bernthal%20Calls%20Pit%20Bull%20Fear%20%27Dog%20Racism%27%20on%20Howard%20Stern"
-        },
-        {
-          "name": "DeepSeek V4 Flash Model Drives AI Usage Surge with Rock-Bottom Prices",
-          "post_count": "1.3K posts",
-          "category": "News",
-          "trending_since": null,
-          "link": "https://x.com/search?q=DeepSeek%20V4%20Flash%20Model%20Drives%20AI%20Usage%20Surge%20with%20Rock-Bottom%20Prices"
-        },
-        {
-          "name": "Call to Normalize Asking White People Their Country of Origin Draws Varied Replies",
-          "post_count": "27K posts",
-          "category": "Other",
-          "trending_since": null,
-          "link": "https://x.com/search?q=Call%20to%20Normalize%20Asking%20White%20People%20Their%20Country%20of%20Origin%20Draws%20Varied%20Replies"
-        }
-      ]
-    ]
+  "copenhagen": [
+    {
+      "headline": "Denmark’s AI advantage depends on trust at work",
+      "link": "https://cphpost.dk/2026-08-04/opinion/denmarks-ai-advantage-depends-on-trust-at-work/",
+      "source": "The Copenhagen Post"
+    },
+    {
+      "headline": "25 states sue over Trump’s new tariffs",
+      "link": "https://cphpost.dk/2026-08-04/global/25-states-sue-over-trumps-new-tariffs/",
+      "source": "The Copenhagen Post"
+    },
+    {
+      "headline": "Sources: AI companies invited to White House meeting",
+      "link": "https://cphpost.dk/2026-08-04/global/sources-ai-companies-invited-to-white-house-meeting/",
+      "source": "The Copenhagen Post"
+    },
+    {
+      "headline": "Trump wants oil companies to cut fuel prices",
+      "link": "https://cphpost.dk/2026-08-04/global/trump-wants-oil-companies-to-cut-fuel-prices/",
+      "source": "The Copenhagen Post"
+    },
+    {
+      "headline": "Romania blasts Danube rock to send water to reactor",
+      "link": "https://cphpost.dk/2026-08-04/global/romania-blasts-danube-rock-to-send-water-to-reactor/",
+      "source": "The Copenhagen Post"
+    },
+    {
+      "headline": "Spider-Man breaks ticket sales record in US and Canada",
+      "link": "https://cphpost.dk/2026-08-04/global/spider-man-breaks-ticket-sales-record-in-us-and-canada/",
+      "source": "The Copenhagen Post"
+    }
   ],
-  "quote": {
-    "text": "The obstacle is the way.",
-    "author": "Marcus Aurelius"
+  "reflection": {
+    "text": "When you pray for guidance but already know the answer that would cost you least, are you seeking God or permission?",
+    "focus": "Prayer and will"
   },
+  "x_trending": [],
   "pdf_available": true
 }

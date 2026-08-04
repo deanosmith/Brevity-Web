@@ -13,14 +13,12 @@ The generator pulls weather, markets, X trends, and news feeds, summarises stori
 ## Sections
 
 - Date and year progress
-- Copenhagen weather
-- Stock markets
-- Words of Jesus
-- Personalised trends on X
+- Copenhagen weather (Open-Meteo), including next 2 days and peak rain time
+- General stock watchlist
+- Christian reflection question
+- Trends on X
 - Copenhagen news
 - Space news
-- World news
-- Stoic / proverb quote
 
 ## Automation
 
@@ -39,7 +37,7 @@ uv run python brevity.py
 
 Useful environment variables:
 
-- `XAI_API_KEY` required for summarisation and generated quotes
+- `XAI_API_KEY` required for summarisation and the reflection question
 - `XAI_MODEL` optional model override (default: `grok-4.20-non-reasoning`)
 - `CONSUMER_KEY`, `CONSUMER_SECRET`, `ACCESS_TOKEN`, `ACCESS_TOKEN_SECRET` for X trends
 - `GENERATE_PDF=false` to skip PDF generation

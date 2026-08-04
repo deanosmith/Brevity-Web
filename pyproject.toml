@@ -1,7 +1,7 @@
 [project]
 name = "brevity"
 version = "0.1.0"
-description = "Generate the Brevity daily brief and deliver it to Slack"
+description = "Generate the Brevity daily brief website (optional Slack delivery)"
 requires-python = ">=3.10"
 dependencies = [
     "requests>=2.31.0",
@@ -16,4 +16,4 @@ dependencies = [
 
 [tool.uv]
 [tool.setuptools.packages.find]
-exclude = ["misc*", "resources*"]
+exclude = ["resources*"]

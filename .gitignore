@@ -1,7 +1,6 @@
-/.env
+.env
 .venv/
-.txt
-.DS_Store
-/misc
+__pycache__/
 *.egg-info/
-brevity.pdf
+.DS_Store
+*.pyc

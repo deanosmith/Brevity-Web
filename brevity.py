@@ -6,6 +6,7 @@ import html
 import hashlib
 import json
 import logging
+import math
 import time
 import requests
 import calendar
@@ -133,14 +134,30 @@ WEATHER_ICONS = {
     99: "⛈️",  # Thunderstorm
 }
 
-STOCK_BASELINES = {
-    "S&P 500": {"price": 99.22, "currency": "USD"}, # TODO: script hardcodes currency to USD.
-    "Tesla": {"price": 339.0, "currency": "USD"},
-    "Nvidia": {"price": 152.19, "currency": "USD"},
-    "Bitcoin": {"price": 712262.0, "currency": "DKK"},
-    "United Health": {"price": 301.0, "currency": "USD"},
-    "Echo Star": {"price": 82.90, "currency": "USD"},
+# General market watchlist. Prices only — no anchored portfolio baselines.
+# Display name -> Yahoo ticker.
+STOCK_TICKERS = {
+    "Tesla": "TSLA",
+    "SPCX": "SPCX",
+    "Nvidia": "NVDA",
+    "Oklo": "OKLO",
+    "Micron": "MU",
+    "Palantir": "PLTR",
 }
+
+# Copenhagen local sources with fallbacks. World news intentionally removed.
+COPENHAGEN_FEEDS = [
+    "https://cphpost.dk/feed/",
+    "https://www.cphpost.dk/feed/",
+    "https://cphpost.dk/category/news/feed/",
+    "https://www.thelocal.dk/feeds/rss.php",
+]
+SPACE_FEEDS = [
+    "https://spacenews.com/feed/",
+]
+
+# United States WOEID for a dedicated top-trends column beside personalized.
+X_US_WOEID = 23424977
 
 TRENDING_TIME_RE = re.compile(r"(\d{1,2}):(\d{2})")
 KEYWORDS_RE = re.compile(r"^\s*\[(?P<keywords>[^\]]+)\]\s*")
@@ -162,7 +179,6 @@ PLASMA_STOPS = (
     (1.0, "#f0f921"),
 )
 
-JESUS_QUOTES_PATH = "resources/jesus.json"
 SITE_DATA_PATH = "resources/brevity.json"
 SITE_HTML_PATH = "index.html"
 PDF_PATH = "brevity.pdf"
@@ -174,6 +190,16 @@ RETRY_BACKOFF = 1.2
 RETRY_STATUS_CODES = (429, 500, 502, 503, 504)
 HTML_TAG_RE = re.compile(r"<[^>]+>")
 WHITESPACE_RE = re.compile(r"\s+")
+
+# Open-Meteo source, matching Brevity-Wallpaper's weather provider.
+WEATHER_LAT = 55.6761
+WEATHER_LON = 12.5683
+WEATHER_TIMEZONE = "Europe/Copenhagen"
+WEATHER_SOURCE = {
+    "name": "Open-Meteo",
+    "url": "https://open-meteo.com/",
+    "location": "Copenhagen",
+}
 
 
 # ==============================================================================
@@ -233,12 +259,111 @@ def plasma_color(value, vmin=0.0, vmax=40.0):
     return PLASMA_STOPS[-1][1]
 
 
+
+
+def clamp01(value):
+    """Clamp a numeric value into the 0..1 range."""
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return 0.0
+    return max(0.0, min(1.0, number))
+
+
+def temperature_color(celsius):
+    """Map temperature onto the wallpaper-style cold-to-hot palette."""
+    # Roughly -10C .. 35C across the spectrum used by Brevity-Wallpaper.
+    progress = clamp01(((safe_number(celsius, 10) or 10) + 10) / 45.0)
+    stops = [
+        (0.0, (77, 163, 255)),   # #4da3ff
+        (0.25, (53, 215, 255)),  # #35d7ff
+        (0.5, (255, 209, 102)),  # #ffd166
+        (0.75, (255, 159, 10)),  # #ff9f0a
+        (1.0, (255, 69, 58)),    # #ff453a
+    ]
+    for index in range(len(stops) - 1):
+        left_t, left_rgb = stops[index]
+        right_t, right_rgb = stops[index + 1]
+        if progress <= right_t:
+            local = 0 if right_t == left_t else (progress - left_t) / (right_t - left_t)
+            rgb = tuple(int(round(a + (b - a) * local)) for a, b in zip(left_rgb, right_rgb))
+            return _rgb_to_hex(rgb)
+    return _rgb_to_hex(stops[-1][1])
+
+
+def rain_color(percent):
+    """Blue intensity scale for rain probability."""
+    progress = clamp01((safe_number(percent, 0) or 0) / 100.0)
+    # Deep slate -> vivid rain blue
+    return _rgb_to_hex(tuple(
+        int(round(a + (b - a) * progress))
+        for a, b in zip((55, 78, 110), (64, 196, 255))
+    ))
+
+
+def uv_color(uv_index):
+    """UV risk colour scale."""
+    progress = clamp01((safe_number(uv_index, 0) or 0) / 11.0)
+    stops = [
+        (0.0, (76, 175, 80)),
+        (0.35, (255, 235, 59)),
+        (0.6, (255, 152, 0)),
+        (1.0, (244, 67, 54)),
+    ]
+    for index in range(len(stops) - 1):
+        left_t, left_rgb = stops[index]
+        right_t, right_rgb = stops[index + 1]
+        if progress <= right_t:
+            local = 0 if right_t == left_t else (progress - left_t) / (right_t - left_t)
+            rgb = tuple(int(round(a + (b - a) * local)) for a, b in zip(left_rgb, right_rgb))
+            return _rgb_to_hex(rgb)
+    return _rgb_to_hex(stops[-1][1])
+
+
+def dial_metrics(rain_chance=None, wind_max=None, uv_max=None, high=None, low=None):
+    """Build glanceable dial payloads inspired by Brevity-Wallpaper."""
+    rain = safe_number(rain_chance, 0) or 0
+    wind = safe_number(wind_max, 0) or 0
+    uv = safe_number(uv_max, 0) or 0
+    high_v = safe_number(high)
+    low_v = safe_number(low)
+    return {
+        "rain": {
+            "progress": clamp01(rain / 100.0),
+            "color": rain_color(rain),
+            "value": f"{int(round(rain))}%",
+            "label": "Rain",
+        },
+        "wind": {
+            "progress": clamp01(wind / 60.0),
+            "color": plasma_color(wind),
+            "value": f"{int(round(wind))} km/h" if wind_max is not None else "—",
+            "label": "Wind",
+        },
+        "uv": {
+            "progress": clamp01(uv / 11.0),
+            "color": uv_color(uv),
+            "value": f"{uv:.1f}" if uv_max is not None else "—",
+            "label": "UV",
+        },
+        "temp": {
+            "high": None if high_v is None else round(high_v),
+            "low": None if low_v is None else round(low_v),
+            "high_color": temperature_color(high_v if high_v is not None else 10),
+            "low_color": temperature_color(low_v if low_v is not None else 5),
+            "high_progress": clamp01(((high_v if high_v is not None else 10) + 10) / 45.0),
+            "low_progress": clamp01(((low_v if low_v is not None else 5) + 10) / 45.0),
+            "label": "Temp",
+        },
+    }
+
 def keyword_style(keyword):
     """Create a deterministic CSS custom-property string for a keyword badge."""
     digest = hashlib.md5(keyword.lower().encode("utf-8")).hexdigest()
     index = int(digest[:8], 16) % len(KEYWORD_COLOR_PALETTE)
     bg, border, text = KEYWORD_COLOR_PALETTE[index]
     return f"--kw-bg: {bg}; --kw-border: {border}; --kw-text: {text};"
+
 
 def to_pascal_case(value):
     """Convert a keyword into PascalCase for display."""
@@ -316,6 +441,51 @@ def format_trending_since(raw_since):
     return None
 
 
+def safe_number(value, default=None):
+    """Return a finite number, else default."""
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return default
+    if isinstance(number, float) and (math.isnan(number) or math.isinf(number)):
+        return default
+    return number
+
+
+def format_clock(value):
+    """Extract HH:MM from an ISO timestamp."""
+    if not value or not isinstance(value, str):
+        return None
+    if "T" in value:
+        return value.split("T", 1)[1][:5]
+    if len(value) >= 5 and value[2] == ":":
+        return value[:5]
+    return value
+
+
+def weekday_label(iso_day, today_iso=None):
+    """Human day label for forecast cards."""
+    if not iso_day:
+        return "Day"
+    if today_iso and iso_day == today_iso:
+        return "Today"
+    try:
+        parsed = date.fromisoformat(iso_day)
+    except ValueError:
+        return iso_day
+    if today_iso:
+        try:
+            today = date.fromisoformat(today_iso)
+            delta = (parsed - today).days
+            if delta == 1:
+                return "Tomorrow"
+            if delta == 2:
+                return "In 2 days"
+        except ValueError:
+            pass
+    return parsed.strftime("%a")
+
+
 def build_retry_session():
     retry_kwargs = {
         "total": RETRY_ATTEMPTS,
@@ -362,24 +532,6 @@ def retry_call(label, func, attempts=RETRY_ATTEMPTS, base_delay=1.0, max_delay=8
     return None
 
 
-def load_jesus_quotes(path=JESUS_QUOTES_PATH):
-    """Load the local Jesus quotes JSON file into a list of tuples."""
-    if not path or not os.path.exists(path):
-        if path:
-            logger.warning("Jesus quotes file not found: %s", path)
-        return []
-    try:
-        with open(path, "r", encoding="utf-8") as file:
-            data = json.load(file)
-    except Exception as exc:
-        logger.warning("Failed to read Jesus quotes from %s: %s", path, exc)
-        return []
-    if not isinstance(data, dict):
-        logger.warning("Jesus quotes file has unexpected format: %s", type(data))
-        return []
-    return [(ref, text) for ref, text in data.items() if ref and text]
-
-
 def strip_html(value):
     """Remove simple HTML tags and collapse whitespace from feed text."""
     if not value:
@@ -393,6 +545,10 @@ def json_safe(value):
     """Convert values so they can be written to JSON."""
     if isinstance(value, Markup):
         return str(value)
+    if isinstance(value, float):
+        if math.isnan(value) or math.isinf(value):
+            return None
+        return value
     if isinstance(value, dict):
         return {key: json_safe(item) for key, item in value.items()}
     if isinstance(value, (list, tuple)):
@@ -400,19 +556,248 @@ def json_safe(value):
     return value
 
 
+def extract_search_term(trend_name):
+    """
+    Build a tighter X search query from a personalized trend title.
+
+    Personalized trends often return long summaries. Prefer hashtags, cashtags,
+    tickers, and compact proper-noun phrases for useful search links.
+    """
+    if not trend_name:
+        return ""
+    name = strip_html(str(trend_name)).strip()
+    if not name:
+        return ""
+
+    hashtags = re.findall(r"#[\w']+", name)
+    if hashtags:
+        return hashtags[0]
+
+    cashtags = re.findall(r"\$[A-Za-z]{1,6}\b", name)
+    if cashtags:
+        return cashtags[0]
+
+    # Exact short trend names are already searchable.
+    words = re.findall(r"[A-Za-z0-9][\w'#.-]*", name)
+    if 1 <= len(words) <= 3 and len(name) <= 40:
+        return name
+
+    # Quoted key phrases often carry the actual topic.
+    quoted = re.findall(r"['\"]([^'\"]{2,48})['\"]", name)
+    if quoted:
+        candidate = quoted[0].strip()
+        if candidate:
+            return candidate
+
+    # Leading proper-noun / product phrase: "DeepSeek V4", "Jon Bernthal", etc.
+    leading = re.match(
+        r"^((?:[A-Z][\w'&.-]+)(?:\s+(?:[A-Z0-9][\w'&.-]*)){0,3})",
+        name,
+    )
+    if leading:
+        phrase = leading.group(1).strip(" -,:;")
+        # Avoid ultra-generic one-word openers from full sentences.
+        weak_starters = {
+            "call", "calls", "new", "why", "how", "what", "when", "after",
+            "before", "this", "that", "with", "from", "into", "over",
+        }
+        if phrase and phrase.lower() not in weak_starters and len(phrase) <= 48:
+            return phrase
+
+    # Tickers / dense acronyms, but only if they look topic-like.
+    caps = re.findall(r"\b[A-Z]{3,}(?:\d+)?\b", name)
+    stop = {"THE", "AND", "FOR", "WITH", "FROM", "THIS", "THAT", "INTO", "OVER", "AFTER", "ARE", "WAS"}
+    caps = [token for token in caps if token not in stop]
+    if caps:
+        return caps[0]
+
+    # Fallback: first few content words.
+    if not words:
+        return name
+    short = " ".join(words[:4]).strip(" -,:;")
+    return short or name
+
+def x_search_link(term):
+    """Create an X search URL for a term or hashtag."""
+    query = (term or "").strip()
+    if not query:
+        return "https://x.com/explore"
+    return f"https://x.com/search?q={quote(query)}&src=typed_query"
+
+
 # ==============================================================================
 # DATA FETCHING
 # ==============================================================================
 
 
+def _peak_rain_time(times, values, day_iso):
+    """Return HH:MM for the highest precip probability on a given day."""
+    if not times or not values or not day_iso:
+        return None
+    peak_index = -1
+    peak_value = -1
+    for index, (stamp, value) in enumerate(zip(times, values)):
+        if not isinstance(stamp, str) or not stamp.startswith(day_iso):
+            continue
+        number = safe_number(value)
+        if number is None:
+            continue
+        if number > peak_value:
+            peak_value = number
+            peak_index = index
+    if peak_index < 0 or peak_value <= 0:
+        return None
+    return format_clock(times[peak_index])
+
+
+def _hourly_rain_points(times, values, day_iso, start_h=0, end_h=24):
+    """Hourly precip probability points for a day window, used by rain timelines."""
+    if not times or not values or not day_iso:
+        return []
+
+    by_hour = {}
+    for stamp, value in zip(times, values):
+        if not isinstance(stamp, str) or not stamp.startswith(day_iso) or len(stamp) < 13:
+            continue
+        try:
+            hour = int(stamp[11:13])
+        except (TypeError, ValueError):
+            continue
+        if hour < start_h or hour >= end_h:
+            continue
+        number = safe_number(value)
+        if number is None:
+            continue
+        by_hour[hour] = round(number)
+
+    points = []
+    for hour in range(start_h, end_h):
+        precip = by_hour.get(hour, 0)
+        # Sparse labels keep the timeline readable without crowding.
+        label = f"{hour:02d}" if hour in {start_h, 9, 12, 15, 18, 21, end_h - 1} else None
+        points.append(
+            {
+                "hour": hour,
+                "precip": precip,
+                "label": label,
+            }
+        )
+    return points
+
+
+def _rain_timeline(times, values, day_iso, start_h=0, end_h=24, rain_color_value=None):
+    """Build a compact rain-peak timeline payload for template rendering."""
+    points = _hourly_rain_points(times, values, day_iso, start_h=start_h, end_h=end_h)
+    if not points:
+        return {
+            "points": [],
+            "max_precip": 0,
+            "peak_time": None,
+            "color": rain_color(rain_color_value if rain_color_value is not None else 0),
+        }
+
+    max_precip = max((point.get("precip") or 0) for point in points)
+    peak_time = None
+    if max_precip > 0:
+        peak_point = max(points, key=lambda point: point.get("precip") or 0)
+        peak_time = f"{int(peak_point.get('hour') or 0):02d}:00"
+
+    color_source = rain_color_value if rain_color_value is not None else max_precip
+    return {
+        "points": points,
+        "max_precip": max_precip,
+        "peak_time": peak_time,
+        "color": rain_color(color_source),
+    }
+
+
+def _segment_stats(hourly, start_h, end_h):
+    """Average/max stats for a same-day hour window."""
+
+    def slice_list(values):
+        return values[start_h:end_h] if isinstance(values, list) else []
+
+    def clean(values):
+        return [value for value in values if isinstance(value, (int, float))]
+
+    temps = clean(slice_list(hourly.get("temperature_2m")))
+    feels = clean(slice_list(hourly.get("apparent_temperature")))
+    precips = clean(slice_list(hourly.get("precipitation_probability")))
+    winds = clean(slice_list(hourly.get("wind_speed_10m")))
+    wind_dirs = clean(slice_list(hourly.get("wind_direction_10m")))
+    codes = slice_list(hourly.get("weather_code"))
+    codes = [code for code in codes if isinstance(code, (int, float))]
+
+    avg_temp = sum(temps) / len(temps) if temps else None
+    avg_feels = sum(feels) / len(feels) if feels else None
+    max_precip = max(precips) if precips else 0
+    max_wind = max(winds) if winds else None
+    avg_wind_dir = sum(wind_dirs) / len(wind_dirs) if wind_dirs else None
+    code = int(max(codes, key=codes.count)) if codes else 0
+
+    return {
+        "temp": None if avg_temp is None else round(avg_temp),
+        "feels_like": None if avg_feels is None else round(avg_feels),
+        "precip": round(max_precip),
+        "wind": None if max_wind is None else round(max_wind),
+        "wind_dir": None if avg_wind_dir is None else round(avg_wind_dir),
+        "wind_color": plasma_color(max_wind or 0),
+        "color": get_weather_color(code),
+        "condition": get_weather_text(code),
+        "icon": get_weather_icon(code),
+        "code": code,
+    }
+
+
+def _percent_from_closes(closes, sessions_back):
+    """Percent change from N trading sessions ago to the latest close."""
+    if not closes:
+        return None
+    current = closes[-1]
+    if sessions_back <= 0:
+        return 0.0
+    if len(closes) <= sessions_back:
+        past = closes[0]
+    else:
+        past = closes[-(sessions_back + 1)]
+    if past in (None, 0) or current is None:
+        return None
+    return ((current - past) / past) * 100
+
+
+def _change_style(percent):
+    """Map a percent change to the stock colour/arrow pair used by the template."""
+    if percent is None:
+        return "grey", "-"
+    if percent >= 0:
+        return "green", "↑"
+    return "red", "↓"
+
+
 def fetch_weather():
-    """Fetch weather for Copenhagen using Open-Meteo with an hourly breakdown."""
-    logger.info("Fetching weather...")
-    lat, lon = 55.6761, 12.5683
+    """
+    Fetch Copenhagen weather from Open-Meteo.
+
+    Source strategy matches Brevity-Wallpaper: Open-Meteo daily + hourly
+    precipitation probabilities, including expected peak rain time.
+    """
+    logger.info("Fetching weather from Open-Meteo...")
     url = "https://api.open-meteo.com/v1/forecast"
     params = {
-        "latitude": lat,
-        "longitude": lon,
+        "latitude": WEATHER_LAT,
+        "longitude": WEATHER_LON,
+        "forecast_days": 3,
+        "timezone": WEATHER_TIMEZONE,
+        "temperature_unit": "celsius",
+        "wind_speed_unit": "kmh",
+        "current": [
+            "temperature_2m",
+            "apparent_temperature",
+            "weather_code",
+            "precipitation_probability",
+            "wind_speed_10m",
+            "wind_direction_10m",
+        ],
         "hourly": [
             "temperature_2m",
             "apparent_temperature",
@@ -421,9 +806,18 @@ def fetch_weather():
             "wind_direction_10m",
             "weather_code",
         ],
-        "daily": ["sunrise", "sunset"],
-        "timezone": "Europe/Berlin",
-        "forecast_days": 1,
+        "daily": [
+            "weather_code",
+            "temperature_2m_max",
+            "temperature_2m_min",
+            "sunrise",
+            "sunset",
+            "uv_index_max",
+            "precipitation_probability_max",
+            "precipitation_sum",
+            "wind_speed_10m_max",
+            "wind_direction_10m_dominant",
+        ],
     }
 
     def _request():
@@ -438,69 +832,133 @@ def fetch_weather():
         return None
 
     try:
-        hourly = data.get("hourly", {})
-        daily = data.get("daily", {})
+        hourly = data.get("hourly", {}) or {}
+        daily = data.get("daily", {}) or {}
+        current = data.get("current", {}) or {}
 
-        required_keys = [
-            "temperature_2m",
-            "apparent_temperature",
-            "precipitation_probability",
-            "wind_speed_10m",
-            "wind_direction_10m",
-            "weather_code",
-        ]
-        if not all(isinstance(hourly.get(key), list) and hourly.get(key) for key in required_keys):
+        days = daily.get("time") or []
+        if not days:
             logger.warning("Incomplete weather payload; skipping weather section")
             return None
 
-        def clean_numbers(values):
-            return [value for value in values if isinstance(value, (int, float))]
+        today_iso = days[0]
+        today_code = int(safe_number((daily.get("weather_code") or [None])[0], 0) or 0)
+        current_code = int(safe_number(current.get("weather_code"), today_code) or today_code)
 
-        def safe_avg(values):
-            numbers = clean_numbers(values or [])
-            return sum(numbers) / len(numbers) if numbers else 0
+        hourly_times = hourly.get("time") or []
+        hourly_precip = hourly.get("precipitation_probability") or []
+        today_rain_chance = round(safe_number((daily.get("precipitation_probability_max") or [0])[0], 0) or 0)
+        # Daytime window used by the continuous morning/afternoon/evening strip.
+        today_rain_timeline = _rain_timeline(
+            hourly_times,
+            hourly_precip,
+            today_iso,
+            start_h=6,
+            end_h=24,
+            rain_color_value=today_rain_chance,
+        )
+        today = {
+            "date": today_iso,
+            "label": "Today",
+            "high": None if safe_number((daily.get("temperature_2m_max") or [None])[0]) is None else round(safe_number((daily.get("temperature_2m_max") or [None])[0])),
+            "low": None if safe_number((daily.get("temperature_2m_min") or [None])[0]) is None else round(safe_number((daily.get("temperature_2m_min") or [None])[0])),
+            "rain_chance": today_rain_chance,
+            "rain_sum_mm": safe_number((daily.get("precipitation_sum") or [None])[0]),
+            "rain_peak_time": today_rain_timeline.get("peak_time") or _peak_rain_time(
+                hourly_times,
+                hourly_precip,
+                today_iso,
+            ),
+            "rain_timeline": today_rain_timeline,
+            "wind_max": None if safe_number((daily.get("wind_speed_10m_max") or [None])[0]) is None else round(safe_number((daily.get("wind_speed_10m_max") or [None])[0])),
+            "wind_dir": None if safe_number((daily.get("wind_direction_10m_dominant") or [None])[0]) is None else round(safe_number((daily.get("wind_direction_10m_dominant") or [None])[0])),
+            "wind_color": plasma_color(safe_number((daily.get("wind_speed_10m_max") or [0])[0], 0) or 0),
+            "uv_max": safe_number((daily.get("uv_index_max") or [None])[0]),
+            "sunrise": format_clock((daily.get("sunrise") or [None])[0]),
+            "sunset": format_clock((daily.get("sunset") or [None])[0]),
+            "code": today_code,
+            "condition": get_weather_text(today_code),
+            "icon": get_weather_icon(today_code),
+            "color": get_weather_color(today_code),
+            "current": {
+                "temp": None if safe_number(current.get("temperature_2m")) is None else round(safe_number(current.get("temperature_2m"))),
+                "feels_like": None if safe_number(current.get("apparent_temperature")) is None else round(safe_number(current.get("apparent_temperature"))),
+                "code": current_code,
+                "condition": get_weather_text(current_code),
+                "icon": get_weather_icon(current_code),
+                "color": get_weather_color(current_code),
+                "wind": None if safe_number(current.get("wind_speed_10m")) is None else round(safe_number(current.get("wind_speed_10m"))),
+                "wind_dir": None if safe_number(current.get("wind_direction_10m")) is None else round(safe_number(current.get("wind_direction_10m"))),
+                "precip": round(safe_number(current.get("precipitation_probability"), 0) or 0),
+            },
+            # Keep period breakdown for richer "today" detail.
+            "morning": _segment_stats(hourly, 6, 12),
+            "afternoon": _segment_stats(hourly, 12, 18),
+            "evening": _segment_stats(hourly, 18, 24),
+        }
+        today["dials"] = dial_metrics(
+            rain_chance=today.get("rain_chance"),
+            wind_max=today.get("wind_max"),
+            uv_max=today.get("uv_max"),
+            high=today.get("high"),
+            low=today.get("low"),
+        )
+        # Colour accents used by glanceable cards.
+        today["high_color"] = today["dials"]["temp"]["high_color"]
+        today["low_color"] = today["dials"]["temp"]["low_color"]
+        today["rain_color"] = today["dials"]["rain"]["color"]
 
-        def safe_max(values):
-            numbers = clean_numbers(values or [])
-            return max(numbers) if numbers else 0
-
-        def slice_list(values, start, end):
-            return values[start:end] if isinstance(values, list) else []
-
-        def get_segment_data(start_h, end_h):
-            temps = slice_list(hourly.get("temperature_2m"), start_h, end_h)
-            feels = slice_list(hourly.get("apparent_temperature"), start_h, end_h)
-            precips = slice_list(hourly.get("precipitation_probability"), start_h, end_h)
-            winds = slice_list(hourly.get("wind_speed_10m"), start_h, end_h)
-            wind_dirs = slice_list(hourly.get("wind_direction_10m"), start_h, end_h)
-            codes = slice_list(hourly.get("weather_code"), start_h, end_h)
-
-            avg_temp = safe_avg(temps)
-            avg_feels = safe_avg(feels)
-            max_precip = safe_max(precips)
-            max_wind = safe_max(winds)
-            avg_wind_dir = safe_avg(wind_dirs)
-            code = max(codes, key=codes.count) if codes else 0
-
-            return {
-                "temp": round(avg_temp) if avg_temp else 0,
-                "feels_like": round(avg_feels) if avg_feels else 0,
-                "precip": max_precip,
-                "wind": round(max_wind) if max_wind else 0,
-                "wind_dir": round(avg_wind_dir) if avg_wind_dir else 0,
-                "wind_color": plasma_color(max_wind),
-                "color": get_weather_color(code),
-                "condition": get_weather_text(code),
-                "icon": get_weather_icon(code),
-            }
+        upcoming = []
+        for index in range(1, min(3, len(days))):
+            code = int(safe_number((daily.get("weather_code") or [None])[index], 0) or 0)
+            day_iso = days[index]
+            high_v = safe_number((daily.get("temperature_2m_max") or [None])[index])
+            low_v = safe_number((daily.get("temperature_2m_min") or [None])[index])
+            rain_v = safe_number((daily.get("precipitation_probability_max") or [0])[index], 0) or 0
+            wind_v = safe_number((daily.get("wind_speed_10m_max") or [None])[index])
+            day_rain_timeline = _rain_timeline(
+                hourly_times,
+                hourly_precip,
+                day_iso,
+                start_h=0,
+                end_h=24,
+                rain_color_value=rain_v,
+            )
+            upcoming.append(
+                {
+                    "date": day_iso,
+                    "label": weekday_label(day_iso, today_iso),
+                    "high": None if high_v is None else round(high_v),
+                    "low": None if low_v is None else round(low_v),
+                    "rain_chance": round(rain_v),
+                    "wind_max": None if wind_v is None else round(wind_v),
+                    "code": code,
+                    "condition": get_weather_text(code),
+                    "icon": get_weather_icon(code),
+                    "color": get_weather_color(code),
+                    "high_color": temperature_color(high_v if high_v is not None else 10),
+                    "low_color": temperature_color(low_v if low_v is not None else 5),
+                    "rain_color": rain_color(rain_v),
+                    "rain_progress": clamp01(rain_v / 100.0),
+                    "rain_timeline": day_rain_timeline,
+                    "rain_peak_time": day_rain_timeline.get("peak_time"),
+                }
+            )
 
         return {
-            "morning": get_segment_data(6, 12),
-            "afternoon": get_segment_data(12, 18),
-            "evening": get_segment_data(18, 24),
+            "location": WEATHER_SOURCE["location"],
+            "timezone": data.get("timezone") or WEATHER_TIMEZONE,
+            "source": WEATHER_SOURCE,
+            "today": today,
+            "upcoming": upcoming,
+            # Backward-compatible aliases used by older templates/PDF styles.
+            "morning": today["morning"],
+            "afternoon": today["afternoon"],
+            "evening": today["evening"],
             "sunrise": (daily.get("sunrise") or [""])[0],
             "sunset": (daily.get("sunset") or [""])[0],
-            "daily_precip": safe_max(hourly.get("precipitation_probability") or []),
+            "daily_precip": today["rain_chance"],
+            "rain_peak_time": today["rain_peak_time"],
         }
     except Exception as exc:
         logger.error("Error parsing weather data: %s", exc)
@@ -508,113 +966,72 @@ def fetch_weather():
 
 
 def fetch_stocks():
-    """Fetch stock data using yfinance."""
+    """Fetch general stock watchlist prices with day, 7-day, and 1-month change."""
     logger.info("Fetching stocks...")
-    tickers = {
-        "S&P 500": "VUSA.AS",
-        "Tesla": "TSLA",
-        "Nvidia": "NVDA",
-        "Bitcoin": "BTC-USD",
-        "United Health": "UNH",
-        "Echo Star": "SATS",
-    }
-
-    fx_cache = {}
-
-    def fetch_fx_rate(symbol):
-        if symbol in fx_cache:
-            return fx_cache[symbol]
-
-        def _fetch_history():
-            ticker = yf.Ticker(symbol)
-            hist = ticker.history(period="1d")
-            if hist is None or hist.empty:
-                raise ValueError("No FX history returned")
-            return hist
-
-        hist = retry_call(f"FX fetch {symbol}", _fetch_history)
-        if hist is None:
-            fx_cache[symbol] = 0.0
-            return 0.0
-        rate = hist["Close"].iloc[-1]
-        fx_cache[symbol] = rate
-        return rate
-
-    def convert_usd_to(currency, price):
-        if currency == "USD":
-            return price
-        if currency == "EUR":
-            rate = fetch_fx_rate("EURUSD=X")
-            return price / rate if rate else price
-        if currency == "DKK":
-            rate = fetch_fx_rate("USDDKK=X")
-            return price * rate if rate else price
-        return price
-
     stock_data = {}
-    for name, symbol in tickers.items():
-        def _fetch_history():
+
+    for name, symbol in STOCK_TICKERS.items():
+        def _fetch_history(period="3mo"):
             ticker = yf.Ticker(symbol)
-            hist = ticker.history(period="2d")
+            hist = ticker.history(period=period, auto_adjust=True)
             if hist is None or hist.empty:
                 raise ValueError("No price history returned")
-            return hist
+            # yfinance can return NaN rows around market close / holidays.
+            closes = [safe_number(value) for value in hist["Close"].tolist()]
+            closes = [value for value in closes if value is not None]
+            if len(closes) < 1:
+                raise ValueError("No finite closes returned")
+            return closes
 
-        hist = retry_call(f"Stock fetch {name}", _fetch_history)
-        if hist is None:
-            # Fall back to a slightly longer window before giving up.
-            def _fetch_history_5d():
-                ticker = yf.Ticker(symbol)
-                hist_5d = ticker.history(period="5d")
-                if hist_5d is None or hist_5d.empty:
-                    raise ValueError("No price history returned")
-                return hist_5d
+        closes = retry_call(f"Stock fetch {name}", lambda: _fetch_history("3mo"))
+        if closes is None:
+            closes = retry_call(f"Stock fetch {name} (1mo)", lambda: _fetch_history("1mo"), attempts=2)
 
-            hist = retry_call(f"Stock fetch {name} (5d)", _fetch_history_5d, attempts=2)
-
-        if hist is None:
-            stock_data[name] = {
-                "price": 0.0,
-                "change": 0.0,
-                "percent": 0.0,
-                "return_percent": 0.0,
-                "color": "grey",
-                "arrow": "-",
-            }
+        empty_row = {
+            "symbol": symbol,
+            "price": None,
+            "change": None,
+            "percent": None,
+            "color": "grey",
+            "arrow": "-",
+            "percent_7d": None,
+            "color_7d": "grey",
+            "arrow_7d": "-",
+            "percent_1m": None,
+            "color_1m": "grey",
+            "arrow_1m": "-",
+        }
+        if not closes:
+            stock_data[name] = empty_row
             continue
 
         try:
-            current_close = float(hist["Close"].iloc[-1])
-            prev_close = float(hist["Close"].iloc[-2]) if len(hist) > 1 else current_close
+            current_close = closes[-1]
+            prev_close = closes[-2] if len(closes) > 1 else current_close
             change = current_close - prev_close
             percent_change = (change / prev_close) * 100 if prev_close else 0.0
-            return_percent = 0.0
-            baseline = STOCK_BASELINES.get(name)
-            if baseline:
-                baseline_price = baseline.get("price", 0.0)
-                baseline_currency = baseline.get("currency", "USD")
-                current_in_baseline = convert_usd_to(baseline_currency, current_close)
-                if baseline_price:
-                    return_percent = ((current_in_baseline - baseline_price) / baseline_price) * 100
-
+            # Approximate calendar windows with trading sessions.
+            percent_7d = _percent_from_closes(closes, 5)
+            percent_1m = _percent_from_closes(closes, 21)
+            color_7d, arrow_7d = _change_style(percent_7d)
+            color_1m, arrow_1m = _change_style(percent_1m)
             stock_data[name] = {
+                "symbol": symbol,
                 "price": current_close,
                 "change": change,
                 "percent": percent_change,
-                "return_percent": return_percent,
                 "color": "green" if change >= 0 else "red",
                 "arrow": "↑" if change >= 0 else "↓",
+                "percent_7d": percent_7d,
+                "color_7d": color_7d,
+                "arrow_7d": arrow_7d,
+                "percent_1m": percent_1m,
+                "color_1m": color_1m,
+                "arrow_1m": arrow_1m,
             }
         except Exception as exc:
             logger.error("Error parsing %s data: %s", name, exc)
-            stock_data[name] = {
-                "price": 0.0,
-                "change": 0.0,
-                "percent": 0.0,
-                "return_percent": 0.0,
-                "color": "grey",
-                "arrow": "-",
-            }
+            stock_data[name] = empty_row
 
     percents = [
         data.get("percent")
@@ -622,8 +1039,19 @@ def fetch_stocks():
         if isinstance(data, dict) and isinstance(data.get("percent"), (int, float))
     ]
     stock_data["average_percent"] = sum(percents) / len(percents) if percents else 0.0
-
     return stock_data
+
+
+# Shared xAI availability flag so one bad key does not thrash every item.
+XAI_AVAILABLE = bool(XAI_API_KEY)
+
+
+def mark_xai_unavailable(reason):
+    """Disable further xAI calls after a hard auth/config failure."""
+    global XAI_AVAILABLE
+    if XAI_AVAILABLE:
+        logger.error("Disabling xAI for this run: %s", reason)
+    XAI_AVAILABLE = False
 
 
 def summarize_with_ai(text, prompt_prefix="Summarize this news item:"):
@@ -631,7 +1059,7 @@ def summarize_with_ai(text, prompt_prefix="Summarize this news item:"):
     clean_text = strip_html(text)
     if not clean_text:
         return "Content unavailable"
-    if not XAI_API_KEY:
+    if not XAI_AVAILABLE:
         return clean_text
 
     headers = {
@@ -661,6 +1089,9 @@ def summarize_with_ai(text, prompt_prefix="Summarize this news item:"):
         )
         if response.status_code >= 400:
             body = (response.text or "")[:300]
+            lower = body.lower()
+            if response.status_code in {401, 403} or "incorrect api key" in lower or "invalid api key" in lower:
+                mark_xai_unavailable(f"xAI {response.status_code}: {body}")
             raise RuntimeError(f"xAI {response.status_code}: {body}")
         content = response.json()["choices"][0]["message"]["content"].strip()
         if not content:
@@ -690,8 +1121,8 @@ def fetch_feed(url):
     return feed
 
 
-def fetch_rss_feed(url, limit=5, prompt="Summarize this content:"):
-    """Fetch and summarize items from an RSS feed."""
+def fetch_rss_feed(url, limit=5, prompt="Summarize this content:", summarize=True):
+    """Fetch and optionally summarize items from an RSS feed."""
     news_items = []
     feed = fetch_feed(url)
     if not feed or not getattr(feed, "entries", None):
@@ -702,12 +1133,19 @@ def fetch_rss_feed(url, limit=5, prompt="Summarize this content:"):
             title = strip_html(getattr(entry, "title", "") or "")
             summary = strip_html(getattr(entry, "summary", getattr(entry, "description", "")) or "")
             content_text = f"{title}. {summary}".strip(". ").strip()
-            item_summary = summarize_with_ai(content_text, prompt)
-            item_summary = stylize_keywords(item_summary)
+            if not content_text:
+                continue
+            if summarize and XAI_AVAILABLE:
+                item_summary = summarize_with_ai(content_text, prompt)
+                item_summary = stylize_keywords(item_summary)
+            else:
+                # Keep the page useful even when AI is unavailable.
+                item_summary = title or content_text
             if item_summary:
                 news_items.append({
                     "headline": item_summary,
                     "link": entry.get("link", ""),
+                    "source": strip_html(getattr(getattr(feed, "feed", None), "title", "") or ""),
                 })
         except Exception as exc:
             logger.warning("Error parsing feed entry from %s: %s", url, exc)
@@ -715,108 +1153,209 @@ def fetch_rss_feed(url, limit=5, prompt="Summarize this content:"):
     return news_items
 
 
-def fetch_world_news():
-    """Fetch and summarize world news from BBC."""
-    logger.info("Fetching world news...")
-    return fetch_rss_feed(
-        "https://feeds.bbci.co.uk/news/world/rss.xml",
-        limit=10,
-        prompt="Summarize this news item:",
-    )
+def fetch_first_rss(urls, limit=5, prompt="Summarize this content:", label="feed"):
+    """Try multiple RSS URLs until one returns items."""
+    for url in urls:
+        logger.info("Trying %s feed: %s", label, url)
+        items = fetch_rss_feed(url, limit=limit, prompt=prompt)
+        if items:
+            logger.info("%s feed ok via %s (%s items)", label, url, len(items))
+            return items
+    logger.warning("No items found for %s feeds", label)
+    return []
 
 
 def fetch_space_news():
     """Fetch and summarize space news."""
     logger.info("Fetching space news...")
-    return fetch_rss_feed(
-        "https://spacenews.com/feed/",
-        limit=5,
+    return fetch_first_rss(
+        SPACE_FEEDS,
+        limit=6,
         prompt="Summarize this content:",
+        label="space",
     )
 
 
 def fetch_copenhagen_events():
-    """Fetch and summarize Copenhagen events/news."""
+    """Fetch and summarize Copenhagen events/news with source fallbacks."""
     logger.info("Fetching Copenhagen events...")
-    return fetch_rss_feed(
-        "https://cphpost.dk/feed/",
-        limit=5,
-        prompt="Summarize this content.",
+    return fetch_first_rss(
+        COPENHAGEN_FEEDS,
+        limit=6,
+        prompt="Summarize this Copenhagen/Denmark news item.",
+        label="copenhagen",
     )
 
 
-def fetch_x_trending():
-    """Fetch trending topics from X using OAuth1 and personalized_trends API."""
-    logger.info("Fetching X trending topics...")
+def _normalize_trend_item(trend, source_label):
+    """Normalize personalized or WOEID trend payloads into one shape."""
+    if not isinstance(trend, dict):
+        return None
+    raw_name = trend.get("trend_name") or trend.get("name") or ""
+    raw_name = strip_html(str(raw_name)).strip()
+    if not raw_name:
+        return None
 
+    # Keep the original X trend text for display; only the click-through link is tightened.
+    search_term = extract_search_term(raw_name) or raw_name
+    post_count = trend.get("post_count")
+    if post_count is None:
+        tweet_count = trend.get("tweet_count")
+        post_count = f"{tweet_count:,} posts" if isinstance(tweet_count, int) else (tweet_count or "N/A")
+
+    return {
+        "name": raw_name,
+        "search_term": search_term,
+        "post_count": post_count,
+        "category": trend.get("category") or source_label or "N/A",
+        "trending_since": format_trending_since(trend.get("trending_since")),
+        "link": x_search_link(search_term),
+        "source": source_label,
+    }
+
+
+def _oauth_session():
     consumer_key = os.getenv("CONSUMER_KEY")
     consumer_secret = os.getenv("CONSUMER_SECRET")
     access_token = os.getenv("ACCESS_TOKEN")
     access_token_secret = os.getenv("ACCESS_TOKEN_SECRET")
-
     if not all([consumer_key, consumer_secret, access_token, access_token_secret]):
-        logger.warning("X Trending: Missing OAuth credentials.")
-        return []
+        return None
+    from requests_oauthlib import OAuth1Session
+
+    return OAuth1Session(
+        consumer_key,
+        client_secret=consumer_secret,
+        resource_owner_key=access_token,
+        resource_owner_secret=access_token_secret,
+    )
+
+
+def fetch_x_trending(limit=5):
+    """
+    Fetch trending topics from X.
+
+    Keep the personalized top 5 and place the United States top 5 beside it.
+    Search links use extracted key terms / hashtags rather than full summaries.
+    """
+    logger.info("Fetching X trending topics...")
 
     try:
-        from requests_oauthlib import OAuth1Session
-
-        oauth = OAuth1Session(
-            consumer_key,
-            client_secret=consumer_secret,
-            resource_owner_key=access_token,
-            resource_owner_secret=access_token_secret,
-        )
-
-        url = "https://api.x.com/2/users/personalized_trends"
-
-        def _request():
-            response = oauth.get(url, timeout=REQUEST_TIMEOUT)
-            if response.status_code != 200:
-                raise RuntimeError(f"X API error {response.status_code}: {response.text}")
-            return response.json()
-
-        payload = retry_call("X trending fetch", _request)
-        if not payload:
-            return []
-
-        raw_data = payload.get("data", [])
-        logger.info("X API returned %s items total.", len(raw_data))
-
-        trends_data = raw_data[:20]
-        formatted_trends = []
-        for trend in trends_data:
-            trend_name = trend.get("trend_name") or "N/A"
-            formatted_trends.append(
-                {
-                    "name": trend_name,
-                    "post_count": trend.get("post_count") or trend.get("tweet_count", "N/A"),
-                    "category": trend.get("category", "N/A"),
-                    "trending_since": format_trending_since(trend.get("trending_since")),
-                    "link": f"https://x.com/search?q={quote(trend_name)}",
-                }
-            )
-
-        if not formatted_trends:
-            return []
-
-        logger.info("Successfully fetched %s X trending topics", len(formatted_trends))
-        return [("Personalized Trends", formatted_trends)]
-
+        oauth = _oauth_session()
     except ImportError:
         logger.error("requests_oauthlib not installed - cannot fetch X trends")
         return []
     except Exception as exc:
-        logger.error("Error fetching X trending: %s", exc)
+        logger.error("Error creating X OAuth session: %s", exc)
         return []
 
+    if oauth is None:
+        logger.warning("X Trending: Missing OAuth credentials.")
+        return []
 
-def fetch_quote():
-    """Fetch a quote of the day (Stoicism/Proverbs) using AI."""
-    logger.info("Fetching Quote of the Day...")
-    fallback = {"text": "The obstacle is the way.", "author": "Marcus Aurelius"}
+    def collect_trends(raw_items, source_label, max_items):
+        collected = []
+        seen = set()
+        for trend in raw_items or []:
+            item = _normalize_trend_item(trend, source_label)
+            if not item:
+                continue
+            key = (item.get("name") or item.get("search_term") or "").lower()
+            if not key or key in seen:
+                continue
+            seen.add(key)
+            collected.append(item)
+            if len(collected) >= max_items:
+                break
+        return collected
 
-    if not XAI_API_KEY:
+    groups = []
+
+    # 1) Personalized trends
+    def _personalized():
+        response = oauth.get(
+            "https://api.x.com/2/users/personalized_trends",
+            params={"personalized_trend.fields": "category,post_count,trend_name,trending_since"},
+            timeout=REQUEST_TIMEOUT,
+        )
+        if response.status_code != 200:
+            raise RuntimeError(f"X API error {response.status_code}: {response.text}")
+        return response.json()
+
+    payload = retry_call("X personalized trends", _personalized)
+    raw_personalized = (payload or {}).get("data", []) if isinstance(payload, dict) else []
+    logger.info("X personalized trends returned %s items.", len(raw_personalized or []))
+    personalized = collect_trends(raw_personalized, "Personalized", limit)
+    if personalized:
+        groups.append(("Personalized", personalized))
+
+    # 2) Dedicated United States top trends column.
+    def _us_trends():
+        response = oauth.get(
+            f"https://api.x.com/2/trends/by/woeid/{X_US_WOEID}",
+            params={"max_trends": 50, "trend.fields": "trend_name,tweet_count"},
+            timeout=REQUEST_TIMEOUT,
+        )
+        if response.status_code != 200:
+            raise RuntimeError(f"X WOEID {X_US_WOEID} error {response.status_code}: {response.text}")
+        return response.json()
+
+    us_payload = retry_call("X trends United States", _us_trends)
+    raw_us = (us_payload or {}).get("data", []) if isinstance(us_payload, dict) else []
+    logger.info("X United States trends returned %s items.", len(raw_us or []))
+    us_trends = collect_trends(raw_us, "United States", limit)
+    if us_trends:
+        groups.append(("United States", us_trends))
+
+    if not groups:
+        return []
+
+    total = sum(len(items) for _, items in groups)
+    logger.info("Successfully fetched %s X trending topics", total)
+    return groups
+
+
+def fetch_reflection(seed_date=None):
+    """
+    Generate one difficult Christian philosophical / psychological question.
+
+    Replaces both the Jesus quote and the stoic/proverb quote.
+    """
+    logger.info("Generating Christian reflection question...")
+    seed = seed_date or date.today()
+    fallback_questions = [
+        {
+            "text": "If love of neighbour is the measure of faith, what does your irritation with the people closest to you reveal about the god you actually trust?",
+            "focus": "Love and self-knowledge",
+        },
+        {
+            "text": "When you pray for guidance but already know the answer that would cost you least, are you seeking God or permission?",
+            "focus": "Prayer and will",
+        },
+        {
+            "text": "If forgiveness requires truth, what wound are you calling 'grace' so you never have to name the harm?",
+            "focus": "Forgiveness",
+        },
+        {
+            "text": "Would your public Christian convictions survive if they never improved your status, only your obedience?",
+            "focus": "Integrity",
+        },
+        {
+            "text": "Where does your need to be right quietly replace your duty to be merciful?",
+            "focus": "Pride and mercy",
+        },
+        {
+            "text": "If Christ is present in weakness, why do you treat your own limits as evidence that God is absent?",
+            "focus": "Weakness",
+        },
+        {
+            "text": "What part of your moral life is performance for an audience you would never admit you need?",
+            "focus": "Authenticity",
+        },
+    ]
+    fallback = fallback_questions[(seed.toordinal() - 1) % len(fallback_questions)]
+
+    if not XAI_AVAILABLE:
         return fallback
 
     headers = {
@@ -824,14 +1363,16 @@ def fetch_quote():
         "Content-Type": "application/json",
     }
     prompt = (
-        "Generate a short, wise quote from Stoic philosophy or the Book of Proverbs. "
-        "Return JSON format: {\"text\": \"Quote text\", \"author\": \"Author Name\"}."
+        "Write one difficult philosophical and psychological question centered on Christianity. "
+        "It should make a thoughtful adult stop and examine conscience, motive, faith, pride, love, "
+        "forgiveness, suffering, or hypocrisy. No quote, no Bible citation, no sermon, no answer. "
+        "One sentence only. Return JSON: "
+        "{\"text\": \"question\", \"focus\": \"short theme\"}."
     )
-
     payload = {
         "model": XAI_MODEL,
         "messages": [
-            {"role": "system", "content": "You are a wise assistant. Output JSON only."},
+            {"role": "system", "content": "You write piercing, non-cynical Christian reflection questions. Output JSON only."},
             {"role": "user", "content": prompt},
         ],
         "response_format": {"type": "json_object"},
@@ -846,26 +1387,21 @@ def fetch_quote():
         )
         if response.status_code >= 400:
             body = (response.text or "")[:300]
+            lower = body.lower()
+            if response.status_code in {401, 403} or "incorrect api key" in lower or "invalid api key" in lower:
+                mark_xai_unavailable(f"xAI {response.status_code}: {body}")
             raise RuntimeError(f"xAI {response.status_code}: {body}")
         content = response.json()["choices"][0]["message"]["content"].strip()
         return json.loads(content)
 
-    quote = retry_call("Quote fetch", _request)
-    if not isinstance(quote, dict) or not quote.get("text"):
+    question = retry_call("Reflection fetch", _request)
+    if not isinstance(question, dict) or not question.get("text"):
         return fallback
-    return quote
-
-
-def fetch_jesus_quote(seed_date=None):
-    """Select a deterministic Jesus quote from local JSON."""
-    logger.info("Selecting Jesus quote...")
-    quotes = load_jesus_quotes()
-    if not quotes:
-        return None
-    seed = seed_date or date.today()
-    index = (seed.toordinal() - 1) % len(quotes)
-    reference, text = quotes[index]
-    return {"text": text, "author": reference}
+    text = str(question.get("text") or "").strip()
+    focus = str(question.get("focus") or "Reflection").strip() or "Reflection"
+    if not text.endswith("?"):
+        text = text.rstrip(".!") + "?"
+    return {"text": text, "focus": focus}
 
 
 # ==============================================================================
@@ -964,12 +1500,10 @@ def build_brief_data(today=None):
     today = today or date.today()
     weather = fetch_weather()
     stocks = fetch_stocks()
-    world_news = fetch_world_news()
     space_news = fetch_space_news()
     copenhagen = fetch_copenhagen_events()
-    x_trending = fetch_x_trending()
-    jesus_quote = fetch_jesus_quote(today)
-    quote = fetch_quote()
+    x_trending = fetch_x_trending(limit=5)
+    reflection = fetch_reflection(today)
 
     day_of_year = today.timetuple().tm_yday
     days_in_year = 366 if calendar.isleap(today.year) else 365
@@ -983,19 +1517,17 @@ def build_brief_data(today=None):
         "year_percent": year_percent,
         "weather": weather,
         "stocks": stocks,
-        "world_news": world_news,
         "space_news": space_news,
         "copenhagen": copenhagen,
-        "jesus_quote": jesus_quote,
+        "reflection": reflection,
         "x_trending": x_trending,
-        "quote": quote,
         "pdf_available": False,
     }
 
 
 def main():
     logger.info("Starting Brevity generation...")
-    if XAI_API_KEY:
+    if XAI_AVAILABLE:
         logger.info("Using xAI model: %s", XAI_MODEL)
     else:
         logger.warning("XAI_API_KEY missing; news will not be summarised.")
