@@ -271,15 +271,15 @@ def clamp01(value):
 
 
 def temperature_color(celsius):
-    """Map temperature onto the wallpaper-style cold-to-hot palette."""
-    # Roughly -10C .. 35C across the spectrum used by Brevity-Wallpaper.
-    progress = clamp01(((safe_number(celsius, 10) or 10) + 10) / 45.0)
+    """Map temperature onto a cool-blue to hot-red palette over -5C..30C."""
+    # -5C (cool blue) through mild to 30C (hot red).
+    progress = clamp01(((safe_number(celsius, 10) or 10) + 5) / 35.0)
     stops = [
-        (0.0, (77, 163, 255)),   # #4da3ff
-        (0.25, (53, 215, 255)),  # #35d7ff
-        (0.5, (255, 209, 102)),  # #ffd166
-        (0.75, (255, 159, 10)),  # #ff9f0a
-        (1.0, (255, 69, 58)),    # #ff453a
+        (0.0, (64, 148, 255)),   # cool blue
+        (0.28, (90, 200, 255)),  # light blue
+        (0.5, (255, 214, 102)),  # mild gold
+        (0.75, (255, 140, 66)),  # warm orange
+        (1.0, (255, 69, 58)),    # hot red
     ]
     for index in range(len(stops) - 1):
         left_t, left_rgb = stops[index]
@@ -351,8 +351,9 @@ def dial_metrics(rain_chance=None, wind_max=None, uv_max=None, high=None, low=No
             "low": None if low_v is None else round(low_v),
             "high_color": temperature_color(high_v if high_v is not None else 10),
             "low_color": temperature_color(low_v if low_v is not None else 5),
-            "high_progress": clamp01(((high_v if high_v is not None else 10) + 10) / 45.0),
-            "low_progress": clamp01(((low_v if low_v is not None else 5) + 10) / 45.0),
+            # Dial fill uses a -5C .. 30C range.
+            "high_progress": clamp01(((high_v if high_v is not None else 10) + 5) / 35.0),
+            "low_progress": clamp01(((low_v if low_v is not None else 5) + 5) / 35.0),
             "label": "Temp",
         },
     }
@@ -1235,22 +1236,35 @@ def fetch_x_trending(limit=5):
     """
     Fetch trending topics from X.
 
-    Keep the personalized top 5 and place the United States top 5 beside it.
-    Search links use extracted key terms / hashtags rather than full summaries.
+    Uses the same personalized_trends path that previously worked, then adds a
+    separate United States top-trends column. Each source fails independently so
+    one endpoint cannot blank the whole section.
     """
     logger.info("Fetching X trending topics...")
 
+    consumer_key = os.getenv("CONSUMER_KEY")
+    consumer_secret = os.getenv("CONSUMER_SECRET")
+    access_token = os.getenv("ACCESS_TOKEN")
+    access_token_secret = os.getenv("ACCESS_TOKEN_SECRET")
+
+    if not all([consumer_key, consumer_secret, access_token, access_token_secret]):
+        logger.warning("X Trending: Missing OAuth credentials.")
+        return []
+
     try:
-        oauth = _oauth_session()
+        from requests_oauthlib import OAuth1Session
+
+        oauth = OAuth1Session(
+            consumer_key,
+            client_secret=consumer_secret,
+            resource_owner_key=access_token,
+            resource_owner_secret=access_token_secret,
+        )
     except ImportError:
         logger.error("requests_oauthlib not installed - cannot fetch X trends")
         return []
     except Exception as exc:
         logger.error("Error creating X OAuth session: %s", exc)
-        return []
-
-    if oauth is None:
-        logger.warning("X Trending: Missing OAuth credentials.")
         return []
 
     def collect_trends(raw_items, source_label, max_items):
@@ -1271,25 +1285,27 @@ def fetch_x_trending(limit=5):
 
     groups = []
 
-    # 1) Personalized trends
+    # 1) Personalized trends — keep the request shape that previously succeeded.
     def _personalized():
         response = oauth.get(
             "https://api.x.com/2/users/personalized_trends",
-            params={"personalized_trend.fields": "category,post_count,trend_name,trending_since"},
             timeout=REQUEST_TIMEOUT,
         )
         if response.status_code != 200:
             raise RuntimeError(f"X API error {response.status_code}: {response.text}")
         return response.json()
 
-    payload = retry_call("X personalized trends", _personalized)
-    raw_personalized = (payload or {}).get("data", []) if isinstance(payload, dict) else []
-    logger.info("X personalized trends returned %s items.", len(raw_personalized or []))
-    personalized = collect_trends(raw_personalized, "Personalized", limit)
-    if personalized:
-        groups.append(("Personalized", personalized))
+    try:
+        payload = retry_call("X personalized trends", _personalized)
+        raw_personalized = (payload or {}).get("data", []) if isinstance(payload, dict) else []
+        logger.info("X personalized trends returned %s items.", len(raw_personalized or []))
+        personalized = collect_trends(raw_personalized, "Personalized", limit)
+        if personalized:
+            groups.append(("Personalized", personalized))
+    except Exception as exc:
+        logger.error("Error fetching personalized X trends: %s", exc)
 
-    # 2) Dedicated United States top trends column.
+    # 2) United States top trends as a second column; failures stay isolated.
     def _us_trends():
         response = oauth.get(
             f"https://api.x.com/2/trends/by/woeid/{X_US_WOEID}",
@@ -1297,15 +1313,25 @@ def fetch_x_trending(limit=5):
             timeout=REQUEST_TIMEOUT,
         )
         if response.status_code != 200:
+            # Retry without field filters for broader API compatibility.
+            response = oauth.get(
+                f"https://api.x.com/2/trends/by/woeid/{X_US_WOEID}",
+                params={"max_trends": 50},
+                timeout=REQUEST_TIMEOUT,
+            )
+        if response.status_code != 200:
             raise RuntimeError(f"X WOEID {X_US_WOEID} error {response.status_code}: {response.text}")
         return response.json()
 
-    us_payload = retry_call("X trends United States", _us_trends)
-    raw_us = (us_payload or {}).get("data", []) if isinstance(us_payload, dict) else []
-    logger.info("X United States trends returned %s items.", len(raw_us or []))
-    us_trends = collect_trends(raw_us, "United States", limit)
-    if us_trends:
-        groups.append(("United States", us_trends))
+    try:
+        us_payload = retry_call("X trends United States", _us_trends)
+        raw_us = (us_payload or {}).get("data", []) if isinstance(us_payload, dict) else []
+        logger.info("X United States trends returned %s items.", len(raw_us or []))
+        us_trends = collect_trends(raw_us, "United States", limit)
+        if us_trends:
+            groups.append(("United States", us_trends))
+    except Exception as exc:
+        logger.error("Error fetching United States X trends: %s", exc)
 
     if not groups:
         return []

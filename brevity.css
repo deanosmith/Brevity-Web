@@ -56,10 +56,10 @@ a {
 }
 
 .brand {
-    font-size: 12px;
-    letter-spacing: 0.34em;
-    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.08em;
     color: #8d8d8d;
+    font-weight: 600;
 }
 
 .header-meta {
@@ -161,8 +161,7 @@ h2 {
 .block-title {
     margin: 18px 0 10px;
     font-size: 13px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    letter-spacing: 0.02em;
     color: #8f8f8f;
     font-weight: 600;
 }
@@ -284,9 +283,8 @@ h2 {
 }
 
 .dial-label {
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.02em;
     color: #8f9aaa;
     margin-bottom: 4px;
 }
@@ -328,8 +326,7 @@ h2 {
 .meta-k {
     color: #8a8a8a;
     font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.02em;
 }
 
 .meta-v {
@@ -624,9 +621,13 @@ h2 {
 .stock-change {
     font-family: "Courier New", monospace;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1.1;
     font-variant-numeric: tabular-nums;
+}
+
+.stock-change-day {
+    font-size: 20px;
 }
 
 .stock-price {
@@ -665,8 +666,7 @@ h2 {
 .reflection-focus {
     margin-top: 14px;
     font-size: 12px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    letter-spacing: 0.02em;
     color: #9a9588;
     font-weight: 700;
 }
@@ -690,9 +690,8 @@ h2 {
 }
 
 .x-category {
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 0.02em;
     color: #8f8f8f;
     margin-bottom: 8px;
     font-weight: 700;
@@ -738,8 +737,8 @@ h2 {
 }
 
 .space-panel {
-    border-color: #3a3f48;
-    background: linear-gradient(165deg, #1c1f26 0%, #13161c 55%, #0f1218 100%);
+    border-color: #4a4d52;
+    background: linear-gradient(165deg, #24262b 0%, #1a1c20 55%, #141618 100%);
 }
 
 .news-list {
@@ -760,8 +759,8 @@ h2 {
 }
 
 .space-panel .news-item {
-    background: linear-gradient(180deg, #171c24 0%, #12161c 100%);
-    border-color: #2a313b;
+    background: linear-gradient(180deg, #22252b 0%, #1a1d22 100%);
+    border-color: #3a3e46;
 }
 
 .news-item a {

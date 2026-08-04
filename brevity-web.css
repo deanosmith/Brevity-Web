@@ -113,6 +113,10 @@ h1 {
     font-size: 14px;
 }
 
+.stock-change-day {
+    font-size: 20px;
+}
+
 .x-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -179,7 +183,10 @@ h1 {
         gap: 12px;
     }
 
-    .weather-top,
+    .weather-top {
+        grid-template-columns: 1fr;
+    }
+
     .forecast-grid,
     .x-grid,
     .dial-row {
@@ -215,13 +222,31 @@ h1 {
         font-size: 13px;
     }
 
+    .stock-change-day {
+        font-size: 18px;
+    }
+
     .stock-header .stock-identity {
         display: none;
     }
 }
 
 @media (max-width: 520px) {
-    .dial-row,
+    .weather-top {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .weather-now-card {
+        min-height: 0;
+    }
+
+    /* Phone weather: Today card, then speedos in a 2x2 grid. */
+    .dial-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px 14px;
+    }
+
     .forecast-grid,
     .x-grid {
         grid-template-columns: 1fr;
@@ -238,5 +263,13 @@ h1 {
 
     .period-card:last-child {
         border-bottom: none;
+    }
+
+    .stock-change {
+        font-size: 12px;
+    }
+
+    .stock-change-day {
+        font-size: 18px;
     }
 }

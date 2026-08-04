@@ -16,11 +16,7 @@
         <header class="site-header panel">
             <div class="brand-row">
                 <div class="brand">Brevity</div>
-                <div class="header-meta">
-                    {% if pdf_available %}
-                    <a class="meta-chip meta-link" href="brevity.pdf">Download PDF</a>
-                    {% endif %}
-                </div>
+                <div class="header-meta"></div>
             </div>
             <h1>
                 <span class="date-text">{{ date }}</span>
@@ -188,7 +184,7 @@
 
                 {% if weather.upcoming %}
                 <div class="forecast-block">
-                    <h3 class="block-title">Next 2 days</h3>
+                    <h3 class="block-title">Next 2 Days</h3>
                     <div class="forecast-grid">
                         {% for day in weather.upcoming %}
                         <div class="forecast-card">
@@ -283,7 +279,7 @@
                         </div>
                         <div class="stock-metrics">
                             <div class="stock-metric">
-                                <div class="stock-change {{ data.color }}">
+                                <div class="stock-change stock-change-day {{ data.color }}">
                                     {% if data.percent is not none %}{{ "%+.2f"|format(data.percent) }}%{% else %}—{% endif %}
                                 </div>
                             </div>
@@ -405,9 +401,6 @@
 
         <footer class="site-footer">
             Built daily from open feeds, market data, Open-Meteo, and xAI summaries.
-            {% if pdf_available %}
-            <a href="brevity.pdf">PDF archive</a>
-            {% endif %}
         </footer>
     </div>
 </body>
