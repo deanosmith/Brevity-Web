@@ -40,6 +40,8 @@ jobs:
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+          X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
+          BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
           SEND_TO_SLACK: "false"
           GENERATE_PDF: "false"
         run: uv run python brevity.py
@@ -52,4 +54,9 @@ jobs:
             index.html
             brevity.css
             brevity-web.css
+            resources/favicon.png
+            resources/favicon-16.png
+            resources/favicon-32.png
+            resources/favicon-512.png
+            resources/apple-touch-icon.png
           if-no-files-found: warn

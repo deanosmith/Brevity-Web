@@ -319,6 +319,29 @@ def uv_color(uv_index):
     return _rgb_to_hex(stops[-1][1])
 
 
+def _temp_dial_range(high_v, low_v):
+    """Map low/high temps onto a fixed -5C..30C arc for the temp speedo."""
+    low_progress = clamp01(((low_v if low_v is not None else 5) + 5) / 35.0)
+    high_progress = clamp01(((high_v if high_v is not None else 10) + 5) / 35.0)
+    if high_progress < low_progress:
+        high_progress = low_progress
+    # Keep a tiny visible sliver when the day range is extremely narrow.
+    min_width = 0.015
+    if high_progress - low_progress < min_width:
+        high_progress = min(1.0, low_progress + min_width)
+        if high_progress - low_progress < min_width:
+            low_progress = max(0.0, high_progress - min_width)
+    return {
+        "high": None if high_v is None else round(high_v),
+        "low": None if low_v is None else round(low_v),
+        "high_color": temperature_color(high_v if high_v is not None else 10),
+        "low_color": temperature_color(low_v if low_v is not None else 5),
+        "high_progress": high_progress,
+        "low_progress": low_progress,
+        "label": "Temp",
+    }
+
+
 def dial_metrics(rain_chance=None, wind_max=None, uv_max=None, high=None, low=None):
     """Build glanceable dial payloads inspired by Brevity-Wallpaper."""
     rain = safe_number(rain_chance, 0) or 0
@@ -345,16 +368,7 @@ def dial_metrics(rain_chance=None, wind_max=None, uv_max=None, high=None, low=No
             "value": f"{uv:.1f}" if uv_max is not None else "—",
             "label": "UV",
         },
-        "temp": {
-            "high": None if high_v is None else round(high_v),
-            "low": None if low_v is None else round(low_v),
-            "high_color": temperature_color(high_v if high_v is not None else 10),
-            "low_color": temperature_color(low_v if low_v is not None else 5),
-            # Dial fill uses a -5C .. 30C range.
-            "high_progress": clamp01(((high_v if high_v is not None else 10) + 5) / 35.0),
-            "low_progress": clamp01(((low_v if low_v is not None else 5) + 5) / 35.0),
-            "label": "Temp",
-        },
+        "temp": _temp_dial_range(high_v, low_v),
     }
 
 def keyword_style(keyword):
@@ -1270,37 +1284,41 @@ def fetch_x_trending(limit=5):
     """
     Fetch trending topics from X.
 
-    Personalized trends use the exact request/format path that previously
-    succeeded in production. United States trends are fetched as a second
-    column with isolated errors.
+    Personalized trends use OAuth1 personalized_trends (existing working path).
+    United States trends use official v2 WOEID endpoint with Bearer auth:
+      GET /2/trends/by/woeid/23424977?max_trends=5&trend.fields=trend_name,tweet_count
     """
     logger.info("Fetching X trending topics...")
+    groups = []
 
-    consumer_key = os.getenv("CONSUMER_KEY")
-    consumer_secret = os.getenv("CONSUMER_SECRET")
-    access_token = os.getenv("ACCESS_TOKEN")
-    access_token_secret = os.getenv("ACCESS_TOKEN_SECRET")
-
-    if not all([consumer_key, consumer_secret, access_token, access_token_secret]):
-        logger.warning("X Trending: Missing OAuth credentials.")
-        return []
+    def format_count(value):
+        if isinstance(value, int):
+            return f"{value:,} posts"
+        if value is None:
+            return "N/A"
+        return str(value)
 
     def format_trend_item(trend, default_category="N/A"):
         if not isinstance(trend, dict):
             return None
-        trend_name = trend.get("trend_name") or trend.get("name")
-        if not trend_name:
-            return None
+        trend_name = (
+            trend.get("trend_name")
+            or trend.get("name")
+            or trend.get("query")
+            or ""
+        )
         trend_name = strip_html(str(trend_name)).strip()
         if not trend_name:
             return None
+
         tweet_count = trend.get("tweet_count")
+        if tweet_count is None:
+            tweet_count = trend.get("tweet_volume")
         if trend.get("post_count") is not None:
             post_count = trend.get("post_count")
-        elif isinstance(tweet_count, int):
-            post_count = f"{tweet_count:,} posts"
         else:
-            post_count = tweet_count or "N/A"
+            post_count = format_count(tweet_count)
+
         return {
             "name": trend_name,
             "post_count": post_count,
@@ -1309,14 +1327,10 @@ def fetch_x_trending(limit=5):
             "link": f"https://x.com/search?q={quote(trend_name)}",
         }
 
-    def collect_raw(raw_items, default_category, max_items, seen=None):
-        seen = seen if seen is not None else set()
+    def collect_items(raw_items, default_category, max_items):
         out = []
-        # Some payloads nest trends under data[0]["trends"].
-        items = list(raw_items or [])
-        if len(items) == 1 and isinstance(items[0], dict) and isinstance(items[0].get("trends"), list):
-            items = items[0]["trends"]
-        for trend in items:
+        seen = set()
+        for trend in raw_items or []:
             item = format_trend_item(trend, default_category=default_category)
             if not item:
                 continue
@@ -1329,89 +1343,98 @@ def fetch_x_trending(limit=5):
                 break
         return out
 
-    try:
-        from requests_oauthlib import OAuth1Session
+    # --- Personalized (OAuth1 user context) ---
+    consumer_key = os.getenv("CONSUMER_KEY")
+    consumer_secret = os.getenv("CONSUMER_SECRET")
+    access_token = os.getenv("ACCESS_TOKEN")
+    access_token_secret = os.getenv("ACCESS_TOKEN_SECRET")
 
-        oauth = OAuth1Session(
-            consumer_key,
-            client_secret=consumer_secret,
-            resource_owner_key=access_token,
-            resource_owner_secret=access_token_secret,
-        )
+    if all([consumer_key, consumer_secret, access_token, access_token_secret]):
+        try:
+            from requests_oauthlib import OAuth1Session
 
-        groups = []
-
-        # Personalized — proven production path from git history.
-        def _personalized_request():
-            response = oauth.get(
-                "https://api.x.com/2/users/personalized_trends",
-                timeout=REQUEST_TIMEOUT,
+            oauth = OAuth1Session(
+                consumer_key,
+                client_secret=consumer_secret,
+                resource_owner_key=access_token,
+                resource_owner_secret=access_token_secret,
             )
-            if response.status_code != 200:
-                raise RuntimeError(f"X API error {response.status_code}: {response.text}")
-            return response.json()
 
-        payload = retry_call("X trending fetch", _personalized_request)
-        raw_data = (payload or {}).get("data", []) if isinstance(payload, dict) else []
-        logger.info("X API returned %s items total.", len(raw_data or []))
-        personalized = collect_raw(raw_data, "Personalized", limit)
-        if personalized:
-            logger.info("Successfully fetched %s X trending topics", len(personalized))
-            groups.append(("Personalized", personalized))
-        else:
-            logger.warning("X personalized trends returned no usable items.")
-
-        # United States top trends as a matching right-hand column.
-        seen = {(item.get("name") or "").lower() for item in personalized}
-        us_trends = []
-        us_woeids = [
-            ("United States", X_US_WOEID),
-            # Major US city fallback if country WOEID is thin/unavailable.
-            ("United States", 2459115),  # New York
-        ]
-        for label, woeid in us_woeids:
-            if len(us_trends) >= limit:
-                break
-
-            def _us_request(current_woeid=woeid):
+            def _personalized_request():
                 response = oauth.get(
-                    f"https://api.x.com/2/trends/by/woeid/{current_woeid}",
-                    params={"max_trends": 50},
+                    "https://api.x.com/2/users/personalized_trends",
                     timeout=REQUEST_TIMEOUT,
                 )
                 if response.status_code != 200:
                     raise RuntimeError(
-                        f"X WOEID {current_woeid} error {response.status_code}: {response.text}"
+                        f"X personalized error {response.status_code}: {(response.text or '')[:300]}"
                     )
                 return response.json()
 
-            try:
-                us_payload = retry_call(f"X trends {label} {woeid}", _us_request)
-            except Exception as us_exc:
-                logger.error("United States X trends skipped (%s): %s", woeid, us_exc)
-                continue
+            payload = retry_call("X trending fetch", _personalized_request)
+            raw_personal = (payload or {}).get("data", []) if isinstance(payload, dict) else []
+            logger.info("X API returned %s items total.", len(raw_personal or []))
+            personalized = collect_items(raw_personal, "Personalized", limit)
+            if personalized:
+                logger.info("Successfully fetched %s X trending topics", len(personalized))
+                groups.append(("Personalized", personalized))
+            else:
+                logger.warning("X personalized trends returned no usable items.")
+        except ImportError:
+            logger.error("requests_oauthlib not installed - cannot fetch personalized X trends")
+        except Exception as exc:
+            logger.error("Error fetching personalized X trends: %s", exc)
+    else:
+        logger.warning("X personalized trends: missing OAuth credentials.")
 
+    # --- United States (Bearer token + official v2 WOEID endpoint) ---
+    bearer = (
+        (os.getenv("X_BEARER_TOKEN") or os.getenv("BEARER_TOKEN") or "").strip()
+    )
+    if not bearer:
+        logger.warning(
+            "X United States trends: missing X_BEARER_TOKEN/BEARER_TOKEN; skipping USA column."
+        )
+    else:
+        def _us_request():
+            response = HTTP_SESSION.get(
+                f"https://api.x.com/2/trends/by/woeid/{X_US_WOEID}",
+                headers={"Authorization": f"Bearer {bearer}"},
+                params={
+                    "max_trends": limit,
+                    "trend.fields": "trend_name,tweet_count",
+                },
+                timeout=REQUEST_TIMEOUT,
+            )
+            body = (response.text or "")[:400]
+            if response.status_code == 401:
+                raise RuntimeError(f"X USA trends unauthorized (invalid bearer): {body}")
+            if response.status_code == 429:
+                raise RuntimeError(f"X USA trends rate limited: {body}")
+            if response.status_code != 200:
+                raise RuntimeError(f"X USA trends error {response.status_code}: {body}")
+            return response.json()
+
+        try:
+            us_payload = retry_call("X USA trends by WOEID", _us_request, attempts=3)
             raw_us = []
             if isinstance(us_payload, dict):
-                raw_us = us_payload.get("data") or us_payload.get("trends") or []
+                raw_us = us_payload.get("data") or []
             elif isinstance(us_payload, list):
                 raw_us = us_payload
-            logger.info("X United States trends (%s) returned %s items.", woeid, len(raw_us or []))
-            us_trends.extend(collect_raw(raw_us, "United States", limit - len(us_trends), seen=seen))
+            logger.info("X USA WOEID trends returned %s raw items.", len(raw_us or []))
+            if raw_us and isinstance(raw_us[0], dict):
+                logger.info("X USA sample keys: %s", sorted(raw_us[0].keys()))
+            us_trends = collect_items(raw_us, "United States", limit)
+            if us_trends:
+                logger.info("Successfully fetched %s United States X trends", len(us_trends))
+                groups.append(("United States", us_trends))
+            else:
+                logger.warning("X United States trends returned no usable items.")
+        except Exception as exc:
+            logger.error("Error fetching United States X trends: %s", exc)
 
-        if us_trends:
-            groups.append(("United States", us_trends[:limit]))
-        else:
-            logger.warning("X United States trends returned no usable items.")
-
-        return groups
-
-    except ImportError:
-        logger.error("requests_oauthlib not installed - cannot fetch X trends")
-        return []
-    except Exception as exc:
-        logger.error("Error fetching X trending: %s", exc)
-        return []
+    return groups
 
 
 def fetch_reflection(seed_date=None):

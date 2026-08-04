@@ -40,7 +40,8 @@ Useful environment variables:
 
 - `XAI_API_KEY` required for summarisation and the reflection question
 - `XAI_MODEL` optional model override (default: `grok-4.20-non-reasoning`)
-- `CONSUMER_KEY`, `CONSUMER_SECRET`, `ACCESS_TOKEN`, `ACCESS_TOKEN_SECRET` for X trends
+- `CONSUMER_KEY`, `CONSUMER_SECRET`, `ACCESS_TOKEN`, `ACCESS_TOKEN_SECRET` for personalized X trends
+- `X_BEARER_TOKEN` or `BEARER_TOKEN` for United States X trends (v2 WOEID)
 - `SEND_TO_SLACK=true` only if you explicitly want Slack upload again (generates a PDF for Slack only)
 - `GENERATE_PDF=false` to force-skip PDF even when Slack is enabled
 

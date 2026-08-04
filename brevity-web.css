@@ -291,3 +291,23 @@ h1 {
         font-size: 18px;
     }
 }
+
+
+.header-top {
+    width: 100%;
+}
+
+.year-progress {
+    margin-left: auto;
+}
+
+@media (max-width: 820px) {
+    .header-top {
+        align-items: flex-start;
+    }
+
+    .year-progress {
+        width: 100%;
+        min-width: 0;
+    }
+}
