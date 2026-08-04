@@ -36,12 +36,13 @@ jobs:
       - name: Run Brevity
         env:
           XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+          XAI_MODEL: ${{ vars.XAI_MODEL }}
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+          SEND_TO_SLACK: "false"
+          GENERATE_PDF: "true"
         run: uv run python brevity.py
       - name: Upload outputs
         if: always()
@@ -49,5 +50,8 @@ jobs:
         with:
           name: brevity-output
           path: |
+            index.html
+            resources/brevity.json
             brevity.pdf
+            brevity.css
           if-no-files-found: warn

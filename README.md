@@ -1,17 +1,54 @@
 # Brevity
 
-A simple yet elegant PDF solution to recieve a news brief covering a variety of specialised topics.
-<br>Using a mix of open & closed APIs, the news is retrieved from the various sources and summarised via Grok.
+A daily automated morning brief published as a GitHub Pages website.
 
-<img width="828" height="793" alt="image" src="https://github.com/user-attachments/assets/486ba206-11c1-4218-bd9e-f5543415623d" />
+Live site: [https://deanosmith.github.io/Brevity-Web/](https://deanosmith.github.io/Brevity-Web/)
 
-Topics include:
-- Date & Year %
-- Copenhagen's weather
+The generator pulls weather, markets, X trends, and news feeds, summarises stories with xAI, then writes:
+
+- `index.html` for the public website
+- `resources/brevity.json` for the structured brief payload
+- `brevity.pdf` as an optional downloadable archive
+
+## Sections
+
+- Date and year progress
+- Copenhagen weather
 - Stock markets
-- A quote from Jesus
+- Words of Jesus
 - Personalised trends on X
-- Copenhagen news this week
-- Space news this week
-- World News this week
-- A quotes from Stoicism
+- Copenhagen news
+- Space news
+- World news
+- Stoic / proverb quote
+
+## Automation
+
+GitHub Actions runs daily at `04:00 UTC` (around 06:00 Copenhagen time in winter / 07:00 in summer) and on manual dispatch.
+
+Published artifacts are committed back to `main`, which GitHub Pages serves from the repository root.
+
+Slack delivery is disabled by default. To re-enable it temporarily, set `SEND_TO_SLACK=true` in the workflow environment and provide Slack secrets.
+
+## Local run
+
+```bash
+uv sync
+uv run python brevity.py
+```
+
+Useful environment variables:
+
+- `XAI_API_KEY` required for summarisation and generated quotes
+- `XAI_MODEL` optional model override (default: `grok-4.20-non-reasoning`)
+- `CONSUMER_KEY`, `CONSUMER_SECRET`, `ACCESS_TOKEN`, `ACCESS_TOKEN_SECRET` for X trends
+- `GENERATE_PDF=false` to skip PDF generation
+- `SEND_TO_SLACK=true` only if you explicitly want Slack upload again
+
+Open `index.html` locally, or serve the folder:
+
+```bash
+python3 -m http.server 8000
+```
+
+Then visit `http://localhost:8000`.

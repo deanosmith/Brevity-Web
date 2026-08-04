@@ -39,21 +39,23 @@ jobs:
       - name: Run Brevity
         env:
           XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+          XAI_MODEL: ${{ vars.XAI_MODEL }}
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+          # Primary product is GitHub Pages. Slack is opt-in only.
+          SEND_TO_SLACK: "false"
+          GENERATE_PDF: "true"
         run: uv run python brevity.py
       - name: Commit and Push Changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Add PDF, HTML, and the JSON data file required for the web page
-          git add brevity.pdf
-          
+
+          # Publish the GitHub Pages homepage, data payload, and optional PDF archive.
+          git add index.html resources/brevity.json brevity.pdf brevity.css
+
           # Only commit if there are changes
           if git diff --staged --quiet; then
             echo "No changes to commit"

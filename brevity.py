@@ -35,8 +35,12 @@ logger = logging.getLogger(__name__)
 load_dotenv()
 
 XAI_API_KEY = os.getenv("XAI_API_KEY")
+XAI_MODEL = os.getenv("XAI_MODEL", "grok-4.20-non-reasoning")
 SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN")
 SLACK_CHANNEL_ID = os.getenv("SLACK_CHANNEL_ID")
+# Slack delivery is optional; the primary product is the GitHub Pages site.
+SEND_TO_SLACK = os.getenv("SEND_TO_SLACK", "").strip().lower() in {"1", "true", "yes", "on"}
+GENERATE_PDF = os.getenv("GENERATE_PDF", "1").strip().lower() not in {"0", "false", "no", "off"}
 
 # Ensure WeasyPrint can locate system libraries on macOS.
 if sys.platform == "darwin":
@@ -158,12 +162,17 @@ PLASMA_STOPS = (
 )
 
 JESUS_QUOTES_PATH = "resources/jesus.json"
-DEFAULT_HEADERS = {"User-Agent": "Brevity/1.0"}
+SITE_DATA_PATH = "resources/brevity.json"
+SITE_HTML_PATH = "index.html"
+PDF_PATH = "brevity.pdf"
+DEFAULT_HEADERS = {"User-Agent": "Brevity/1.0 (+https://deanosmith.github.io/Brevity-Web/)"}
 REQUEST_TIMEOUT = 30
 AI_TIMEOUT = 60
 RETRY_ATTEMPTS = 3
 RETRY_BACKOFF = 1.2
 RETRY_STATUS_CODES = (429, 500, 502, 503, 504)
+HTML_TAG_RE = re.compile(r"<[^>]+>")
+WHITESPACE_RE = re.compile(r"\s+")
 
 
 # ==============================================================================
@@ -370,6 +379,26 @@ def load_jesus_quotes(path=JESUS_QUOTES_PATH):
     return [(ref, text) for ref, text in data.items() if ref and text]
 
 
+def strip_html(value):
+    """Remove simple HTML tags and collapse whitespace from feed text."""
+    if not value:
+        return ""
+    text = HTML_TAG_RE.sub(" ", str(value))
+    text = html.unescape(text)
+    return WHITESPACE_RE.sub(" ", text).strip()
+
+
+def json_safe(value):
+    """Convert values so they can be written to JSON."""
+    if isinstance(value, Markup):
+        return str(value)
+    if isinstance(value, dict):
+        return {key: json_safe(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [json_safe(item) for item in value]
+    return value
+
+
 # ==============================================================================
 # DATA FETCHING
 # ==============================================================================
@@ -532,6 +561,17 @@ def fetch_stocks():
 
         hist = retry_call(f"Stock fetch {name}", _fetch_history)
         if hist is None:
+            # Fall back to a slightly longer window before giving up.
+            def _fetch_history_5d():
+                ticker = yf.Ticker(symbol)
+                hist_5d = ticker.history(period="5d")
+                if hist_5d is None or hist_5d.empty:
+                    raise ValueError("No price history returned")
+                return hist_5d
+
+            hist = retry_call(f"Stock fetch {name} (5d)", _fetch_history_5d, attempts=2)
+
+        if hist is None:
             stock_data[name] = {
                 "price": 0.0,
                 "change": 0.0,
@@ -543,8 +583,8 @@ def fetch_stocks():
             continue
 
         try:
-            current_close = hist["Close"].iloc[-1]
-            prev_close = hist["Close"].iloc[-2] if len(hist) > 1 else current_close
+            current_close = float(hist["Close"].iloc[-1])
+            prev_close = float(hist["Close"].iloc[-2]) if len(hist) > 1 else current_close
             change = current_close - prev_close
             percent_change = (change / prev_close) * 100 if prev_close else 0.0
             return_percent = 0.0
@@ -587,8 +627,11 @@ def fetch_stocks():
 
 def summarize_with_ai(text, prompt_prefix="Summarize this news item:"):
     """Summarize text using the xAI API."""
+    clean_text = strip_html(text)
+    if not clean_text:
+        return "Content unavailable"
     if not XAI_API_KEY:
-        return text
+        return clean_text
 
     headers = {
         "Authorization": f"Bearer {XAI_API_KEY}",
@@ -601,10 +644,10 @@ def summarize_with_ai(text, prompt_prefix="Summarize this news item:"):
         "Do not filter anything out. Be specific."
     )
     payload = {
-        "model": "grok-4-1-fast-reasoning",
+        "model": XAI_MODEL,
         "messages": [
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": f"{prompt_prefix}\n\n{text}"},
+            {"role": "user", "content": f"{prompt_prefix}\n\n{clean_text}"},
         ],
     }
 
@@ -615,7 +658,9 @@ def summarize_with_ai(text, prompt_prefix="Summarize this news item:"):
             json=payload,
             timeout=AI_TIMEOUT,
         )
-        response.raise_for_status()
+        if response.status_code >= 400:
+            body = (response.text or "")[:300]
+            raise RuntimeError(f"xAI {response.status_code}: {body}")
         content = response.json()["choices"][0]["message"]["content"].strip()
         if not content:
             raise ValueError("Empty summary response")
@@ -624,7 +669,7 @@ def summarize_with_ai(text, prompt_prefix="Summarize this news item:"):
     summary = retry_call("AI summarization", _summarize)
     if not summary:
         logger.error("AI summarization failed; falling back to raw text")
-        return text if text else "Content unavailable"
+        return clean_text
     return summary
 
 
@@ -653,8 +698,8 @@ def fetch_rss_feed(url, limit=5, prompt="Summarize this content:"):
 
     for entry in feed.entries[:limit]:
         try:
-            title = getattr(entry, "title", "") or ""
-            summary = getattr(entry, "summary", getattr(entry, "description", "")) or ""
+            title = strip_html(getattr(entry, "title", "") or "")
+            summary = strip_html(getattr(entry, "summary", getattr(entry, "description", "")) or "")
             content_text = f"{title}. {summary}".strip(". ").strip()
             item_summary = summarize_with_ai(content_text, prompt)
             item_summary = stylize_keywords(item_summary)
@@ -673,7 +718,7 @@ def fetch_world_news():
     """Fetch and summarize world news from BBC."""
     logger.info("Fetching world news...")
     return fetch_rss_feed(
-        "http://feeds.bbci.co.uk/news/world/rss.xml",
+        "https://feeds.bbci.co.uk/news/world/rss.xml",
         limit=10,
         prompt="Summarize this news item:",
     )
@@ -783,7 +828,7 @@ def fetch_quote():
     )
 
     payload = {
-        "model": "grok-4-1-fast-reasoning",
+        "model": XAI_MODEL,
         "messages": [
             {"role": "system", "content": "You are a wise assistant. Output JSON only."},
             {"role": "user", "content": prompt},
@@ -798,7 +843,9 @@ def fetch_quote():
             json=payload,
             timeout=AI_TIMEOUT,
         )
-        response.raise_for_status()
+        if response.status_code >= 400:
+            body = (response.text or "")[:300]
+            raise RuntimeError(f"xAI {response.status_code}: {body}")
         content = response.json()["choices"][0]["message"]["content"].strip()
         return json.loads(content)
 
@@ -821,18 +868,48 @@ def fetch_jesus_quote(seed_date=None):
 
 
 # ==============================================================================
-# PDF GENERATION & DELIVERY
+# SITE / PDF GENERATION
 # ==============================================================================
 
 
 def render_html(data):
-    """Render the Jinja2 template for PDF generation."""
-    env = Environment(loader=FileSystemLoader(os.path.dirname(__file__)))
+    """Render the Jinja2 template for the website and optional PDF."""
+    env = Environment(loader=FileSystemLoader(os.path.dirname(__file__) or "."))
     template = env.get_template("brevity_template.html")
     return template.render(**data)
 
 
-def generate_pdf(data):
+def write_site_html(data, path=SITE_HTML_PATH):
+    """Write the static GitHub Pages homepage."""
+    logger.info("Writing site HTML to %s...", path)
+    try:
+        html_out = render_html(data)
+        with open(path, "w", encoding="utf-8") as file:
+            file.write(html_out)
+        logger.info("Site HTML written to %s", path)
+        return path
+    except Exception as exc:
+        logger.error("Error writing site HTML: %s", exc)
+        return None
+
+
+def write_site_data(data, path=SITE_DATA_PATH):
+    """Write the machine-readable brief used by the website and debugging."""
+    logger.info("Writing site data to %s...", path)
+    try:
+        os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+        payload = json_safe(data)
+        with open(path, "w", encoding="utf-8") as file:
+            json.dump(payload, file, ensure_ascii=False, indent=2)
+            file.write("\n")
+        logger.info("Site data written to %s", path)
+        return path
+    except Exception as exc:
+        logger.error("Error writing site data: %s", exc)
+        return None
+
+
+def generate_pdf(data, path=PDF_PATH):
     """Generate PDF from the HTML template using WeasyPrint."""
     logger.info("Generating PDF...")
     try:
@@ -843,17 +920,16 @@ def generate_pdf(data):
         return None
     try:
         html_out = render_html(data)
-        pdf_path = "brevity.pdf"
-        HTML(string=html_out, base_url=os.path.dirname(__file__)).write_pdf(pdf_path)
-        logger.info("PDF generated at %s", pdf_path)
-        return pdf_path
+        HTML(string=html_out, base_url=os.path.dirname(__file__) or ".").write_pdf(path)
+        logger.info("PDF generated at %s", path)
+        return path
     except Exception as exc:
         logger.error("Error generating PDF: %s", exc)
         return None
 
 
 def send_to_slack(pdf_path):
-    """Upload PDF to Slack using the v2 API."""
+    """Upload PDF to Slack using the v2 API (optional)."""
     logger.info("Sending to Slack...")
 
     if not os.path.exists(pdf_path):
@@ -882,10 +958,9 @@ def send_to_slack(pdf_path):
         logger.error("Slack upload failed after retries.")
 
 
-def main():
-    logger.info("Starting Brevity generation...")
-
-    today = date.today()
+def build_brief_data(today=None):
+    """Fetch all sources and assemble the daily brief payload."""
+    today = today or date.today()
     weather = fetch_weather()
     stocks = fetch_stocks()
     world_news = fetch_world_news()
@@ -898,9 +973,12 @@ def main():
     day_of_year = today.timetuple().tm_yday
     days_in_year = 366 if calendar.isleap(today.year) else 365
     year_percent = (day_of_year / days_in_year) * 100
+    generated_at = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M %Z")
 
-    data = {
+    return {
         "date": today.strftime("%A, %B %d"),
+        "iso_date": today.isoformat(),
+        "generated_at": generated_at,
         "year_percent": year_percent,
         "weather": weather,
         "stocks": stocks,
@@ -910,11 +988,34 @@ def main():
         "jesus_quote": jesus_quote,
         "x_trending": x_trending,
         "quote": quote,
+        "pdf_available": False,
     }
 
-    pdf_path = generate_pdf(data)
-    if pdf_path:
+
+def main():
+    logger.info("Starting Brevity generation...")
+    if XAI_API_KEY:
+        logger.info("Using xAI model: %s", XAI_MODEL)
+    else:
+        logger.warning("XAI_API_KEY missing; news will not be summarised.")
+
+    data = build_brief_data()
+
+    write_site_data(data)
+    write_site_html(data)
+
+    pdf_path = None
+    if GENERATE_PDF:
+        pdf_path = generate_pdf(data)
+        data["pdf_available"] = bool(pdf_path)
+        # Re-write site artifacts so the homepage can link the PDF when present.
+        write_site_data(data)
+        write_site_html(data)
+
+    if SEND_TO_SLACK and pdf_path:
         send_to_slack(pdf_path)
+    elif SEND_TO_SLACK and not pdf_path:
+        logger.warning("SEND_TO_SLACK enabled but no PDF was generated.")
 
     logger.info("Done.")
 
