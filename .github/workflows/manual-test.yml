@@ -36,7 +36,6 @@ jobs:
       - name: Run Brevity
         env:
           XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
-          XAI_MODEL: ${{ vars.XAI_MODEL }}
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
@@ -54,4 +53,5 @@ jobs:
             resources/brevity.json
             brevity.pdf
             brevity.css
+            brevity-web.css
           if-no-files-found: warn

@@ -1,0 +1,56 @@
+/* Browser-only enhancements. Keep WeasyPrint on brevity.css. */
+
+@media (max-width: 820px) {
+    body {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .section,
+    .column {
+        width: 100%;
+    }
+
+    .column-left,
+    .column-right {
+        float: none;
+    }
+
+    .columns {
+        break-before: auto;
+        page-break-before: auto;
+    }
+
+    .weather-grid .weather-item {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+
+    .x-grid,
+    .world-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stock-item {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 7ch) 1ch minmax(0, 7ch);
+        grid-template-areas:
+            "name price sep change"
+            ". . return-sep return";
+    }
+
+    .stock-name { grid-area: name; }
+    .stock-price-value { grid-area: price; }
+    .stock-item .stock-delimiter:nth-of-type(1) { grid-area: sep; }
+    .stock-change { grid-area: change; }
+    .stock-item .stock-delimiter:nth-of-type(2) { grid-area: return-sep; }
+    .stock-return { grid-area: return; }
+}
+
+@media (min-width: 821px) {
+    h1 {
+        font-size: 34px;
+    }
+}

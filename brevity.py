@@ -35,7 +35,8 @@ logger = logging.getLogger(__name__)
 load_dotenv()
 
 XAI_API_KEY = os.getenv("XAI_API_KEY")
-XAI_MODEL = os.getenv("XAI_MODEL", "grok-4.20-non-reasoning")
+# Ignore blank overrides from empty GitHub Actions variables.
+XAI_MODEL = (os.getenv("XAI_MODEL") or "grok-4.20-non-reasoning").strip() or "grok-4.20-non-reasoning"
 SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN")
 SLACK_CHANNEL_ID = os.getenv("SLACK_CHANNEL_ID")
 # Slack delivery is optional; the primary product is the GitHub Pages site.

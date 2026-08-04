@@ -39,7 +39,6 @@ jobs:
       - name: Run Brevity
         env:
           XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
-          XAI_MODEL: ${{ vars.XAI_MODEL }}
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
@@ -54,7 +53,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
           # Publish the GitHub Pages homepage, data payload, and optional PDF archive.
-          git add index.html resources/brevity.json brevity.pdf brevity.css
+          git add index.html resources/brevity.json brevity.pdf brevity.css brevity-web.css
 
           # Only commit if there are changes
           if git diff --staged --quiet; then
