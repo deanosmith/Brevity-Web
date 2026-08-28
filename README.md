@@ -4,7 +4,7 @@ A daily automated morning brief published as a GitHub Pages website.
 
 Live site: [https://deanosmith.github.io/Brevity-Web/](https://deanosmith.github.io/Brevity-Web/)
 
-The generator pulls weather, markets, X trends, and news feeds, summarises stories with xAI, then writes:
+The generator pulls weather, markets, X topics, sky data, and news feeds, summarises stories with xAI, then writes:
 
 - `index.html` for the public website
 - `brevity.css` / `brevity-web.css` for styling
@@ -17,7 +17,8 @@ PDF generation is kept only for optional Slack delivery and is not part of the p
 - Copenhagen weather (Open-Meteo), including next 2 days and peak rain time
 - General stock watchlist
 - Christian reflection question
-- Trends on X
+- Personalized topics from X
+- Sky Watch (moon, aurora, solar weather, next launch, next eclipse)
 - Copenhagen news
 - Space news
 
@@ -38,10 +39,9 @@ uv run python brevity.py
 
 Useful environment variables:
 
-- `XAI_API_KEY` required for summarisation and the reflection question
+- `XAI_API_KEY` required for summarisation, the reflection question, and personalized X topics
 - `XAI_MODEL` optional model override (default: `grok-4.20-non-reasoning`)
-- `CONSUMER_KEY`, `CONSUMER_SECRET`, `ACCESS_TOKEN`, `ACCESS_TOKEN_SECRET` for personalized X trends
-- `X_BEARER_TOKEN` or `BEARER_TOKEN` for United States X trends (v2 WOEID)
+- `CONSUMER_KEY`, `CONSUMER_SECRET`, `ACCESS_TOKEN`, `ACCESS_TOKEN_SECRET` optional; used if the X account has Premium personalized trends
 - `SEND_TO_SLACK=true` only if you explicitly want Slack upload again (generates a PDF for Slack only)
 - `GENERATE_PDF=false` to force-skip PDF even when Slack is enabled
 

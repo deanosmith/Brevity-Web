@@ -11,7 +11,8 @@ import time
 import requests
 import calendar
 from urllib.parse import quote
-from datetime import date, datetime
+from datetime import date, datetime, timedelta, timezone
+from zoneinfo import ZoneInfo
 
 from dotenv import load_dotenv
 from requests.adapters import HTTPAdapter
@@ -156,8 +157,40 @@ SPACE_FEEDS = [
     "https://spacenews.com/feed/",
 ]
 
-# United States WOEID for a dedicated top-trends column beside personalized.
-X_US_WOEID = 23424977
+COPENHAGEN_TZ = ZoneInfo("Europe/Copenhagen")
+# Next notable eclipses after the Aug 2026 events. Used by Sky Watch.
+UPCOMING_ECLIPSES = [
+    {
+        "when": datetime(2026, 8, 28, 4, 13, tzinfo=timezone.utc),
+        "name": "Partial Lunar Eclipse",
+        "detail": "Visible from Europe",
+        "link": "https://science.nasa.gov/eclipses/",
+    },
+    {
+        "when": datetime(2027, 2, 6, 16, 0, tzinfo=timezone.utc),
+        "name": "Annular Solar Eclipse",
+        "detail": "South America and Africa",
+        "link": "https://science.nasa.gov/eclipses/future-eclipses/eclipse-2027/",
+    },
+    {
+        "when": datetime(2027, 8, 2, 10, 7, tzinfo=timezone.utc),
+        "name": "Total Solar Eclipse",
+        "detail": "Spain and North Africa",
+        "link": "https://science.nasa.gov/eclipses/future-eclipses/eclipse-2027/",
+    },
+    {
+        "when": datetime(2028, 1, 26, 15, 8, tzinfo=timezone.utc),
+        "name": "Annular Solar Eclipse",
+        "detail": "Americas and western Europe",
+        "link": "https://science.nasa.gov/eclipses/",
+    },
+    {
+        "when": datetime(2028, 7, 22, 2, 56, tzinfo=timezone.utc),
+        "name": "Total Solar Eclipse",
+        "detail": "Australia and New Zealand",
+        "link": "https://science.nasa.gov/eclipses/",
+    },
+]
 
 TRENDING_TIME_RE = re.compile(r"(\d{1,2}):(\d{2})")
 KEYWORDS_RE = re.compile(r"^\s*\[(?P<keywords>[^\]]+)\]\s*")
@@ -194,6 +227,8 @@ WHITESPACE_RE = re.compile(r"\s+")
 WEATHER_LAT = 55.6761
 WEATHER_LON = 12.5683
 WEATHER_TIMEZONE = "Europe/Copenhagen"
+# Wind dial full-scale in km/h. 24 km/h should read as very strong.
+WIND_DIAL_MAX_KMH = 50
 WEATHER_SOURCE = {
     "name": "Open-Meteo",
     "url": "https://open-meteo.com/",
@@ -357,7 +392,7 @@ def dial_metrics(rain_chance=None, wind_max=None, uv_max=None, high=None, low=No
             "label": "Rain",
         },
         "wind": {
-            "progress": clamp01(wind / 60.0),
+            "progress": clamp01(wind / float(WIND_DIAL_MAX_KMH)),
             "color": plasma_color(wind),
             "value": f"{int(round(wind))} km/h" if wind_max is not None else "—",
             "label": "Wind",
@@ -671,6 +706,111 @@ def x_search_link(term):
     if not query:
         return "https://x.com/explore"
     return f"https://x.com/search?q={quote(query)}&src=typed_query"
+
+
+def fetch_json(url, params=None, extra_headers=None, label="JSON fetch"):
+    """GET JSON with the shared retry session."""
+    headers = dict(DEFAULT_HEADERS)
+    if extra_headers:
+        headers.update(extra_headers)
+
+    def _request():
+        response = HTTP_SESSION.get(
+            url, params=params, timeout=REQUEST_TIMEOUT, headers=headers
+        )
+        response.raise_for_status()
+        return response.json()
+
+    return retry_call(label, _request)
+
+
+def copenhagen_now():
+    """Current time in Copenhagen."""
+    return datetime.now(COPENHAGEN_TZ)
+
+
+def as_utc(moment):
+    """Normalize a datetime or ISO stamp to timezone-aware UTC."""
+    if moment is None:
+        return None
+    if isinstance(moment, str):
+        text = moment.strip()
+        if not text:
+            return None
+        try:
+            moment = datetime.fromisoformat(text.replace("Z", "+00:00"))
+        except ValueError:
+            return None
+    if not isinstance(moment, datetime):
+        return None
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=timezone.utc)
+    return moment.astimezone(timezone.utc)
+
+
+def tonight_copenhagen(hour=21):
+    """This evening in Copenhagen, used as the moon-viewing sort time."""
+    now = copenhagen_now()
+    evening = now.replace(hour=hour, minute=0, second=0, microsecond=0)
+    if evening < now:
+        return now
+    return evening
+
+
+def relative_local_label(moment):
+    """Compact Copenhagen-local label, matching the brief's 12-hour clocks."""
+    if moment is None:
+        return None
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=timezone.utc)
+    local = moment.astimezone(COPENHAGEN_TZ)
+    today = copenhagen_now().date()
+    clock = format_clock_12(local.strftime("%H:%M"))
+    if local.date() == today:
+        return f"Today {clock}"
+    if local.date() == today + timedelta(days=1):
+        return f"Tomorrow {clock}"
+    return f"{local.strftime('%a')} {clock}"
+
+
+def extract_json_object(text):
+    """Parse a JSON object from model output, ignoring markdown fences."""
+    if not text or not isinstance(text, str):
+        return None
+    cleaned = text.strip()
+    if cleaned.startswith("```"):
+        cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned)
+        cleaned = re.sub(r"\s*```$", "", cleaned)
+    try:
+        parsed = json.loads(cleaned)
+        return parsed if isinstance(parsed, dict) else None
+    except json.JSONDecodeError:
+        match = re.search(r"\{.*\}", cleaned, re.S)
+        if not match:
+            return None
+        try:
+            parsed = json.loads(match.group(0))
+            return parsed if isinstance(parsed, dict) else None
+        except json.JSONDecodeError:
+            return None
+
+
+def responses_output_text(payload):
+    """Flatten xAI Responses API output into a single string."""
+    if not isinstance(payload, dict):
+        return ""
+    chunks = []
+    for item in payload.get("output") or []:
+        if not isinstance(item, dict):
+            continue
+        if item.get("type") and item.get("type") != "message":
+            continue
+        for part in item.get("content") or []:
+            if isinstance(part, dict) and part.get("text"):
+                chunks.append(str(part["text"]))
+            elif isinstance(part, str):
+                chunks.append(part)
+    return "\n".join(chunks).strip()
 
 
 # ==============================================================================
@@ -1236,205 +1376,478 @@ def fetch_copenhagen_events():
     )
 
 
-def _normalize_trend_item(trend, source_label):
-    """Normalize personalized or WOEID trend payloads into one shape."""
-    if not isinstance(trend, dict):
+def _format_post_count(value):
+    if isinstance(value, int):
+        return f"{value:,} posts"
+    if value is None:
         return None
-    raw_name = trend.get("trend_name") or trend.get("name") or ""
-    raw_name = strip_html(str(raw_name)).strip()
+    text = str(value).strip()
+    return text or None
+
+
+def _trend_card(name, post_count=None, category="Personalized", trending_since=None, link=None):
+    """One card in the Personalized / Sky Watch lists."""
+    raw_name = strip_html(str(name or "")).strip()
     if not raw_name:
         return None
-
-    # Keep the original X trend text for display; only the click-through link is tightened.
     search_term = extract_search_term(raw_name) or raw_name
-    post_count = trend.get("post_count")
-    if post_count is None:
-        tweet_count = trend.get("tweet_count")
-        post_count = f"{tweet_count:,} posts" if isinstance(tweet_count, int) else (tweet_count or "N/A")
-
+    since = format_trending_since(trending_since) if trending_since else None
+    if since and since[:1].isdigit():
+        since = f"Since {since}"
     return {
         "name": raw_name,
         "search_term": search_term,
-        "post_count": post_count,
-        "category": trend.get("category") or source_label or "N/A",
-        "trending_since": format_trending_since(trend.get("trending_since")),
-        "link": x_search_link(search_term),
-        "source": source_label,
+        "post_count": _format_post_count(post_count) or "Live",
+        "category": category or "Personalized",
+        "trending_since": since,
+        "link": link or x_search_link(search_term),
+        "source": category,
     }
 
 
-def _oauth_session():
+def _collect_trend_cards(raw_items, category, max_items):
+    out = []
+    seen = set()
+    for trend in raw_items or []:
+        if not isinstance(trend, dict):
+            continue
+        item = _trend_card(
+            trend.get("trend_name") or trend.get("name") or trend.get("query"),
+            post_count=trend.get("post_count", trend.get("tweet_count", trend.get("tweet_volume"))),
+            category=trend.get("category") or category,
+            trending_since=trend.get("trending_since"),
+        )
+        if not item:
+            continue
+        key = item["name"].lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(item)
+        if len(out) >= max_items:
+            break
+    return out
+
+
+def _fetch_x_personalized_official(limit):
+    """
+    Official X personalized_trends. Requires X Premium on the user token.
+
+    Returns a list of cards, or None when the endpoint is unavailable so a
+    fallback can run. Empty list means a successful but blank payload.
+    """
     consumer_key = os.getenv("CONSUMER_KEY")
     consumer_secret = os.getenv("CONSUMER_SECRET")
     access_token = os.getenv("ACCESS_TOKEN")
     access_token_secret = os.getenv("ACCESS_TOKEN_SECRET")
     if not all([consumer_key, consumer_secret, access_token, access_token_secret]):
+        logger.info("X personalized API skipped: missing OAuth credentials.")
         return None
-    from requests_oauthlib import OAuth1Session
 
-    return OAuth1Session(
+    try:
+        from requests_oauthlib import OAuth1Session
+    except ImportError:
+        logger.error("requests_oauthlib not installed - cannot fetch official X trends")
+        return None
+
+    oauth = OAuth1Session(
         consumer_key,
         client_secret=consumer_secret,
         resource_owner_key=access_token,
         resource_owner_secret=access_token_secret,
     )
+    try:
+        response = oauth.get(
+            "https://api.x.com/2/users/personalized_trends",
+            params={
+                "personalized_trend.fields": "category,post_count,trend_name,trending_since",
+            },
+            timeout=REQUEST_TIMEOUT,
+        )
+    except Exception as exc:
+        logger.warning("X personalized API request failed: %s", exc)
+        return None
+
+    body = (response.text or "")[:400]
+    if response.status_code == 401 and "premium" in body.lower():
+        logger.warning(
+            "X personalized trends require Premium; falling back to Grok X search."
+        )
+        return None
+    if response.status_code != 200:
+        logger.warning("X personalized API error %s: %s", response.status_code, body)
+        return None
+
+    payload = response.json() if response.content else {}
+    raw_items = payload.get("data", []) if isinstance(payload, dict) else []
+    logger.info("X personalized API returned %s items.", len(raw_items or []))
+    return _collect_trend_cards(raw_items, "Personalized", limit)
+
+
+def _fetch_x_personalized_grok(limit):
+    """Live For-You topics from Grok's X search, tuned to this brief's interests."""
+    if not XAI_AVAILABLE:
+        return []
+
+    today = date.today().isoformat()
+    yesterday = (date.today() - timedelta(days=1)).isoformat()
+    prompt = (
+        f"Using X search, list {limit} topics that are actually moving on X today ({today}). "
+        "Choose what would matter to someone in Copenhagen who follows spaceflight and SpaceX, "
+        "AI and semiconductors, nuclear energy, Tesla, Palantir, and Denmark or Europe. "
+        "Skip celebrity gossip, sports scores, and meme coins unless they are market-moving. "
+        "Each name must be a short search query or hashtag, not a sentence. "
+        'Return JSON only: {"trends":[{"name":"Topic","post_count":"Rising or ~12k posts",'
+        '"category":"Space"}]}. '
+        "post_count should be a short volume hint, not a paragraph."
+    )
+    headers = {
+        "Authorization": f"Bearer {XAI_API_KEY}",
+        "Content-Type": "application/json",
+    }
+    payload = {
+        "model": XAI_MODEL,
+        "input": [
+            {
+                "role": "system",
+                "content": (
+                    "You curate a tight morning X briefing. Output JSON only. "
+                    "Use X search. No markdown."
+                ),
+            },
+            {"role": "user", "content": prompt},
+        ],
+        "tools": [{"type": "x_search", "from_date": yesterday}],
+        "store": False,
+    }
+
+    def _request():
+        response = HTTP_SESSION.post(
+            "https://api.x.ai/v1/responses",
+            headers=headers,
+            json=payload,
+            timeout=90,
+        )
+        if response.status_code >= 400:
+            body = (response.text or "")[:300]
+            lower = body.lower()
+            if response.status_code in {401, 403} or "incorrect api key" in lower or "invalid api key" in lower:
+                mark_xai_unavailable(f"xAI {response.status_code}: {body}")
+            raise RuntimeError(f"xAI responses {response.status_code}: {body}")
+        return response.json()
+
+    result = retry_call("Grok X search", _request, attempts=2)
+    parsed = extract_json_object(responses_output_text(result)) if result else None
+
+    if not parsed:
+        # Chat completions fallback without live search still beats an empty column.
+        chat_payload = {
+            "model": XAI_MODEL,
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "You curate a tight morning X briefing. Output JSON only.",
+                },
+                {"role": "user", "content": prompt},
+            ],
+            "response_format": {"type": "json_object"},
+        }
+
+        def _chat():
+            response = HTTP_SESSION.post(
+                "https://api.x.ai/v1/chat/completions",
+                headers=headers,
+                json=chat_payload,
+                timeout=AI_TIMEOUT,
+            )
+            if response.status_code >= 400:
+                body = (response.text or "")[:300]
+                lower = body.lower()
+                if response.status_code in {401, 403} or "incorrect api key" in lower or "invalid api key" in lower:
+                    mark_xai_unavailable(f"xAI {response.status_code}: {body}")
+                raise RuntimeError(f"xAI {response.status_code}: {body}")
+            return response.json()["choices"][0]["message"]["content"].strip()
+
+        content = retry_call("Grok X briefing", _chat, attempts=2)
+        parsed = extract_json_object(content) if content else None
+
+    raw_trends = []
+    if isinstance(parsed, dict):
+        raw_trends = parsed.get("trends") or parsed.get("topics") or parsed.get("items") or []
+    cards = _collect_trend_cards(raw_trends, "Personalized", limit)
+    if cards:
+        logger.info("Grok returned %s personalized X topics.", len(cards))
+    return cards
 
 
 def fetch_x_trending(limit=5):
     """
-    Fetch trending topics from X.
+    Personalized X topics for the left Watch column.
 
-    Personalized trends use OAuth1 personalized_trends (existing working path).
-    United States trends use official v2 WOEID endpoint with Bearer auth:
-      GET /2/trends/by/woeid/23424977?max_trends=5&trend.fields=trend_name,tweet_count
+    Tries the official personalized_trends endpoint first. That route now
+    requires X Premium, so Grok X search is the reliable fallback, tuned to
+    this brief (Copenhagen, space, AI, energy).
     """
-    logger.info("Fetching X trending topics...")
-    groups = []
+    logger.info("Fetching personalized X topics...")
+    official = _fetch_x_personalized_official(limit)
+    personalized = official if official else _fetch_x_personalized_grok(limit)
+    if not personalized:
+        logger.warning("Personalized X topics unavailable.")
+        return []
+    return [("Personalized", personalized)]
 
-    def format_count(value):
-        if isinstance(value, int):
-            return f"{value:,} posts"
-        if value is None:
-            return "N/A"
-        return str(value)
 
-    def format_trend_item(trend, default_category="N/A"):
-        if not isinstance(trend, dict):
-            return None
-        trend_name = (
-            trend.get("trend_name")
-            or trend.get("name")
-            or trend.get("query")
-            or ""
-        )
-        trend_name = strip_html(str(trend_name)).strip()
-        if not trend_name:
-            return None
-
-        tweet_count = trend.get("tweet_count")
-        if tweet_count is None:
-            tweet_count = trend.get("tweet_volume")
-        if trend.get("post_count") is not None:
-            post_count = trend.get("post_count")
-        else:
-            post_count = format_count(tweet_count)
-
-        return {
-            "name": trend_name,
-            "post_count": post_count,
-            "category": trend.get("category") or default_category,
-            "trending_since": format_trending_since(trend.get("trending_since")),
-            "link": f"https://x.com/search?q={quote(trend_name)}",
-        }
-
-    def collect_items(raw_items, default_category, max_items):
-        out = []
-        seen = set()
-        for trend in raw_items or []:
-            item = format_trend_item(trend, default_category=default_category)
-            if not item:
-                continue
-            key = item["name"].lower()
-            if key in seen:
-                continue
-            seen.add(key)
-            out.append(item)
-            if len(out) >= max_items:
-                break
-        return out
-
-    # --- Personalized (OAuth1 user context) ---
-    consumer_key = os.getenv("CONSUMER_KEY")
-    consumer_secret = os.getenv("CONSUMER_SECRET")
-    access_token = os.getenv("ACCESS_TOKEN")
-    access_token_secret = os.getenv("ACCESS_TOKEN_SECRET")
-
-    if all([consumer_key, consumer_secret, access_token, access_token_secret]):
-        try:
-            from requests_oauthlib import OAuth1Session
-
-            oauth = OAuth1Session(
-                consumer_key,
-                client_secret=consumer_secret,
-                resource_owner_key=access_token,
-                resource_owner_secret=access_token_secret,
-            )
-
-            def _personalized_request():
-                response = oauth.get(
-                    "https://api.x.com/2/users/personalized_trends",
-                    timeout=REQUEST_TIMEOUT,
-                )
-                if response.status_code != 200:
-                    raise RuntimeError(
-                        f"X personalized error {response.status_code}: {(response.text or '')[:300]}"
-                    )
-                return response.json()
-
-            payload = retry_call("X trending fetch", _personalized_request)
-            raw_personal = (payload or {}).get("data", []) if isinstance(payload, dict) else []
-            logger.info("X API returned %s items total.", len(raw_personal or []))
-            personalized = collect_items(raw_personal, "Personalized", limit)
-            if personalized:
-                logger.info("Successfully fetched %s X trending topics", len(personalized))
-                groups.append(("Personalized", personalized))
-            else:
-                logger.warning("X personalized trends returned no usable items.")
-        except ImportError:
-            logger.error("requests_oauthlib not installed - cannot fetch personalized X trends")
-        except Exception as exc:
-            logger.error("Error fetching personalized X trends: %s", exc)
-    else:
-        logger.warning("X personalized trends: missing OAuth credentials.")
-
-    # --- United States (Bearer token + official v2 WOEID endpoint) ---
-    bearer = (
-        (os.getenv("X_BEARER_TOKEN") or os.getenv("BEARER_TOKEN") or "").strip()
+def _moon_watch(now_utc):
+    """Moon phase from a known new moon. No network."""
+    known_new = datetime(2000, 1, 6, 18, 14, tzinfo=timezone.utc)
+    synodic = 29.530588853
+    age_days = (now_utc - known_new).total_seconds() / 86400.0
+    phase = (age_days / synodic) % 1.0
+    illumination = (1.0 - math.cos(2.0 * math.pi * phase)) / 2.0 * 100.0
+    names = (
+        (0.03, "New Moon"),
+        (0.22, "Waxing Crescent"),
+        (0.28, "First Quarter"),
+        (0.47, "Waxing Gibbous"),
+        (0.53, "Full Moon"),
+        (0.72, "Waning Gibbous"),
+        (0.78, "Last Quarter"),
+        (0.97, "Waning Crescent"),
+        (1.01, "New Moon"),
     )
-    if not bearer:
-        logger.warning(
-            "X United States trends: missing X_BEARER_TOKEN/BEARER_TOKEN; skipping USA column."
-        )
+    name = "Moon"
+    for threshold, label in names:
+        if phase < threshold:
+            name = label
+            break
+    lit = int(round(illumination))
+    return {
+        "name": name,
+        "post_count": f"{lit}% Lit",
+        "trending_since": "Tonight",
+        "link": "https://moon.nasa.gov/moon-in-motion/moon-phases/",
+        "category": "Sky Watch",
+        "sort_at": tonight_copenhagen().isoformat(),
+    }
+
+
+def _solar_flare_class(flux):
+    """Map GOES long-band X-ray flux to A/B/C/M/X class."""
+    flux = safe_number(flux)
+    if flux is None or flux <= 0:
+        return None
+    bands = (
+        (1e-4, "X"),
+        (1e-5, "M"),
+        (1e-6, "C"),
+        (1e-7, "B"),
+        (1e-8, "A"),
+    )
+    for threshold, letter in bands:
+        if flux >= threshold:
+            magnitude = flux / threshold
+            if magnitude < 10:
+                label = f"{letter}{magnitude:.1f}"
+                return label[:-2] if label.endswith(".0") else label
+            return f"{letter}{int(round(magnitude))}"
+    return "A0"
+
+
+def _sky_aurora_card():
+    kp_payload = fetch_json(
+        "https://services.swpc.noaa.gov/json/planetary_k_index_1m.json",
+        label="NOAA Kp",
+    )
+    latest = (kp_payload or [])[-1] if isinstance(kp_payload, list) and kp_payload else {}
+    kp = safe_number((latest or {}).get("estimated_kp"), latest.get("kp_index") if isinstance(latest, dict) else None)
+    kp_label = f"Kp {kp:.1f}".replace(".0", "") if kp is not None else "Kp —"
+
+    aurora = None
+    ovation = fetch_json(
+        "https://services.swpc.noaa.gov/json/ovation_aurora_latest.json",
+        label="NOAA aurora",
+    )
+    if isinstance(ovation, dict):
+        best = None
+        best_dist = 10**9
+        for row in ovation.get("coordinates") or []:
+            if not isinstance(row, (list, tuple)) or len(row) < 3:
+                continue
+            lon, lat, value = row[0], row[1], row[2]
+            dist = abs((safe_number(lon) or 0) - 13) + abs((safe_number(lat) or 0) - 56)
+            if dist < best_dist:
+                best_dist = dist
+                best = safe_number(value)
+        aurora = best
+
+    if kp is None:
+        chance = "No reading"
+        name = "Aurora"
+    elif kp >= 6 or (aurora is not None and aurora >= 20):
+        chance = "Possible here"
+        name = "Aurora Watch"
+    elif kp >= 4:
+        chance = "North horizon"
+        name = "Unsettled Aurora"
     else:
-        def _us_request():
-            response = HTTP_SESSION.get(
-                f"https://api.x.com/2/trends/by/woeid/{X_US_WOEID}",
-                headers={"Authorization": f"Bearer {bearer}"},
-                params={
-                    "max_trends": limit,
-                    "trend.fields": "trend_name,tweet_count",
-                },
-                timeout=REQUEST_TIMEOUT,
-            )
-            body = (response.text or "")[:400]
-            if response.status_code == 401:
-                raise RuntimeError(f"X USA trends unauthorized (invalid bearer): {body}")
-            if response.status_code == 429:
-                raise RuntimeError(f"X USA trends rate limited: {body}")
-            if response.status_code != 200:
-                raise RuntimeError(f"X USA trends error {response.status_code}: {body}")
-            return response.json()
+        chance = "Unlikely here"
+        name = "Quiet Aurora"
 
+    observed = as_utc((latest or {}).get("time_tag")) or datetime.now(timezone.utc)
+    return {
+        "name": name,
+        "post_count": kp_label,
+        "trending_since": chance,
+        "link": "https://www.swpc.noaa.gov/",
+        "category": "Sky Watch",
+        "sort_at": observed.isoformat(),
+    }
+
+
+def _sky_solar_card():
+    xrays = fetch_json(
+        "https://services.swpc.noaa.gov/json/goes/primary/xrays-6-hour.json",
+        label="GOES X-ray",
+    )
+    longs = [
+        row for row in (xrays or [])
+        if isinstance(row, dict) and row.get("energy") == "0.1-0.8nm"
+    ]
+    flux = longs[-1].get("flux") if longs else None
+    flare = _solar_flare_class(flux)
+    if not flare:
+        name, meta = "Solar Flux", "No reading"
+    elif flare.startswith("X") or flare.startswith("M"):
+        name, meta = f"Solar Class {flare}", "Active sun"
+    elif flare.startswith("C"):
+        name, meta = f"Solar Class {flare}", "C-class"
+    else:
+        name, meta = f"Solar Class {flare}", "Quiet sun"
+    observed = as_utc(longs[-1].get("time_tag") if longs else None) or datetime.now(timezone.utc)
+    return {
+        "name": name,
+        "post_count": "GOES X-ray",
+        "trending_since": meta,
+        "link": "https://www.swpc.noaa.gov/products/goes-x-ray-flux",
+        "category": "Sky Watch",
+        "sort_at": observed.isoformat(),
+    }
+
+
+def _sky_launch_card(now_utc):
+    payload = fetch_json(
+        "https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=8&mode=list",
+        label="Launch Library",
+    )
+    results = payload.get("results") if isinstance(payload, dict) else []
+    skip_status = {"success", "failure", "partial failure"}
+    for item in results or []:
+        if not isinstance(item, dict):
+            continue
+        status_name = str((item.get("status") or {}).get("name") or "").lower()
+        if status_name in skip_status:
+            continue
+        net_raw = item.get("net")
         try:
-            us_payload = retry_call("X USA trends by WOEID", _us_request, attempts=3)
-            raw_us = []
-            if isinstance(us_payload, dict):
-                raw_us = us_payload.get("data") or []
-            elif isinstance(us_payload, list):
-                raw_us = us_payload
-            logger.info("X USA WOEID trends returned %s raw items.", len(raw_us or []))
-            if raw_us and isinstance(raw_us[0], dict):
-                logger.info("X USA sample keys: %s", sorted(raw_us[0].keys()))
-            us_trends = collect_items(raw_us, "United States", limit)
-            if us_trends:
-                logger.info("Successfully fetched %s United States X trends", len(us_trends))
-                groups.append(("United States", us_trends))
-            else:
-                logger.warning("X United States trends returned no usable items.")
-        except Exception as exc:
-            logger.error("Error fetching United States X trends: %s", exc)
+            net = datetime.fromisoformat(str(net_raw).replace("Z", "+00:00"))
+        except (TypeError, ValueError):
+            continue
+        if net.tzinfo is None:
+            net = net.replace(tzinfo=timezone.utc)
+        if net < now_utc - timedelta(hours=2):
+            continue
+        full_name = strip_html(item.get("name") or "")
+        parts = [part.strip() for part in full_name.split("|", 1)]
+        vehicle = parts[0] or "Launch"
+        mission = parts[1] if len(parts) > 1 else "Orbital launch"
+        launch_id = item.get("id") or ""
+        link = f"https://spacelaunchnow.me/launch/{launch_id}/" if launch_id else "https://spacelaunchnow.me/"
+        return {
+            "name": vehicle,
+            "post_count": mission,
+            "trending_since": relative_local_label(net),
+            "link": link,
+            "category": "Sky Watch",
+            "sort_at": net.isoformat(),
+        }
+    return None
 
-    return groups
+
+def _sky_eclipse_card(now_utc):
+    today_local = now_utc.astimezone(COPENHAGEN_TZ).date()
+    chosen = None
+    for event in UPCOMING_ECLIPSES:
+        event_local = event["when"].astimezone(COPENHAGEN_TZ).date()
+        if event_local >= today_local:
+            chosen = event
+            break
+    if not chosen:
+        return None
+    event_local = chosen["when"].astimezone(COPENHAGEN_TZ).date()
+    delta = (event_local - today_local).days
+    if delta == 0:
+        when_label = "This Morning" if chosen["when"] < now_utc else "Today"
+    elif delta == 1:
+        when_label = "Tomorrow"
+    elif delta < 14:
+        when_label = relative_local_label(chosen["when"])
+    else:
+        when_label = chosen["when"].astimezone(COPENHAGEN_TZ).strftime("%b %d, %Y").replace(" 0", " ")
+    return {
+        "name": chosen["name"],
+        "post_count": chosen["detail"],
+        "trending_since": when_label,
+        "link": chosen["link"],
+        "category": "Sky Watch",
+        "sort_at": chosen["when"].isoformat(),
+    }
+
+
+def fetch_sky_watch(limit=5):
+    """
+    Copenhagen-facing sky briefing: moon, aurora, solar weather, next launch, next eclipse.
+
+    Fills the column that used to be United States X trends.
+    """
+    logger.info("Fetching Sky Watch...")
+    now_utc = datetime.now(timezone.utc)
+    cards = []
+
+    builders = (
+        lambda: _moon_watch(now_utc),
+        _sky_aurora_card,
+        _sky_solar_card,
+        lambda: _sky_launch_card(now_utc),
+        lambda: _sky_eclipse_card(now_utc),
+    )
+    for builder in builders:
+        try:
+            card = builder()
+        except Exception as exc:
+            logger.warning("Sky Watch item failed: %s", exc)
+            continue
+        if not card or not card.get("name"):
+            continue
+        cards.append(card)
+
+    far_future = datetime.max.replace(tzinfo=timezone.utc)
+
+    def sort_key(card):
+        moment = as_utc(card.get("sort_at")) or far_future
+        return (moment, card.get("name") or "")
+
+    cards.sort(key=sort_key)
+    cards = cards[:limit]
+
+    if not cards:
+        logger.warning("Sky Watch returned no items.")
+    else:
+        logger.info(
+            "Sky Watch assembled %s items: %s",
+            len(cards),
+            ", ".join(item.get("name") or "?" for item in cards),
+        )
+    return cards
 
 
 def fetch_reflection(seed_date=None):
@@ -1608,6 +2021,7 @@ def build_brief_data(today=None):
     space_news = fetch_space_news()
     copenhagen = fetch_copenhagen_events()
     x_trending = fetch_x_trending(limit=5)
+    sky_watch = fetch_sky_watch(limit=5)
     reflection = fetch_reflection(today)
 
     day_of_year = today.timetuple().tm_yday
@@ -1626,6 +2040,7 @@ def build_brief_data(today=None):
         "copenhagen": copenhagen,
         "reflection": reflection,
         "x_trending": x_trending,
+        "sky_watch": sky_watch,
     }
 
 

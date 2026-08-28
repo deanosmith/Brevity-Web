@@ -43,8 +43,6 @@ jobs:
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
-          X_BEARER_TOKEN: ${{ secrets.X_BEARER_TOKEN }}
-          BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
           # Primary product is GitHub Pages. Slack is opt-in only.
           SEND_TO_SLACK: "false"
           GENERATE_PDF: "false"

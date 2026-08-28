@@ -40,7 +40,7 @@ body {
 }
 
 .reflection-panel,
-.x-panel,
+.watch-pair,
 .news-pair {
     grid-column: span 12;
 }
@@ -52,13 +52,16 @@ body {
     align-items: stretch;
 }
 
-.news-pair > .panel {
+.news-pair > .panel,
+.watch-pair > .panel {
     margin-bottom: 0;
     min-height: 100%;
 }
 
 .copenhagen-panel,
-.space-panel {
+.space-panel,
+.x-panel,
+.sky-panel {
     grid-column: auto;
 }
 
@@ -174,12 +177,13 @@ h1 {
     .weather-panel,
     .markets-panel,
     .news-pair,
-    .reflection-panel,
-    .x-panel {
+    .watch-pair,
+    .reflection-panel {
         grid-column: span 12;
     }
 
     .news-pair,
+    .watch-pair,
     .x-grid.matched-pair,
     .matched-pair {
         grid-template-columns: 1fr;
