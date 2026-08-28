@@ -2015,7 +2015,7 @@ def send_to_slack(pdf_path):
 
 def build_brief_data(today=None):
     """Fetch all sources and assemble the daily brief payload."""
-    today = today or date.today()
+    today = today or copenhagen_now().date()
     weather = fetch_weather()
     stocks = fetch_stocks()
     space_news = fetch_space_news()

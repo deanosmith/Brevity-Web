@@ -3,18 +3,59 @@ name: Brevity Workflow
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 4 * * *'
-    # 05:00 UTC = 06:00 CET / 07:00 CEST (before 08:00 Copenhagen time)
+    # GitHub cron is UTC and best-effort: slots are often 15–90 minutes late
+    # and can be dropped with no retry. Copenhagen is UTC+1 (CET) or UTC+2 (CEST).
+    # Fire several times before 07:00 Copenhagen; later slots no-op if today's
+    # brief is already on main. Minutes are off :00 to avoid the hourly pile-up.
+    - cron: '17 3 * * *'   # 03:17 UTC = 05:17 CEST / 04:17 CET
+    - cron: '47 3 * * *'   # 03:47 UTC = 05:47 CEST / 04:47 CET
+    - cron: '17 4 * * *'   # 04:17 UTC = 06:17 CEST / 05:17 CET
+    - cron: '47 4 * * *'   # 04:47 UTC = 06:47 CEST / 05:47 CET
+    - cron: '17 5 * * *'   # 05:17 UTC = 07:17 CEST / 06:17 CET (winter still before 07:00)
+    - cron: '47 5 * * *'   # 05:47 UTC = 07:47 CEST / 06:47 CET (last same-morning catch-up)
 
 permissions:
   contents: write
 
+concurrency:
+  group: brevity-daily-publish
+  cancel-in-progress: false
+
 jobs:
   run-script:
     runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      TZ: Europe/Copenhagen
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Skip if today's brief is already published
+        id: guard
+        run: |
+          CPH_TODAY="$(TZ=Europe/Copenhagen date +%F)"
+          echo "Copenhagen date: ${CPH_TODAY}"
+          echo "Event: ${GITHUB_EVENT_NAME}"
+
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            echo "Manual dispatch always regenerates."
+            echo "skip=false" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+
+          if grep -F -q "name=\"brevity-date\" content=\"${CPH_TODAY}\"" index.html; then
+            echo "Today's brief is already on main; skipping generation."
+            echo "skip=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "No published brief for ${CPH_TODAY}; generating."
+            echo "skip=false" >> "${GITHUB_OUTPUT}"
+          fi
+
       - name: Install system dependencies
+        if: steps.guard.outputs.skip != 'true'
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -28,15 +69,23 @@ jobs:
             libopenjp2-7 \
             libtiff6 \
             fonts-dejavu-core
+
       - name: Set up Python
+        if: steps.guard.outputs.skip != 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
       - name: Set up uv
+        if: steps.guard.outputs.skip != 'true'
         uses: astral-sh/setup-uv@v3
+
       - name: Sync dependencies
+        if: steps.guard.outputs.skip != 'true'
         run: uv sync --frozen --no-dev
+
       - name: Run Brevity
+        if: steps.guard.outputs.skip != 'true'
         env:
           XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
@@ -46,8 +95,22 @@ jobs:
           # Primary product is GitHub Pages. Slack is opt-in only.
           SEND_TO_SLACK: "false"
           GENERATE_PDF: "false"
-        run: uv run python brevity.py
+        run: |
+          for attempt in 1 2 3; do
+            echo "Generation attempt ${attempt} of 3"
+            if uv run python brevity.py; then
+              exit 0
+            fi
+            echo "Generation attempt ${attempt} failed"
+            if [[ "${attempt}" -lt 3 ]]; then
+              sleep $((attempt * 20))
+            fi
+          done
+          echo "Generation failed after 3 attempts"
+          exit 1
+
       - name: Commit and Push Changes
+        if: steps.guard.outputs.skip != 'true'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -57,10 +120,21 @@ jobs:
           # Drop previously published artifacts that the site no longer uses.
           git rm -f --ignore-unmatch resources/brevity.json brevity.pdf || true
 
-          # Only commit if there are changes
           if git diff --staged --quiet; then
             echo "No changes to commit"
-          else
-            git commit -m "Update Brevity content [skip ci]"
-            git push
+            exit 0
           fi
+
+          git commit -m "Update Brevity content [skip ci]"
+
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "Push failed (attempt ${attempt}); rebase onto origin/main and retry"
+            git pull --rebase origin main
+            sleep $((attempt * 5))
+          done
+
+          echo "Push failed after retries"
+          exit 1
