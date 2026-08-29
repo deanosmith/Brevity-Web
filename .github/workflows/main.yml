@@ -3,16 +3,11 @@ name: Brevity Workflow
 on:
   workflow_dispatch:
   schedule:
-    # GitHub cron is UTC and best-effort: slots are often 15–90 minutes late
-    # and can be dropped with no retry. Copenhagen is UTC+1 (CET) or UTC+2 (CEST).
-    # Fire several times before 07:00 Copenhagen; later slots no-op if today's
-    # brief is already on main. Minutes are off :00 to avoid the hourly pile-up.
+    # GitHub cron is UTC and best-effort: often 15–90 minutes late, sometimes
+    # much later. Copenhagen is UTC+1 (CET) or UTC+2 (CEST). One morning slot
+    # only, scheduled early enough that a typical delay still publishes before
+    # 07:00. Minutes are off :00 to avoid the hourly pile-up.
     - cron: '17 3 * * *'   # 03:17 UTC = 05:17 CEST / 04:17 CET
-    - cron: '47 3 * * *'   # 03:47 UTC = 05:47 CEST / 04:47 CET
-    - cron: '17 4 * * *'   # 04:17 UTC = 06:17 CEST / 05:17 CET
-    - cron: '47 4 * * *'   # 04:47 UTC = 06:47 CEST / 05:47 CET
-    - cron: '17 5 * * *'   # 05:17 UTC = 07:17 CEST / 06:17 CET (winter still before 07:00)
-    - cron: '47 5 * * *'   # 05:47 UTC = 07:47 CEST / 06:47 CET (last same-morning catch-up)
 
 permissions:
   contents: write
