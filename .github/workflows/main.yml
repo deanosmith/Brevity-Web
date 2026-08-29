@@ -4,10 +4,11 @@ on:
   workflow_dispatch:
   schedule:
     # GitHub cron is UTC and best-effort: often 15–90 minutes late, sometimes
-    # much later. Copenhagen is UTC+1 (CET) or UTC+2 (CEST). One morning slot
-    # only, scheduled early enough that a typical delay still publishes before
-    # 07:00. Minutes are off :00 to avoid the hourly pile-up.
+    # much later. Copenhagen is UTC+1 (CET) or UTC+2 (CEST). Minutes are off
+    # :00 to avoid the hourly pile-up. The catch-up no-ops if today's brief
+    # is already on main.
     - cron: '17 3 * * *'   # 03:17 UTC = 05:17 CEST / 04:17 CET
+    - cron: '17 4 * * *'   # 04:17 UTC = 06:17 CEST / 05:17 CET (catch-up, +1h)
 
 permissions:
   contents: write

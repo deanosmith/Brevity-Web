@@ -24,7 +24,7 @@ PDF generation is kept only for optional Slack delivery and is not part of the p
 
 ## Automation
 
-GitHub Actions runs once each morning at `03:17` UTC (`05:17` CEST / `04:17` CET), off the hour, so a typical delay still publishes before 07:00 Copenhagen time. Manual dispatch always regenerates.
+GitHub Actions runs at `03:17` UTC (`05:17` CEST / `04:17` CET), then again an hour later. The second run skips generation if today's brief is already on `main`; otherwise it retries. Manual dispatch always regenerates.
 
 Published artifacts are committed back to `main`, which GitHub Pages serves from the repository root.
 
