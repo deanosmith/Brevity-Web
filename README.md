@@ -24,11 +24,11 @@ PDF generation is kept only for optional Slack delivery and is not part of the p
 
 ## Automation
 
-A daily request at 06:00 Copenhagen starts this workflow (cron-job.org). GitHub's own 05:17 / 06:17 schedule is only a backup; it is often hours late or skipped.
+A daily request at 05:00 Copenhagen starts this workflow (cron-job.org). GitHub's own 05:17 / 06:17 schedule is only a backup; it is often hours late or skipped.
 
 The job skips if today's brief is already on `main`. To regenerate, use **Run Workflow** and enable **Regenerate Even If Today Is Already Published**.
 
-Create a fine-grained GitHub token for this repo with **Actions: Read and write**, then add one daily job at [cron-job.org](https://cron-job.org) for 06:00 `Europe/Copenhagen`:
+Create a fine-grained GitHub token for this repo with **Actions: Read and write**, then add one daily job at [cron-job.org](https://cron-job.org) for 05:00 `Europe/Copenhagen`:
 
 - URL: `https://api.github.com/repos/deanosmith/Brevity-Web/actions/workflows/main.yml/dispatches`
 - Method: `POST`

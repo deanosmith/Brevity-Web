@@ -9,7 +9,7 @@ on:
         default: false
   schedule:
     # Backup only. GitHub cron is often hours late or dropped. The 07:00
-    # Copenhagen page is triggered at 06:00 Europe/Copenhagen by an external
+    # Copenhagen page is triggered at 05:00 Europe/Copenhagen by an external
     # dispatch (see README). Minutes are off :00 to avoid the hourly pile-up.
     - cron: '17 3 * * *'   # 03:17 UTC = 05:17 CEST / 04:17 CET
     - cron: '17 4 * * *'   # 04:17 UTC = 06:17 CEST / 05:17 CET (catch-up, +1h)
