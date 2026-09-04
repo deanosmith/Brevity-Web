@@ -2,11 +2,15 @@ name: Brevity Workflow
 
 on:
   workflow_dispatch:
+    inputs:
+      force:
+        description: 'Regenerate Even If Today Is Already Published'
+        type: boolean
+        default: false
   schedule:
-    # GitHub cron is UTC and best-effort: often 15–90 minutes late, sometimes
-    # much later. Copenhagen is UTC+1 (CET) or UTC+2 (CEST). Minutes are off
-    # :00 to avoid the hourly pile-up. The catch-up no-ops if today's brief
-    # is already on main.
+    # Backup only. GitHub cron is often hours late or dropped. The 07:00
+    # Copenhagen page is triggered at 06:00 Europe/Copenhagen by an external
+    # dispatch (see README). Minutes are off :00 to avoid the hourly pile-up.
     - cron: '17 3 * * *'   # 03:17 UTC = 05:17 CEST / 04:17 CET
     - cron: '17 4 * * *'   # 04:17 UTC = 06:17 CEST / 05:17 CET (catch-up, +1h)
 
@@ -31,13 +35,16 @@ jobs:
 
       - name: Skip if today's brief is already published
         id: guard
+        env:
+          FORCE: ${{ github.event.inputs.force }}
         run: |
           CPH_TODAY="$(TZ=Europe/Copenhagen date +%F)"
           echo "Copenhagen date: ${CPH_TODAY}"
           echo "Event: ${GITHUB_EVENT_NAME}"
+          echo "Force: ${FORCE:-false}"
 
-          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
-            echo "Manual dispatch always regenerates."
+          if [[ "${FORCE}" == "true" ]]; then
+            echo "Force regenerate requested."
             echo "skip=false" >> "${GITHUB_OUTPUT}"
             exit 0
           fi
