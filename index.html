@@ -104,7 +104,7 @@
                                         <div class="dial-label">Wind</div>
                                         <div class="dial-value" style="color: #a32295;">
                                             
-                                            18<span class="wind-arrow" style="transform: rotate(188deg);" aria-hidden="true"></span>
+                                            18<span class="wind-arrow" style="--wind-dir: 188;" aria-hidden="true"><svg viewBox="0 0 26 14" focusable="false"><path fill="none" d="M1.4 7h18.2M16.2 2.6L23.6 7 16.2 11.4"/></svg></span>
                                             
                                         </div>
                                         <div class="dial-sub">
@@ -990,9 +990,9 @@
                     <a class="trend-card" href="https://www.swpc.noaa.gov/products/goes-x-ray-flux" target="_blank" rel="noopener noreferrer">
                         <div class="trend-name">Solar Class B3.9</div>
                         <div class="trend-meta">
-                            <span>GOES X-ray</span>
+                            <span class="trend-detail">Goes Satellite X-Ray Reading</span>
                             
-                            <span>Quiet sun</span>
+                            <span class="trend-when">Quiet Sun, No Major Flares</span>
                             
                         </div>
                     </a>
@@ -1000,9 +1000,9 @@
                     <a class="trend-card" href="https://www.swpc.noaa.gov/" target="_blank" rel="noopener noreferrer">
                         <div class="trend-name">Quiet Aurora</div>
                         <div class="trend-meta">
-                            <span>Kp 0.7</span>
+                            <span class="trend-detail">Geomagnetic Index Kp 0.7</span>
                             
-                            <span>Unlikely here</span>
+                            <span class="trend-when">Visible Aurora Unlikely Tonight</span>
                             
                         </div>
                     </a>
@@ -1010,9 +1010,9 @@
                     <a class="trend-card" href="https://moon.nasa.gov/moon-in-motion/moon-phases/" target="_blank" rel="noopener noreferrer">
                         <div class="trend-name">Waning Crescent</div>
                         <div class="trend-meta">
-                            <span>23% Lit</span>
+                            <span class="trend-detail">Moon 23% Illuminated</span>
                             
-                            <span>Tonight</span>
+                            <span class="trend-when">Visible Tonight Over Copenhagen</span>
                             
                         </div>
                     </a>
@@ -1020,9 +1020,9 @@
                     <a class="trend-card" href="https://spacelaunchnow.me/launch/95eb9265-bdbe-43ad-b08c-6be7eb4e58f4/" target="_blank" rel="noopener noreferrer">
                         <div class="trend-name">Long March 2D/YZ-3</div>
                         <div class="trend-meta">
-                            <span>Unknown Payload</span>
+                            <span class="trend-detail">Mission Unknown Payload</span>
                             
-                            <span>Wed 11:00</span>
+                            <span class="trend-when">Launch Wed At 11:00</span>
                             
                         </div>
                     </a>
@@ -1030,9 +1030,9 @@
                     <a class="trend-card" href="https://science.nasa.gov/eclipses/future-eclipses/eclipse-2027/" target="_blank" rel="noopener noreferrer">
                         <div class="trend-name">Annular Solar Eclipse</div>
                         <div class="trend-meta">
-                            <span>South America and Africa</span>
+                            <span class="trend-detail">Visible From South America And Africa</span>
                             
-                            <span>Feb 6, 2027</span>
+                            <span class="trend-when">Next Visible On Feb 6, 2027</span>
                             
                         </div>
                     </a>
@@ -1081,6 +1081,46 @@
                 
             </section>
 
+            <section class="panel news-panel south-africa-panel">
+                <div class="panel-head">
+                    <div>
+                        <h2>South Africa</h2>
+                        <p class="panel-sub">Government, Finance, Diplomacy</p>
+                    </div>
+                </div>
+                
+                <div class="news-list">
+                    
+                    <article class="news-item">
+                        <a href="https://www.gcis.gov.za/statement-on-the-cabinet-meeting-of-wednesday-26-august-2026" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #4a375f; --kw-border: #5f4c78; --kw-text: #f0e3ff;">Agoa</span><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">Trade</span><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Cabinet</span></span><span class="keyword-text">Cabinet welcomed Agoa&#x27;s extension to 31 December 2028, keeping preferential US market access for eligible South African exports.</span></a>
+                    </article>
+                    
+                    <article class="news-item">
+                        <a href="https://www.gcis.gov.za/statement-on-the-cabinet-meeting-of-wednesday-26-august-2026" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">Airline</span><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Cabinet</span><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Equity</span></span><span class="keyword-text">Cabinet approved a competitive process to find a strategic equity partner for South African Airways and reduce state exposure.</span></a>
+                    </article>
+                    
+                    <article class="news-item">
+                        <a href="https://www.statssa.gov.za/?p=19804" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Unemployment</span><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">Labour</span><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">Jobs</span></span><span class="keyword-text">Official unemployment rose to 33.6% in the second quarter of 2026 from 32.7%, with 8.5 million people unemployed.</span></a>
+                    </article>
+                    
+                    <article class="news-item">
+                        <a href="https://www.businessday.co.za/economy/2026-09-07-economic-week-ahead-gdp-contraction-may-be-on-the-cards-as-fuel-costs-bite/" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Gdp</span><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Fuel</span><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">Economy</span></span><span class="keyword-text">Statistics South Africa publishes second-quarter GDP on 8 September; economists expect about 0% to -0.2% after 0.5% first-quarter growth.</span></a>
+                    </article>
+                    
+                    <article class="news-item">
+                        <a href="https://www.bloomberg.com/news/articles/2026-09-03/south-africa-s-kganyago-sees-room-for-caution-on-rate-moves" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Sarb</span><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">Rates</span><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">Inflation</span></span><span class="keyword-text">The Reserve Bank is holding the repo rate at 7%; Governor Kganyago urged caution ahead of the 23 September decision.</span></a>
+                    </article>
+                    
+                    <article class="news-item">
+                        <a href="https://www.gcis.gov.za/statement-on-the-cabinet-meeting-of-wednesday-26-august-2026" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Brics</span><span class="keyword-badge" style="--kw-bg: #4a375f; --kw-border: #5f4c78; --kw-text: #f0e3ff;">Diplomacy</span><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">India</span></span><span class="keyword-text">President Ramaphosa will lead South Africa&#x27;s delegation to the 18th Brics Summit in New Delhi on 12-13 September.</span></a>
+                    </article>
+                    
+                </div>
+                
+            </section>
+            </div>
+
+            <div class="news-pair news-pair-wide">
             <section class="panel news-panel space-panel">
                 <div class="panel-head">
                     <div>

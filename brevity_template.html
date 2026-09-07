@@ -108,7 +108,7 @@
                                         <div class="dial-label">Wind</div>
                                         <div class="dial-value" style="color: {{ (dials.wind.color if dials and dials.wind else '#c084fc') }};">
                                             {% if today.wind_max is not none %}
-                                            {{ today.wind_max }}{% if today.wind_dir is not none %}<span class="wind-arrow" style="transform: rotate({{ today.wind_dir }}deg);" aria-hidden="true"></span>{% endif %}
+                                            {{ today.wind_max }}{% if today.wind_dir is not none %}<span class="wind-arrow" style="--wind-dir: {{ today.wind_dir }};" aria-hidden="true"><svg viewBox="0 0 26 14" focusable="false"><path fill="none" d="M1.4 7h18.2M16.2 2.6L23.6 7 16.2 11.4"/></svg></span>{% endif %}
                                             {% else %}—{% endif %}
                                         </div>
                                         <div class="dial-sub">
@@ -369,9 +369,9 @@
                     <a class="trend-card" href="{{ item.link }}" target="_blank" rel="noopener noreferrer">
                         <div class="trend-name">{{ item.name }}</div>
                         <div class="trend-meta">
-                            <span>{{ item.post_count }}</span>
+                            <span class="trend-detail">{{ item.post_count }}</span>
                             {% if item.trending_since %}
-                            <span>{{ item.trending_since }}</span>
+                            <span class="trend-when">{{ item.trending_since }}</span>
                             {% endif %}
                         </div>
                     </a>
@@ -404,6 +404,28 @@
                 {% endif %}
             </section>
 
+            <section class="panel news-panel south-africa-panel">
+                <div class="panel-head">
+                    <div>
+                        <h2>South Africa</h2>
+                        <p class="panel-sub">Government, Finance, Diplomacy</p>
+                    </div>
+                </div>
+                {% if south_africa %}
+                <div class="news-list">
+                    {% for item in south_africa %}
+                    <article class="news-item">
+                        <a href="{{ item.link }}" target="_blank" rel="noopener noreferrer">{{ item.headline }}</a>
+                    </article>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">No South Africa stories available</div>
+                {% endif %}
+            </section>
+            </div>
+
+            <div class="news-pair news-pair-wide">
             <section class="panel news-panel space-panel">
                 <div class="panel-head">
                     <div>

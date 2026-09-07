@@ -52,6 +52,10 @@ body {
     align-items: stretch;
 }
 
+.news-pair.news-pair-wide {
+    grid-template-columns: 1fr;
+}
+
 .news-pair > .panel,
 .watch-pair > .panel {
     margin-bottom: 0;
@@ -59,6 +63,7 @@ body {
 }
 
 .copenhagen-panel,
+.south-africa-panel,
 .space-panel,
 .x-panel,
 .sky-panel {

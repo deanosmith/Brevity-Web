@@ -433,14 +433,28 @@ h2 {
 }
 
 .wind-arrow {
-    display: inline-block;
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 8px solid currentColor;
-    transform-origin: 50% 35%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 11px;
+    flex: 0 0 18px;
+    transform: rotate(calc(var(--wind-dir, 0) * 1deg + 90deg));
+    transform-origin: 8% 50%;
     color: inherit;
+    pointer-events: none;
+}
+
+.wind-arrow svg {
+    display: block;
+    width: 18px;
+    height: 11px;
+    overflow: visible;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 .period-strip {
@@ -894,10 +908,21 @@ h2 {
 .trend-meta {
     display: flex;
     justify-content: space-between;
-    gap: 10px;
+    gap: 12px;
     margin-top: 8px;
     font-size: 11px;
     color: #777;
+    align-items: flex-start;
+}
+
+.trend-detail {
+    flex: 1 1 52%;
+    min-width: 0;
+}
+
+.trend-when {
+    flex: 1 1 42%;
+    text-align: right;
 }
 
 /* News */
@@ -920,6 +945,11 @@ h2 {
 .copenhagen-panel {
     border-color: #5a3030;
     background: linear-gradient(165deg, #2a1719 0%, #1c1012 55%, #140c0e 100%);
+}
+
+.south-africa-panel {
+    border-color: #3d6b48;
+    background: linear-gradient(165deg, #1a3322 0%, #122018 55%, #0d1611 100%);
 }
 
 .space-panel {
@@ -949,6 +979,11 @@ h2 {
 .copenhagen-panel .news-item {
     background: linear-gradient(180deg, #1c1618 0%, #151012 100%);
     border-color: #3a2828;
+}
+
+.south-africa-panel .news-item {
+    background: linear-gradient(180deg, #1c2c22 0%, #141c18 100%);
+    border-color: #345840;
 }
 
 .space-panel .news-item {

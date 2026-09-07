@@ -10,7 +10,7 @@ import math
 import time
 import requests
 import calendar
-from urllib.parse import quote
+from urllib.parse import quote, urlparse
 from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
@@ -156,6 +156,47 @@ COPENHAGEN_FEEDS = [
 SPACE_FEEDS = [
     "https://spacenews.com/feed/",
 ]
+# National government, finance, and diplomacy. Crime and sport are filtered later.
+SOUTH_AFRICA_FEEDS = [
+    "https://www.sanews.gov.za/rss.xml",
+    "https://www.gov.za/rss.xml",
+    "https://www.gcis.gov.za/rss.xml",
+    "https://www.moneyweb.co.za/feed/",
+    "https://www.dailymaverick.co.za/dmrss/",
+    "https://mg.co.za/rss/",
+    "https://www.sabcnews.com/sabcnews/feed/",
+]
+SOUTH_AFRICA_SKIP_RE = re.compile(
+    r"\b(murder|hijack|rape|assault|robbery|shooting|pothole|lotto|"
+    r"soccer|rugby|cricket|bafana|banyana|springbok|celebrity)\b",
+    re.I,
+)
+SOUTH_AFRICA_PETTY_RE = re.compile(
+    r"\b("
+    r"ethekwini|hammarsdale|pothole|traders|informal economy|"
+    r"heritage month|public service month|tourism month|"
+    r"apply for ids?|identity documents?|"
+    r"women['’]?s struggle|sport awards|commemorat|"
+    r"load.?shedding schedule"
+    r")\b",
+    re.I,
+)
+SOUTH_AFRICA_GEO_RE = re.compile(
+    r"\b(south africa|south african|pretoria|ramaphosa|gnu|"
+    r"reserve bank|sarb|dirco|agoa|the rand)\b",
+    re.I,
+)
+SOUTH_AFRICA_KEEP_RE = re.compile(
+    r"\b(cabinet|parliament|presidency|ramaphosa|gnu|"
+    r"government of national unity|treasury|"
+    r"sarb|reserve bank|repo rate|the rand|zar|"
+    r"gdp|inflation|unemployment|budget|current account|"
+    r"credit rating|fatf|investment|"
+    r"brics|sadc|dirco|diplomat|agoa|trade|export|imf|world bank|"
+    r"election|eskom)\b",
+    re.I,
+)
+SOUTH_AFRICA_WEAK_TERMS = frozenset({"minister", "policy", "election"})
 
 COPENHAGEN_TZ = ZoneInfo("Europe/Copenhagen")
 # Next notable eclipses after the Aug 2026 events. Used by Sky Watch.
@@ -757,6 +798,21 @@ def tonight_copenhagen(hour=21):
     return evening
 
 
+def sky_when_label(moment, prefix="Launch"):
+    """Longer Copenhagen-local schedule line for Sky Watch cards."""
+    raw = relative_local_label(moment)
+    if not raw:
+        return None
+    if raw.startswith("Today "):
+        return f"{prefix} Today At {raw[6:]}"
+    if raw.startswith("Tomorrow "):
+        return f"{prefix} Tomorrow At {raw[9:]}"
+    parts = raw.split(" ", 1)
+    if len(parts) == 2:
+        return f"{prefix} {parts[0]} At {parts[1]}"
+    return f"{prefix} {raw}"
+
+
 def relative_local_label(moment):
     """Compact Copenhagen-local label, matching the brief's 12-hour clocks."""
     if moment is None:
@@ -1310,13 +1366,13 @@ def fetch_feed(url):
     return feed
 
 
-def fetch_rss_feed(url, limit=5, prompt="Summarize this content:", summarize=True):
-    """Fetch and optionally summarize items from an RSS feed."""
-    news_items = []
+def _rss_entries(url, limit=5):
+    """Parse RSS entries into title, text, and link dicts."""
     feed = fetch_feed(url)
     if not feed or not getattr(feed, "entries", None):
         return []
-
+    source = strip_html(getattr(getattr(feed, "feed", None), "title", "") or "") or url
+    items = []
     for entry in feed.entries[:limit]:
         try:
             title = strip_html(getattr(entry, "title", "") or "")
@@ -1324,17 +1380,34 @@ def fetch_rss_feed(url, limit=5, prompt="Summarize this content:", summarize=Tru
             content_text = f"{title}. {summary}".strip(". ").strip()
             if not content_text:
                 continue
+            items.append({
+                "title": title,
+                "content_text": content_text,
+                "link": entry.get("link", ""),
+                "source": source,
+                "feed_url": url,
+            })
+        except Exception as exc:
+            logger.warning("Error parsing feed entry from %s: %s", url, exc)
+    return items
+
+
+def fetch_rss_feed(url, limit=5, prompt="Summarize this content:", summarize=True):
+    """Fetch and optionally summarize items from an RSS feed."""
+    news_items = []
+    for entry in _rss_entries(url, limit=limit):
+        try:
             if summarize and XAI_AVAILABLE:
-                item_summary = summarize_with_ai(content_text, prompt)
+                item_summary = summarize_with_ai(entry["content_text"], prompt)
                 item_summary = stylize_keywords(item_summary)
             else:
                 # Keep the page useful even when AI is unavailable.
-                item_summary = title or content_text
+                item_summary = entry["title"] or entry["content_text"]
             if item_summary:
                 news_items.append({
                     "headline": item_summary,
-                    "link": entry.get("link", ""),
-                    "source": strip_html(getattr(getattr(feed, "feed", None), "title", "") or ""),
+                    "link": entry["link"],
+                    "source": entry["source"],
                 })
         except Exception as exc:
             logger.warning("Error parsing feed entry from %s: %s", url, exc)
@@ -1374,6 +1447,113 @@ def fetch_copenhagen_events():
         prompt="Summarize this Copenhagen/Denmark news item.",
         label="copenhagen",
     )
+
+
+def _story_key(title):
+    return re.sub(r"[^a-z0-9]+", "", (title or "").lower())[:80]
+
+
+def _is_sa_trusted_feed(url):
+    host = urlparse(url or "").netloc.lower()
+    return host.endswith("gov.za") or host.endswith("moneyweb.co.za")
+
+
+def _sa_brief_score(entry):
+    """Score national government, finance, and diplomacy; reject petty local stories."""
+    title = entry.get("title") or ""
+    text = entry.get("content_text") or ""
+    if not _is_sa_trusted_feed(entry.get("feed_url")):
+        if not SOUTH_AFRICA_GEO_RE.search(f"{title} {text[:320]}"):
+            return -1
+    title_hits = {hit.lower() for hit in SOUTH_AFRICA_KEEP_RE.findall(title)}
+    if SOUTH_AFRICA_PETTY_RE.search(title) and not title_hits:
+        return -1
+    if SOUTH_AFRICA_SKIP_RE.search(title) and not title_hits:
+        return -1
+    if title_hits:
+        return 10 + len(title_hits)
+
+    body_hits = {hit.lower() for hit in SOUTH_AFRICA_KEEP_RE.findall(text)}
+    body_hits -= SOUTH_AFRICA_WEAK_TERMS
+    if SOUTH_AFRICA_PETTY_RE.search(text) and len(body_hits) < 2:
+        return -1
+    if SOUTH_AFRICA_SKIP_RE.search(text) and not body_hits:
+        return -1
+    if len(body_hits) >= 2:
+        return len(body_hits)
+    return -1
+
+
+def _pick_diverse_stories(scored_items, limit=6, per_source=2):
+    """Take the strongest items while mixing sources."""
+    selected = []
+    counts = {}
+    for score, item in scored_items:
+        if score < 0:
+            continue
+        source = item.get("source") or item.get("link") or ""
+        if counts.get(source, 0) >= per_source:
+            continue
+        selected.append(item)
+        counts[source] = counts.get(source, 0) + 1
+        if len(selected) >= limit:
+            return selected
+    selected_ids = {id(item) for item in selected}
+    for score, item in scored_items:
+        if score < 0 or id(item) in selected_ids:
+            continue
+        selected.append(item)
+        selected_ids.add(id(item))
+        if len(selected) >= limit:
+            break
+    return selected
+
+
+def fetch_south_africa_news():
+    """Fetch national South Africa stories: government, finance, diplomacy."""
+    logger.info("Fetching South Africa news...")
+    seen = set()
+    scored = []
+    for url in SOUTH_AFRICA_FEEDS:
+        logger.info("Trying south africa feed: %s", url)
+        for entry in _rss_entries(url, limit=10):
+            key = _story_key(entry["title"])
+            if not key or key in seen:
+                continue
+            seen.add(key)
+            score = _sa_brief_score(entry)
+            scored.append((score, entry))
+
+    scored.sort(key=lambda pair: pair[0], reverse=True)
+    chosen = _pick_diverse_stories(scored, limit=6, per_source=2)
+    if not chosen:
+        logger.warning("No items found for south africa feeds")
+        return []
+
+    prompt = (
+        "Summarize this South Africa news item as one concise factual sentence. "
+        "Prefer national government decisions, major financial developments, or international relations. "
+        "Omit petty municipal, crime, celebrity, and sports detail."
+    )
+    news_items = []
+    for entry in chosen:
+        try:
+            if XAI_AVAILABLE:
+                item_summary = summarize_with_ai(entry["content_text"], prompt)
+                item_summary = stylize_keywords(item_summary)
+            else:
+                item_summary = entry["title"] or entry["content_text"]
+            if item_summary:
+                news_items.append({
+                    "headline": item_summary,
+                    "link": entry["link"],
+                    "source": entry["source"],
+                })
+        except Exception as exc:
+            logger.warning("Error summarising South Africa item: %s", exc)
+
+    logger.info("South Africa feed assembled %s items", len(news_items))
+    return news_items
 
 
 def _format_post_count(value):
@@ -1623,8 +1803,8 @@ def _moon_watch(now_utc):
     lit = int(round(illumination))
     return {
         "name": name,
-        "post_count": f"{lit}% Lit",
-        "trending_since": "Tonight",
+        "post_count": f"Moon {lit}% Illuminated",
+        "trending_since": "Visible Tonight Over Copenhagen",
         "link": "https://moon.nasa.gov/moon-in-motion/moon-phases/",
         "category": "Sky Watch",
         "sort_at": tonight_copenhagen().isoformat(),
@@ -1681,22 +1861,22 @@ def _sky_aurora_card():
         aurora = best
 
     if kp is None:
-        chance = "No reading"
+        chance = "No Geomagnetic Reading"
         name = "Aurora"
     elif kp >= 6 or (aurora is not None and aurora >= 20):
-        chance = "Possible here"
+        chance = "Visible Aurora Possible Tonight"
         name = "Aurora Watch"
     elif kp >= 4:
-        chance = "North horizon"
+        chance = "Possible On The North Horizon"
         name = "Unsettled Aurora"
     else:
-        chance = "Unlikely here"
+        chance = "Visible Aurora Unlikely Tonight"
         name = "Quiet Aurora"
 
     observed = as_utc((latest or {}).get("time_tag")) or datetime.now(timezone.utc)
     return {
         "name": name,
-        "post_count": kp_label,
+        "post_count": f"Geomagnetic Index {kp_label}",
         "trending_since": chance,
         "link": "https://www.swpc.noaa.gov/",
         "category": "Sky Watch",
@@ -1716,17 +1896,17 @@ def _sky_solar_card():
     flux = longs[-1].get("flux") if longs else None
     flare = _solar_flare_class(flux)
     if not flare:
-        name, meta = "Solar Flux", "No reading"
+        name, meta = "Solar Flux", "No Current Reading"
     elif flare.startswith("X") or flare.startswith("M"):
-        name, meta = f"Solar Class {flare}", "Active sun"
+        name, meta = f"Solar Class {flare}", "Active Sun, Major Flare Risk"
     elif flare.startswith("C"):
-        name, meta = f"Solar Class {flare}", "C-class"
+        name, meta = f"Solar Class {flare}", "Modest C-Class Activity"
     else:
-        name, meta = f"Solar Class {flare}", "Quiet sun"
+        name, meta = f"Solar Class {flare}", "Quiet Sun, No Major Flares"
     observed = as_utc(longs[-1].get("time_tag") if longs else None) or datetime.now(timezone.utc)
     return {
         "name": name,
-        "post_count": "GOES X-ray",
+        "post_count": "Goes Satellite X-Ray Reading",
         "trending_since": meta,
         "link": "https://www.swpc.noaa.gov/products/goes-x-ray-flux",
         "category": "Sky Watch",
@@ -1764,8 +1944,8 @@ def _sky_launch_card(now_utc):
         link = f"https://spacelaunchnow.me/launch/{launch_id}/" if launch_id else "https://spacelaunchnow.me/"
         return {
             "name": vehicle,
-            "post_count": mission,
-            "trending_since": relative_local_label(net),
+            "post_count": f"Mission {mission}" if mission else "Orbital Launch",
+            "trending_since": sky_when_label(net, prefix="Launch"),
             "link": link,
             "category": "Sky Watch",
             "sort_at": net.isoformat(),
@@ -1786,16 +1966,17 @@ def _sky_eclipse_card(now_utc):
     event_local = chosen["when"].astimezone(COPENHAGEN_TZ).date()
     delta = (event_local - today_local).days
     if delta == 0:
-        when_label = "This Morning" if chosen["when"] < now_utc else "Today"
+        when_label = "Visible This Morning" if chosen["when"] < now_utc else "Visible Today"
     elif delta == 1:
-        when_label = "Tomorrow"
+        when_label = "Visible Tomorrow"
     elif delta < 14:
-        when_label = relative_local_label(chosen["when"])
+        when_label = sky_when_label(chosen["when"], prefix="Visible")
     else:
-        when_label = chosen["when"].astimezone(COPENHAGEN_TZ).strftime("%b %d, %Y").replace(" 0", " ")
+        date_label = chosen["when"].astimezone(COPENHAGEN_TZ).strftime("%b %d, %Y").replace(" 0", " ")
+        when_label = f"Next Visible On {date_label}"
     return {
         "name": chosen["name"],
-        "post_count": chosen["detail"],
+        "post_count": f"Visible From {chosen['detail']}",
         "trending_since": when_label,
         "link": chosen["link"],
         "category": "Sky Watch",
@@ -2020,6 +2201,7 @@ def build_brief_data(today=None):
     stocks = fetch_stocks()
     space_news = fetch_space_news()
     copenhagen = fetch_copenhagen_events()
+    south_africa = fetch_south_africa_news()
     x_trending = fetch_x_trending(limit=5)
     sky_watch = fetch_sky_watch(limit=5)
     reflection = fetch_reflection(today)
@@ -2038,6 +2220,7 @@ def build_brief_data(today=None):
         "stocks": stocks,
         "space_news": space_news,
         "copenhagen": copenhagen,
+        "south_africa": south_africa,
         "reflection": reflection,
         "x_trending": x_trending,
         "sky_watch": sky_watch,
