@@ -36,6 +36,7 @@ jobs:
       - name: Run Brevity
         env:
           XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          ESV_API_KEY: ${{ secrets.ESV_API_KEY }}
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
@@ -57,4 +58,5 @@ jobs:
             resources/favicon-32.png
             resources/favicon-512.png
             resources/apple-touch-icon.png
+            resources/scripture-history.json
           if-no-files-found: warn

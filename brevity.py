@@ -7,6 +7,7 @@ import hashlib
 import json
 import logging
 import math
+import random
 import time
 import requests
 import calendar
@@ -39,6 +40,7 @@ load_dotenv()
 XAI_API_KEY = os.getenv("XAI_API_KEY")
 # Ignore blank overrides from empty GitHub Actions variables.
 XAI_MODEL = (os.getenv("XAI_MODEL") or "grok-4.20-non-reasoning").strip() or "grok-4.20-non-reasoning"
+ESV_API_KEY = (os.getenv("ESV_API_KEY") or "").strip()
 SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN")
 SLACK_CHANNEL_ID = os.getenv("SLACK_CHANNEL_ID")
 # Slack delivery is optional; the primary product is the GitHub Pages site.
@@ -144,6 +146,8 @@ STOCK_TICKERS = {
     "Oklo": "OKLO",
     "Micron": "MU",
     "Palantir": "PLTR",
+    "Bitcoin": "BTC-USD",
+    "Vanguard S&P 500": "VUSA.AS",
 }
 
 # Copenhagen local sources with fallbacks. World news intentionally removed.
@@ -255,6 +259,37 @@ PLASMA_STOPS = (
 
 SITE_HTML_PATH = "index.html"
 PDF_PATH = "brevity.pdf"
+_BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SCRIPTURE_VERSES_PATH = os.path.join(_BASE_DIR, "resources", "scripture-verses.json")
+SCRIPTURE_HISTORY_PATH = os.path.join(_BASE_DIR, "resources", "scripture-history.json")
+SCRIPTURE_FALLBACK = [
+    {
+        "ref": "Proverbs 3:5",
+        "book": "Proverbs",
+        "text": "Trust in the Lord with all thine heart; and lean not unto thine own understanding.",
+    },
+    {
+        "ref": "Proverbs 27:1",
+        "book": "Proverbs",
+        "text": "Boast not thyself of to morrow; for thou knowest not what a day may bring forth.",
+    },
+    {
+        "ref": "Ecclesiastes 3:1",
+        "book": "Ecclesiastes",
+        "text": "To every thing there is a season, and a time to every purpose under the heaven:",
+    },
+    {
+        "ref": "Ecclesiastes 12:13",
+        "book": "Ecclesiastes",
+        "text": "Let us hear the conclusion of the whole matter: Fear God, and keep his commandments: for this is the whole duty of man.",
+    },
+]
+ESV_API_URL = "https://api.esv.org/v3/passage/text/"
+ESV_SOURCE = {
+    "name": "English Standard Version",
+    "url": "https://www.esv.org/",
+}
+SCRIPTURE_TRANSLATION = "Esv"
 DEFAULT_HEADERS = {"User-Agent": "Brevity/1.0 (+https://deanosmith.github.io/Brevity-Web/)"}
 REQUEST_TIMEOUT = 30
 AI_TIMEOUT = 60
@@ -493,14 +528,14 @@ def stylize_keywords(text):
 
 
 def format_trending_since(raw_since):
-    """Normalize trending_since to HH:MM, or return None if invalid."""
+    """Normalize trending_since to 12-hour clock text, or return None if invalid."""
     if raw_since is None:
         return None
     if isinstance(raw_since, (int, float)):
         if raw_since <= 0:
             return None
         try:
-            return datetime.utcfromtimestamp(raw_since).strftime("%H:%M")
+            return format_clock_12(datetime.utcfromtimestamp(raw_since).strftime("%H:%M"))
         except Exception:
             return None
     if isinstance(raw_since, str):
@@ -514,7 +549,7 @@ def format_trending_since(raw_since):
                 ts_value = int(value)
                 if ts_value > 1_000_000_000_000:
                     ts_value = ts_value / 1000
-                return datetime.utcfromtimestamp(ts_value).strftime("%H:%M")
+                return format_clock_12(datetime.utcfromtimestamp(ts_value).strftime("%H:%M"))
             except Exception:
                 return None
         match = TRENDING_TIME_RE.search(value)
@@ -522,10 +557,19 @@ def format_trending_since(raw_since):
             hour = int(match.group(1))
             minute = match.group(2)
             if 0 <= hour <= 23:
-                return f"{hour:02d}:{minute}"
+                prefix = value[: match.start()].strip()
+                suffix = value[match.end() :].strip()
+                if suffix.lower() in {"am", "pm"}:
+                    return format_clock_12(value)
+                clock = format_clock_12(f"{hour:02d}:{minute}")
+                parts = [part for part in (prefix, clock, suffix) if part]
+                return " ".join(parts)
         lowered = value.lower()
         if "trend" in lowered or "now" in lowered:
             return "Now"
+        converted = format_clock_12(value)
+        if converted:
+            return converted
         if len(value) <= 8:
             return value
     return None
@@ -553,8 +597,116 @@ def format_clock(value):
     return value
 
 
-def format_hour_12(hour, with_minutes=False):
-    """Format an hour as 12-hour clock text without am/pm labels."""
+def clock_to_minutes(value):
+    """Convert 24-hour or 12-hour clock text to minutes from midnight."""
+    if value is None:
+        return None
+    text = str(value).strip()
+    if "T" in text:
+        text = format_clock(text) or text
+    match = re.match(r"^(\d{1,2}):(\d{2})(?:\s*(am|pm))?$", text, re.I)
+    if not match:
+        return None
+    hours = int(match.group(1))
+    minutes = int(match.group(2))
+    period = (match.group(3) or "").lower()
+    if period:
+        hours = hours % 12
+        if period == "pm":
+            hours += 12
+    if hours > 23 or minutes > 59:
+        return None
+    return hours * 60 + minutes
+
+
+# Compact elliptical daylight arc for the weather now-column.
+_SUN_PATH_CX = 120.0
+_SUN_PATH_CY = 58.0
+_SUN_PATH_RX = 100.0
+_SUN_PATH_RY = 44.0
+_SUN_PATH_NIGHT_Y = _SUN_PATH_CY + 8.0
+
+
+def _sun_arc_point(progress, cx=_SUN_PATH_CX, cy=_SUN_PATH_CY, rx=_SUN_PATH_RX, ry=_SUN_PATH_RY):
+    """Map 0..1 along the sunrise-to-sunset ellipse to SVG coordinates."""
+    t = max(0.0, min(1.0, float(progress)))
+    angle = math.pi * t
+    return (
+        round(cx - rx * math.cos(angle), 1),
+        round(cy - ry * math.sin(angle), 1),
+    )
+
+
+def build_sun_path(sunrise, sunset, rain_peak=None, now=None):
+    """Build coordinates for the daylight arc under today's conditions."""
+    rise = clock_to_minutes(sunrise)
+    set_at = clock_to_minutes(sunset)
+    if rise is None or set_at is None or set_at <= rise:
+        return None
+
+    if hasattr(now, "hour"):
+        now_minutes = now.hour * 60 + now.minute
+    else:
+        now_minutes = clock_to_minutes(now)
+    if now_minutes is None:
+        now_minutes = rise
+
+    span = set_at - rise
+    start_x = round(_SUN_PATH_CX - _SUN_PATH_RX, 1)
+    end_x = round(_SUN_PATH_CX + _SUN_PATH_RX, 1)
+    is_day = rise <= now_minutes <= set_at
+    if now_minutes < rise:
+        sun_x, sun_y = start_x, _SUN_PATH_NIGHT_Y
+    elif now_minutes > set_at:
+        sun_x, sun_y = end_x, _SUN_PATH_NIGHT_Y
+    else:
+        sun_x, sun_y = _sun_arc_point((now_minutes - rise) / span)
+
+    hours, minutes = divmod(span, 60)
+    daylight = f"{hours}h {minutes:02d}m" if minutes else f"{hours}h"
+    rain_minutes = clock_to_minutes(rain_peak)
+    rain_on_arc = rain_minutes is not None and rise <= rain_minutes <= set_at
+    rain_x = rain_y = None
+    if rain_minutes is not None:
+        if rain_on_arc:
+            rain_x, rain_y = _sun_arc_point((rain_minutes - rise) / span)
+        elif rain_minutes < rise:
+            rain_x, rain_y = round(start_x - 10, 1), _SUN_PATH_CY
+        else:
+            rain_x, rain_y = round(end_x + 10, 1), _SUN_PATH_CY
+
+    arc_d = (
+        f"M{start_x:.0f} {_SUN_PATH_CY:.0f} "
+        f"A{_SUN_PATH_RX:.0f} {_SUN_PATH_RY:.0f} 0 0 1 {end_x:.0f} {_SUN_PATH_CY:.0f}"
+    )
+    return {
+        "sunrise": format_clock_12(sunrise) or sunrise,
+        "sunset": format_clock_12(sunset) or sunset,
+        "sun_x": sun_x,
+        "sun_y": sun_y,
+        "is_day": is_day,
+        "daylight": daylight,
+        "rain_peak": rain_peak,
+        "rain_on_arc": rain_on_arc,
+        "rain_x": rain_x,
+        "rain_y": rain_y,
+        "cy": int(_SUN_PATH_CY),
+        "start_x": start_x,
+        "end_x": end_x,
+        "arc_d": arc_d,
+        "sky_d": f"{arc_d} L{end_x:.0f} {_SUN_PATH_CY:.0f} L{start_x:.0f} {_SUN_PATH_CY:.0f} Z",
+        "horizon_x1": 8,
+        "horizon_x2": 232,
+        "tick_y1": int(_SUN_PATH_CY - 5),
+        "tick_y2": int(_SUN_PATH_CY + 4),
+        "sunrise_clock_x": round(start_x + 22, 1),
+        "sunset_clock_x": round(end_x - 22, 1),
+        "clock_y": int(_SUN_PATH_CY - 8),
+    }
+
+
+def format_hour_12(hour, with_minutes=False, with_period=True):
+    """Format an hour as 12-hour clock text with lowercase am/pm."""
     try:
         hour_i = int(hour) % 24
     except (TypeError, ValueError):
@@ -562,29 +714,42 @@ def format_hour_12(hour, with_minutes=False):
     hour_12 = hour_i % 12
     if hour_12 == 0:
         hour_12 = 12
-    if with_minutes:
-        return f"{hour_12}:00"
-    return str(hour_12)
+    text = f"{hour_12}:00" if with_minutes else str(hour_12)
+    if with_period:
+        suffix = "am" if hour_i < 12 else "pm"
+        return f"{text} {suffix}"
+    return text
 
 
-def format_clock_12(value):
-    """Convert HH:MM or an ISO timestamp to 12-hour time without am/pm."""
-    if isinstance(value, str) and ("T" in value or (len(value) >= 5 and value[2] == ":")):
-        clock = format_clock(value) if "T" in value else value[:5]
-    else:
-        clock = value
-    if not isinstance(clock, str) or ":" not in clock:
-        return format_hour_12(clock, with_minutes=False)
-    try:
-        hour_s, minute_s = clock.split(":", 1)
-        hour_i = int(hour_s)
-        minute_i = int(minute_s[:2])
-    except (TypeError, ValueError):
-        return clock
+def format_clock_12(value, with_period=True):
+    """Convert HH:MM, 12-hour clock text, or an ISO timestamp to 12-hour time."""
+    if value is None:
+        return None
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        return format_hour_12(int(value), with_minutes=False, with_period=with_period)
+    text = str(value).strip()
+    if not text:
+        return None
+    if "T" in text:
+        text = format_clock(text) or text
+    match = re.match(r"^(\d{1,2}):(\d{2})(?:\s*(am|pm))?$", text, re.I)
+    if not match:
+        return format_hour_12(text, with_minutes=False, with_period=with_period)
+    hour_i = int(match.group(1))
+    minute_i = int(match.group(2))
+    period = (match.group(3) or "").lower()
+    if period:
+        hour_i = hour_i % 12
+        if period == "pm":
+            hour_i += 12
     hour_12 = hour_i % 12
     if hour_12 == 0:
         hour_12 = 12
-    return f"{hour_12}:{minute_i:02d}"
+    clock = f"{hour_12}:{minute_i:02d}"
+    if with_period:
+        suffix = "am" if (hour_i % 24) < 12 else "pm"
+        return f"{clock} {suffix}"
+    return clock
 
 
 def weekday_label(iso_day, today_iso=None):
@@ -891,7 +1056,7 @@ def _peak_rain_time(times, values, day_iso):
             peak_index = index
     if peak_index < 0 or peak_value <= 0:
         return None
-    return format_clock_12(times[peak_index])
+    return format_clock_12(times[peak_index], with_period=True)
 
 
 def _hourly_rain_points(times, values, day_iso, start_h=0, end_h=24):
@@ -915,7 +1080,7 @@ def _hourly_rain_points(times, values, day_iso, start_h=0, end_h=24):
         by_hour[hour] = round(number)
 
     points = []
-    # Sparse 12-hour labels (no am/pm) keep the timeline readable.
+    # Sparse 12-hour labels keep the timeline readable.
     label_hours = {start_h, 9, 12, 15, 18, 21, end_h - 1}
     for hour in range(start_h, end_h):
         precip = by_hour.get(hour, 0)
@@ -925,6 +1090,7 @@ def _hourly_rain_points(times, values, day_iso, start_h=0, end_h=24):
                 "hour": hour,
                 "precip": precip,
                 "label": label,
+                "clock": format_hour_12(hour, with_minutes=True),
             }
         )
     return points
@@ -945,7 +1111,7 @@ def _rain_timeline(times, values, day_iso, start_h=0, end_h=24, rain_color_value
     peak_time = None
     if max_precip > 0:
         peak_point = max(points, key=lambda point: point.get("precip") or 0)
-        peak_time = format_hour_12(peak_point.get("hour") or 0, with_minutes=True)
+        peak_time = format_hour_12(peak_point.get("hour") or 0, with_minutes=True, with_period=True)
 
     color_source = rain_color_value if rain_color_value is not None else max_precip
     return {
@@ -1119,8 +1285,8 @@ def fetch_weather():
             "wind_dir": None if safe_number((daily.get("wind_direction_10m_dominant") or [None])[0]) is None else round(safe_number((daily.get("wind_direction_10m_dominant") or [None])[0])),
             "wind_color": plasma_color(safe_number((daily.get("wind_speed_10m_max") or [0])[0], 0) or 0),
             "uv_max": safe_number((daily.get("uv_index_max") or [None])[0]),
-            "sunrise": format_clock((daily.get("sunrise") or [None])[0]),
-            "sunset": format_clock((daily.get("sunset") or [None])[0]),
+            "sunrise": format_clock_12((daily.get("sunrise") or [None])[0]),
+            "sunset": format_clock_12((daily.get("sunset") or [None])[0]),
             "code": today_code,
             "condition": get_weather_text(today_code),
             "icon": get_weather_icon(today_code),
@@ -1141,6 +1307,12 @@ def fetch_weather():
             "afternoon": _segment_stats(hourly, 12, 18),
             "evening": _segment_stats(hourly, 18, 24),
         }
+        today["sun_path"] = build_sun_path(
+            (daily.get("sunrise") or [None])[0],
+            (daily.get("sunset") or [None])[0],
+            rain_peak=today.get("rain_peak_time"),
+            now=copenhagen_now(),
+        )
         today["dials"] = dial_metrics(
             rain_chance=today.get("rain_chance"),
             wind_max=today.get("wind_max"),
@@ -1200,8 +1372,8 @@ def fetch_weather():
             "morning": today["morning"],
             "afternoon": today["afternoon"],
             "evening": today["evening"],
-            "sunrise": (daily.get("sunrise") or [""])[0],
-            "sunset": (daily.get("sunset") or [""])[0],
+            "sunrise": format_clock_12((daily.get("sunrise") or [""])[0]),
+            "sunset": format_clock_12((daily.get("sunset") or [""])[0]),
             "daily_precip": today["rain_chance"],
             "rain_peak_time": today["rain_peak_time"],
         }
@@ -2031,92 +2203,209 @@ def fetch_sky_watch(limit=5):
     return cards
 
 
-def fetch_reflection(seed_date=None):
-    """
-    Generate one difficult Christian philosophical / psychological question.
+def scripture_gateway_url(ref, version="ESV"):
+    """Bible Gateway passage URL for a Proverbs or Ecclesiastes reference."""
+    query = quote((ref or "").strip(), safe="")
+    if not query:
+        return ""
+    return f"https://www.biblegateway.com/passage/?search={query}&version={version}"
 
-    Replaces both the Jesus quote and the stoic/proverb quote.
-    """
-    logger.info("Generating Christian reflection question...")
-    seed = seed_date or date.today()
-    fallback_questions = [
-        {
-            "text": "If love of neighbour is the measure of faith, what does your irritation with the people closest to you reveal about the god you actually trust?",
-            "focus": "Love and self-knowledge",
-        },
-        {
-            "text": "When you pray for guidance but already know the answer that would cost you least, are you seeking God or permission?"
-        },
-        {
-            "text": "If forgiveness requires truth, what wound are you calling 'grace' so you never have to name the harm?",
-            "focus": "Forgiveness",
-        },
-        {
-            "text": "Would your public Christian convictions survive if they never improved your status, only your obedience?",
-            "focus": "Integrity",
-        },
-        {
-            "text": "Where does your need to be right quietly replace your duty to be merciful?",
-            "focus": "Pride and mercy",
-        },
-        {
-            "text": "If Christ is present in weakness, why do you treat your own limits as evidence that God is absent?",
-            "focus": "Weakness",
-        },
-        {
-            "text": "What part of your moral life is performance for an audience you would never admit you need?",
-            "focus": "Authenticity",
-        },
-    ]
-    fallback = fallback_questions[(seed.toordinal() - 1) % len(fallback_questions)]
 
-    if not XAI_AVAILABLE:
-        return fallback
+def _is_esv_scripture(verse):
+    """True when a stored verse is already English Standard Version text."""
+    if not isinstance(verse, dict):
+        return False
+    translation = str(verse.get("translation") or "").strip().lower()
+    label = str(verse.get("translation_label") or "").strip().lower()
+    return translation == "esv" or "english standard" in label
 
-    headers = {
-        "Authorization": f"Bearer {XAI_API_KEY}",
-        "Content-Type": "application/json",
-    }
-    prompt = (
-        "Write one difficult philosophical and psychological question centered on Christianity. "
-        "It should make a thoughtful adult stop and examine conscience, motive, faith, pride, love, "
-        "forgiveness, suffering, or hypocrisy. No quote, no Bible citation, no sermon, no answer. "
-        "One sentence only. Return JSON: "
-        "{\"text\": \"question\", \"focus\": \"short theme\"}."
-    )
+
+def _esv_scripture_payload(ref, book="", text=""):
+    """Shape an English Standard Version verse for the template."""
+    ref = str(ref or "").strip()
     payload = {
-        "model": XAI_MODEL,
-        "messages": [
-            {"role": "system", "content": "You write piercing, non-cynical Christian reflection questions. Output JSON only."},
-            {"role": "user", "content": prompt},
-        ],
-        "response_format": {"type": "json_object"},
+        "text": str(text or "").strip(),
+        "focus": ref,
+        "ref": ref,
+        "book": str(book or "").strip(),
+        "translation": SCRIPTURE_TRANSLATION,
+        "translation_label": ESV_SOURCE["name"],
+        "source": dict(ESV_SOURCE),
     }
+    link = scripture_gateway_url(ref)
+    if link:
+        payload["link"] = link
+    return payload
 
-    def _request():
-        response = HTTP_SESSION.post(
-            "https://api.x.ai/v1/chat/completions",
-            headers=headers,
-            json=payload,
-            timeout=AI_TIMEOUT,
+
+def _clean_esv_passage(text):
+    """Collapse API passage text into a single display sentence."""
+    cleaned = str(text or "")
+    cleaned = re.sub(r"\[[0-9]+\]", "", cleaned)
+    cleaned = cleaned.replace("(ESV)", "")
+    return WHITESPACE_RE.sub(" ", cleaned).strip(" \n\t\"'")
+
+
+def _fetch_esv_text(ref):
+    """Fetch one verse from Crossway's ESV API. Returns None if unavailable."""
+    if not ESV_API_KEY or not ref:
+        return None
+    payload = fetch_json(
+        ESV_API_URL,
+        params={
+            "q": ref,
+            "include-passage-references": "false",
+            "include-verse-numbers": "false",
+            "include-first-verse-numbers": "false",
+            "include-footnotes": "false",
+            "include-footnote-body": "false",
+            "include-headings": "false",
+            "include-short-copyright": "false",
+            "include-copyright": "false",
+            "include-selahs": "false",
+            "indent-poetry": "false",
+            "indent-paragraphs": "0",
+        },
+        extra_headers={"Authorization": f"Token {ESV_API_KEY}"},
+        label=f"ESV {ref}",
+    )
+    if not isinstance(payload, dict):
+        return None
+    passages = payload.get("passages")
+    if not isinstance(passages, list) or not passages:
+        return None
+    return _clean_esv_passage(passages[0]) or None
+
+
+def _resolve_scripture_text(verse):
+    """Load English Standard Version text from Crossway. Never use another translation."""
+    ref = str((verse or {}).get("ref") or "").strip()
+    book = str((verse or {}).get("book") or "").strip()
+    esv_text = _fetch_esv_text(ref)
+    if not esv_text:
+        return None
+    return _esv_scripture_payload(ref, book=book, text=esv_text)
+
+
+def _load_scripture_verses():
+    """Load the local Proverbs and Ecclesiastes verse bank."""
+    try:
+        with open(SCRIPTURE_VERSES_PATH, encoding="utf-8") as file:
+            verses = json.load(file)
+    except Exception as exc:
+        logger.warning("Could not load scripture verses: %s", exc)
+        return list(SCRIPTURE_FALLBACK)
+
+    cleaned = []
+    for item in verses:
+        if not isinstance(item, dict):
+            continue
+        ref = str(item.get("ref") or "").strip()
+        if not ref:
+            continue
+        cleaned.append({
+            "ref": ref,
+            "book": str(item.get("book") or "").strip(),
+        })
+    return cleaned or list(SCRIPTURE_FALLBACK)
+
+
+def _load_scripture_history():
+    """Load used-verse history so daily picks do not repeat."""
+    try:
+        with open(SCRIPTURE_HISTORY_PATH, encoding="utf-8") as file:
+            data = json.load(file)
+        if isinstance(data, dict):
+            return data
+    except FileNotFoundError:
+        pass
+    except Exception as exc:
+        logger.warning("Could not load scripture history: %s", exc)
+    return {}
+
+
+def _save_scripture_history(history):
+    """Persist used-verse history next to the published site files."""
+    os.makedirs(os.path.dirname(SCRIPTURE_HISTORY_PATH), exist_ok=True)
+    with open(SCRIPTURE_HISTORY_PATH, "w", encoding="utf-8") as file:
+        json.dump(history, file, ensure_ascii=False, indent=2)
+        file.write("\n")
+
+
+def pick_scripture(seed_date=None):
+    """
+    Choose a random Proverbs or Ecclesiastes verse and load ESV text.
+
+    Verses are not reused until every verse in the bank has been shown.
+    Re-running on the same date keeps the same reference. Text comes only from
+    Crossway's English Standard Version API.
+    """
+    today = seed_date or date.today()
+    today_iso = today.isoformat() if hasattr(today, "isoformat") else str(today)
+    verses = _load_scripture_verses()
+    by_ref = {verse["ref"]: verse for verse in verses}
+    history = _load_scripture_history()
+    current = history.get("current") if isinstance(history.get("current"), dict) else {}
+    used = history.get("used_refs")
+    used_refs = [ref for ref in used if isinstance(ref, str)] if isinstance(used, list) else []
+    used_set = set(used_refs)
+
+    if (
+        current.get("date") == today_iso
+        and current.get("ref")
+        and current.get("text")
+        and _is_esv_scripture(current)
+    ):
+        logger.info("Reusing today's scripture: %s", current.get("ref"))
+        return _esv_scripture_payload(
+            current.get("ref"),
+            book=current.get("book") or "",
+            text=current.get("text") or "",
         )
-        if response.status_code >= 400:
-            body = (response.text or "")[:300]
-            lower = body.lower()
-            if response.status_code in {401, 403} or "incorrect api key" in lower or "invalid api key" in lower:
-                mark_xai_unavailable(f"xAI {response.status_code}: {body}")
-            raise RuntimeError(f"xAI {response.status_code}: {body}")
-        content = response.json()["choices"][0]["message"]["content"].strip()
-        return json.loads(content)
 
-    question = retry_call("Reflection fetch", _request)
-    if not isinstance(question, dict) or not question.get("text"):
-        return fallback
-    text = str(question.get("text") or "").strip()
-    focus = str(question.get("focus") or "Reflection").strip() or "Reflection"
-    if not text.endswith("?"):
-        text = text.rstrip(".!") + "?"
-    return {"text": text, "focus": focus}
+    chosen = None
+    if current.get("date") == today_iso and current.get("ref") in by_ref:
+        chosen = by_ref[current["ref"]]
+        logger.info("Refreshing today's scripture text: %s", chosen["ref"])
+    else:
+        unused = [verse for verse in verses if verse["ref"] not in used_set]
+        if not unused:
+            logger.info("Scripture pool exhausted (%s verses); starting a new cycle.", len(verses))
+            last_ref = current.get("ref")
+            unused = [verse for verse in verses if verse["ref"] != last_ref] or list(verses)
+            used_refs = []
+            used_set = set()
+        chosen = random.choice(unused)
+
+    payload = _resolve_scripture_text(chosen)
+    if payload and payload.get("text") and payload.get("ref") not in used_set:
+        used_refs.append(payload["ref"])
+
+    next_history = {
+        "used_refs": used_refs,
+        "current": {
+            "date": today_iso,
+            **(payload or _esv_scripture_payload(chosen["ref"], book=chosen.get("book") or "")),
+        },
+    }
+    try:
+        _save_scripture_history(next_history)
+    except Exception as exc:
+        logger.warning("Could not save scripture history: %s", exc)
+    if not payload or not payload.get("text"):
+        logger.warning(
+            "English Standard Version text unavailable for %s; hiding scripture panel.",
+            chosen["ref"],
+        )
+        return None
+    remaining = max(0, len(verses) - len(used_refs))
+    logger.info(
+        "Selected scripture %s (%s, %s remaining in cycle)",
+        chosen["ref"],
+        payload.get("translation_label") or "English Standard Version",
+        remaining,
+    )
+    return payload
 
 
 # ==============================================================================
@@ -2204,7 +2493,7 @@ def build_brief_data(today=None):
     south_africa = fetch_south_africa_news()
     x_trending = fetch_x_trending(limit=5)
     sky_watch = fetch_sky_watch(limit=5)
-    reflection = fetch_reflection(today)
+    scripture = pick_scripture(today)
 
     day_of_year = today.timetuple().tm_yday
     days_in_year = 366 if calendar.isleap(today.year) else 365
@@ -2221,7 +2510,7 @@ def build_brief_data(today=None):
         "space_news": space_news,
         "copenhagen": copenhagen,
         "south_africa": south_africa,
-        "reflection": reflection,
+        "scripture": scripture,
         "x_trending": x_trending,
         "sky_watch": sky_watch,
     }
@@ -2233,6 +2522,10 @@ def main():
         logger.info("Using xAI model: %s", XAI_MODEL)
     else:
         logger.warning("XAI_API_KEY missing; news will not be summarised.")
+    if ESV_API_KEY:
+        logger.info("Scripture will use the English Standard Version API.")
+    else:
+        logger.warning("ESV_API_KEY missing; scripture panel will stay hidden.")
 
     data = build_brief_data()
 

@@ -24,7 +24,7 @@ body {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: 18px;
-    align-items: start;
+    align-items: stretch;
 }
 
 .layout > .panel {
@@ -33,10 +33,24 @@ body {
 
 .weather-panel {
     grid-column: span 7;
+    display: flex;
+    flex-direction: column;
 }
 
 .markets-panel {
     grid-column: span 5;
+    display: flex;
+    flex-direction: column;
+}
+
+.markets-panel .stock-list {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.markets-panel .stock-row:not(.stock-header) {
+    flex: 1 1 auto;
 }
 
 .reflection-panel,
@@ -77,6 +91,18 @@ body {
         inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
+.sky-panel {
+    box-shadow:
+        0 12px 36px rgba(0, 0, 0, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.x-panel {
+    box-shadow:
+        0 12px 36px rgba(0, 0, 0, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
 .site-header {
     padding: 28px 26px;
 }
@@ -89,12 +115,30 @@ h1 {
     display: grid;
     grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.2fr);
     gap: 18px;
-    align-items: center;
+    align-items: stretch;
+}
+
+.weather-now-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0;
+    min-width: 0;
 }
 
 .weather-now-card {
     margin-bottom: 0;
     min-height: 148px;
+    flex: 0 0 auto;
+}
+
+.sun-path {
+    margin-top: 0;
+    margin-bottom: 0;
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
 }
 
 .dial-row {
@@ -155,8 +199,17 @@ h1 {
 
 .news-item a:hover,
 .trend-card:hover .trend-name,
-.source-link:hover {
+.source-link:hover,
+a.reflection-panel:hover .reflection-text {
     color: #ffffff;
+}
+
+.sky-panel .trend-card:hover .trend-name {
+    color: #0a0e1a;
+}
+
+.x-panel .trend-card:hover .trend-name {
+    color: #1d9bf0;
 }
 
 .stock-row:hover {
@@ -166,10 +219,6 @@ h1 {
 @media (max-width: 1100px) {
     .x-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .weather-top {
-        grid-template-columns: 1fr;
     }
 
     .dial-row {
@@ -230,10 +279,6 @@ h1 {
 
     .brand-row {
         align-items: flex-start;
-    }
-
-    .meta-pill {
-        border-radius: 14px;
     }
 
     .stock-row {

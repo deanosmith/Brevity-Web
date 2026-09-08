@@ -91,6 +91,7 @@ jobs:
         if: steps.guard.outputs.skip != 'true'
         env:
           XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          ESV_API_KEY: ${{ secrets.ESV_API_KEY }}
           CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
@@ -119,7 +120,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
           # Publish only the files the GitHub Pages site actually serves.
-          git add index.html brevity.css brevity-web.css resources/favicon.png resources/favicon-16.png resources/favicon-32.png resources/favicon-512.png resources/apple-touch-icon.png
+          git add index.html brevity.css brevity-web.css resources/favicon.png resources/favicon-16.png resources/favicon-32.png resources/favicon-512.png resources/apple-touch-icon.png resources/scripture-history.json
           # Drop previously published artifacts that the site no longer uses.
           git rm -f --ignore-unmatch resources/brevity.json brevity.pdf || true
 

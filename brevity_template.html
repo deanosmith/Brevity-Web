@@ -12,8 +12,8 @@
     <link rel="icon" href="resources/favicon-32.png?v=eclipse" type="image/png" sizes="32x32">
     <link rel="icon" href="resources/favicon-16.png?v=eclipse" type="image/png" sizes="16x16">
     <link rel="apple-touch-icon" href="resources/apple-touch-icon.png?v=eclipse" sizes="180x180">
-    <link rel="stylesheet" href="brevity.css">
-    <link rel="stylesheet" href="brevity-web.css" media="screen">
+    <link rel="stylesheet" href="brevity.css?v=12h-clock2">
+    <link rel="stylesheet" href="brevity-web.css?v=12h-clock2" media="screen">
 </head>
 
 <body>
@@ -55,25 +55,72 @@
                 {% set dials = today.dials if today.dials else None %}
                 <div class="weather-today">
                     <div class="weather-top">
-                        <div class="weather-now-card">
-                            <div class="weather-hero-icon">{{ today.current.icon if today.current else today.icon }}</div>
-                            <div class="weather-now-copy">
-                                <div class="weather-now-temp" style="color: {{ today.high_color or '#f2f2f2' }};">
-                                    {% if today.current and today.current.temp is not none %}
-                                    {{ today.current.temp }}°
-                                    {% elif today.high is not none %}
-                                    {{ today.high }}°
-                                    {% else %}
-                                    —
+                        <div class="weather-now-column">
+                            <div class="weather-now-card">
+                                <div class="weather-hero-icon">{{ today.current.icon if today.current else today.icon }}</div>
+                                <div class="weather-now-copy">
+                                    <div class="weather-now-temp" style="color: {{ today.high_color or '#f2f2f2' }};">
+                                        {% if today.current and today.current.temp is not none %}
+                                        {{ today.current.temp }}°
+                                        {% elif today.high is not none %}
+                                        {{ today.high }}°
+                                        {% else %}
+                                        —
+                                        {% endif %}
+                                    </div>
+                                    <div class="weather-now-condition">
+                                        {{ (today.current.condition if today.current else today.condition) or "—" }}
+                                    </div>
+                                    {% if today.current and today.current.feels_like is not none %}
+                                    <div class="weather-now-feels">Feels {{ today.current.feels_like }}°</div>
                                     {% endif %}
                                 </div>
-                                <div class="weather-now-condition">
-                                    {{ (today.current.condition if today.current else today.condition) or "—" }}
-                                </div>
-                                {% if today.current and today.current.feels_like is not none %}
-                                <div class="weather-now-feels">Feels {{ today.current.feels_like }}°</div>
-                                {% endif %}
                             </div>
+
+                            {% if today.sunrise or today.sunset %}
+                            <div class="sun-path" role="img" aria-label="Sunrise {{ today.sunrise or '—' }}, sunset {{ today.sunset or '—' }}">
+                                <div class="sun-event">
+                                    <svg class="sun-event-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                                        <defs>
+                                            <clipPath id="sunriseClip">
+                                                <rect x="0" y="0" width="32" height="21" />
+                                            </clipPath>
+                                        </defs>
+                                        <g clip-path="url(#sunriseClip)">
+                                            <circle cx="16" cy="21" r="7" fill="#ffd166" stroke="#cd9b50" stroke-width="1.4" />
+                                            <g fill="none" stroke="#cd9b50" stroke-width="1.5" stroke-linecap="round">
+                                                <line x1="16" y1="4" x2="16" y2="7.5" />
+                                                <line x1="7.2" y1="8.2" x2="9.6" y2="10.6" />
+                                                <line x1="24.8" y1="8.2" x2="22.4" y2="10.6" />
+                                                <line x1="4.5" y1="17" x2="8" y2="17" />
+                                                <line x1="27.5" y1="17" x2="24" y2="17" />
+                                            </g>
+                                        </g>
+                                        <line x1="3" y1="21" x2="29" y2="21" stroke="#c8c4bc" stroke-width="1.5" stroke-linecap="round" />
+                                    </svg>
+                                    <span class="sun-event-time">{{ today.sunrise or "—" }}</span>
+                                </div>
+                                <div class="sun-event">
+                                    <svg class="sun-event-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                                        <defs>
+                                            <clipPath id="sunsetClip">
+                                                <rect x="0" y="0" width="32" height="21" />
+                                            </clipPath>
+                                        </defs>
+                                        <g clip-path="url(#sunsetClip)">
+                                            <circle cx="16" cy="23" r="7" fill="#e8a45a" stroke="#cd9b50" stroke-width="1.4" />
+                                            <g fill="none" stroke="#cd9b50" stroke-width="1.5" stroke-linecap="round">
+                                                <line x1="16" y1="8" x2="16" y2="11" />
+                                                <line x1="8.4" y1="11.2" x2="10.6" y2="13.2" />
+                                                <line x1="23.6" y1="11.2" x2="21.4" y2="13.2" />
+                                            </g>
+                                        </g>
+                                        <line x1="3" y1="21" x2="29" y2="21" stroke="#c8c4bc" stroke-width="1.5" stroke-linecap="round" />
+                                    </svg>
+                                    <span class="sun-event-time">{{ today.sunset or "—" }}</span>
+                                </div>
+                            </div>
+                            {% endif %}
                         </div>
 
                         <div class="dial-row">
@@ -98,6 +145,9 @@
                                         <div class="dial-value" style="color: {{ (dials.rain.color if dials and dials.rain else '#40c4ff') }};">
                                             {% if today.rain_chance is not none %}{{ today.rain_chance }}%{% else %}—{% endif %}
                                         </div>
+                                        <div class="dial-sub"{% if today.rain_peak_time %} style="color: {{ (dials.rain.color if dials and dials.rain else '#40c4ff') }};"{% endif %}>
+                                            {% if today.rain_peak_time %}{{ today.rain_peak_time }}{% else %}&nbsp;{% endif %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -108,7 +158,7 @@
                                         <div class="dial-label">Wind</div>
                                         <div class="dial-value" style="color: {{ (dials.wind.color if dials and dials.wind else '#c084fc') }};">
                                             {% if today.wind_max is not none %}
-                                            {{ today.wind_max }}{% if today.wind_dir is not none %}<span class="wind-arrow" style="--wind-dir: {{ today.wind_dir }};" aria-hidden="true"><svg viewBox="0 0 26 14" focusable="false"><path fill="none" d="M1.4 7h18.2M16.2 2.6L23.6 7 16.2 11.4"/></svg></span>{% endif %}
+                                            {{ today.wind_max }}{% if today.wind_dir is not none %}<span class="wind-arrow" style="--wind-dir: {{ today.wind_dir }};" aria-hidden="true"><svg viewBox="0 0 26 14" focusable="false"><path d="M1 4.6h12.2V1.6L24.8 7 13.2 12.4V9.4H1z"/></svg></span>{% endif %}
                                             {% else %}—{% endif %}
                                         </div>
                                         <div class="dial-sub">
@@ -129,21 +179,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="weather-meta-row">
-                        <div class="meta-pill">
-                            <span class="meta-k">Sunrise</span>
-                            <span class="meta-v">{{ today.sunrise or "—" }}</span>
-                        </div>
-                        <div class="meta-pill">
-                            <span class="meta-k">Sunset</span>
-                            <span class="meta-v">{{ today.sunset or "—" }}</span>
-                        </div>
-                        <div class="meta-pill">
-                            <span class="meta-k">Peak rain</span>
-                            <span class="meta-v">{{ today.rain_peak_time or "—" }}</span>
                         </div>
                     </div>
 
@@ -175,7 +210,7 @@
                             </div>
                             <div class="rain-timeline-track" aria-hidden="true">
                                 {% for point in rain_tl.points %}
-                                <div class="rain-bar" style="--rain: {{ point.precip if point.precip is not none else 0 }};" title="{{ '%02d'|format(point.hour) }}:00 · {{ point.precip if point.precip is not none else 0 }}%">
+                                <div class="rain-bar" style="--rain: {{ point.precip if point.precip is not none else 0 }};" title="{{ point.clock or '' }} · {{ point.precip if point.precip is not none else 0 }}%">
                                     <span class="rain-bar-fill"></span>
                                 </div>
                                 {% endfor %}
@@ -218,7 +253,7 @@
                                 </div>
                                 <div class="rain-timeline-track" aria-hidden="true">
                                     {% for point in day_tl.points %}
-                                    <div class="rain-bar" style="--rain: {{ point.precip if point.precip is not none else 0 }};" title="{{ '%02d'|format(point.hour) }}:00 · {{ point.precip if point.precip is not none else 0 }}%">
+                                    <div class="rain-bar" style="--rain: {{ point.precip if point.precip is not none else 0 }};" title="{{ point.clock or '' }} · {{ point.precip if point.precip is not none else 0 }}%">
                                         <span class="rain-bar-fill"></span>
                                     </div>
                                     {% endfor %}
@@ -310,20 +345,32 @@
                 {% endif %}
             </section>
 
-            <section class="panel reflection-panel">
+            {% if scripture and scripture.text and scripture.link %}
+            <a class="panel reflection-panel" href="{{ scripture.link }}" target="_blank" rel="noopener noreferrer">
                 <div class="panel-head">
+                    <div>
+                        <h2>Scripture</h2>
+                        <p class="panel-sub">English Standard Version</p>
+                    </div>
                 </div>
-                {% if reflection %}
                 <div class="reflection-card">
-                    <div class="reflection-text">{{ reflection.text }}</div>
-                    {% if reflection.focus %}
-                    <div class="reflection-focus">{{ reflection.focus }}</div>
+                    <div class="reflection-text">{{ scripture.text }}</div>
+                    {% if scripture.focus %}
+                    <div class="reflection-focus">{{ scripture.focus }}</div>
                     {% endif %}
                 </div>
-                {% else %}
-                <div class="empty-state">Reflection unavailable</div>
-                {% endif %}
+            </a>
+            {% else %}
+            <section class="panel reflection-panel">
+                <div class="panel-head">
+                    <div>
+                        <h2>Scripture</h2>
+                        <p class="panel-sub">English Standard Version</p>
+                    </div>
+                </div>
+                <div class="empty-state">Scripture unavailable</div>
             </section>
+            {% endif %}
 
             <div class="news-pair matched-pair watch-pair">
             <section class="panel x-panel">
