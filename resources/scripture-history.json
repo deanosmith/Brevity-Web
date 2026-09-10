@@ -3,10 +3,10 @@
     "Proverbs 19:15"
   ],
   "current": {
-    "date": "2026-09-09",
+    "date": "2026-09-10",
     "text": "",
-    "focus": "Proverbs 2:2",
-    "ref": "Proverbs 2:2",
+    "focus": "Proverbs 10:21",
+    "ref": "Proverbs 10:21",
     "book": "Proverbs",
     "translation": "Esv",
     "translation_label": "English Standard Version",
@@ -14,6 +14,6 @@
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%202%3A2&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2010%3A21&version=ESV"
   }
 }
