@@ -1759,11 +1759,15 @@ X_HANDLE_RE = re.compile(r"^@?([A-Za-z0-9_]{1,15})$")
 
 
 def _clip_text(value, limit):
-    """Plain text trimmed to a word boundary."""
+    """Plain text trimmed to a sentence end, else a word boundary."""
     text = strip_html(str(value or "")).strip()
     if len(text) <= limit:
         return text
-    return text[:limit].rsplit(" ", 1)[0].rstrip(",;:-") + "…"
+    head = text[:limit]
+    sentence_end = max(head.rfind(". "), head.rfind("! "), head.rfind("? "))
+    if sentence_end >= limit * 0.5:
+        return head[: sentence_end + 1]
+    return head.rsplit(" ", 1)[0].rstrip(",;:-") + "…"
 
 
 def _x_accounts(raw):
@@ -1799,7 +1803,7 @@ def _trend_card(name, post_count=None, category="Personalized", trending_since=N
     return {
         "name": raw_name,
         "headline": _clip_text(details.get("headline"), 90) or raw_name,
-        "summary": _clip_text(details.get("summary"), 320),
+        "summary": _clip_text(details.get("summary"), 480),
         "why": _clip_text(details.get("why_it_matters"), 180),
         "sentiment": sentiment.title() if sentiment in X_SENTIMENTS else None,
         "accounts": _x_accounts(details.get("accounts")),
@@ -1907,14 +1911,14 @@ def _fetch_x_personalized_grok(limit):
         "Skip celebrity gossip, sports scores, and meme coins unless they are market-moving. "
         "For each topic give: name (a short search query or hashtag, not a sentence); "
         "headline (Title Case, max 8 words); "
-        "summary (two factual sentences on what happened and what people on X are saying, "
+        "summary (two factual sentences, max 55 words, on what happened and what people on X are saying, "
         "with specific names, numbers, and dates); "
-        "why_it_matters (one short sentence on why this reader should care); "
+        "why_it_matters (one short sentence, max 20 words, on why this reader should care); "
         "category (one of Space, AI, Chips, Energy, Tesla, Palantir, Markets, Denmark, Europe); "
         "sentiment (Bullish, Bearish, Mixed, or Neutral); "
         "post_count (short volume hint like ~12k posts or Rising); "
         "accounts (up to 2 real X handles driving the conversation). "
-        "Also give pulse: one sentence reading today's overall X mood across these interests. "
+        "Also give pulse: one sentence, max 35 words, reading today's overall X mood across these interests. "
         'Return JSON only: {"pulse":"...","trends":[{"name":"","headline":"","summary":"",'
         '"why_it_matters":"","category":"","sentiment":"","post_count":"","accounts":["@handle"]}]}.'
     )
@@ -1985,7 +1989,7 @@ def _fetch_x_personalized_grok(limit):
         known = {card["name"].lower() for card in cards}
         extra = [card for card in _collect_trend_cards(raw_trends, "Personalized", limit) if card["name"].lower() not in known]
         cards.extend(extra[: limit - len(cards)])
-        pulse = pulse or _clip_text(parsed.get("pulse"), 240) or None
+        pulse = pulse or _clip_text(parsed.get("pulse"), 400) or None
         logger.info("%s gave %s topics (%s total).", label, len(extra), len(cards))
     return cards, pulse
 
