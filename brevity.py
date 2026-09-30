@@ -40,6 +40,8 @@ load_dotenv()
 XAI_API_KEY = os.getenv("XAI_API_KEY")
 # Ignore blank overrides from empty GitHub Actions variables.
 XAI_MODEL = (os.getenv("XAI_MODEL") or "grok-4.20-non-reasoning").strip() or "grok-4.20-non-reasoning"
+# Agent turns for the X search; each turn re-sends every fetched post as input.
+X_SEARCH_MAX_TURNS = 2
 ESV_API_KEY = (os.getenv("ESV_API_KEY") or "").strip()
 SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN")
 SLACK_CHANNEL_ID = os.getenv("SLACK_CHANNEL_ID")
@@ -1494,6 +1496,28 @@ def raise_for_xai(response, label="xAI"):
     raise RuntimeError(message)
 
 
+XAI_USAGE = {"calls": 0, "input_tokens": 0, "output_tokens": 0, "x_posts_fetched": 0, "x_users_fetched": 0}
+
+
+def record_xai_usage(label, payload):
+    """Log and total token and X search usage from an xAI response body."""
+    usage = (payload or {}).get("usage") or {}
+    details = usage.get("server_side_tool_usage_details") or {}
+    counts = {
+        "input_tokens": int(usage.get("input_tokens") or usage.get("prompt_tokens") or 0),
+        "output_tokens": int(usage.get("output_tokens") or usage.get("completion_tokens") or 0),
+        "x_posts_fetched": int(details.get("x_posts_fetched") or 0),
+        "x_users_fetched": int(details.get("x_users_fetched") or 0),
+    }
+    XAI_USAGE["calls"] += 1
+    for key, value in counts.items():
+        XAI_USAGE[key] += value
+    logger.info(
+        "%s usage: %s in / %s out tokens, %s posts, %s profiles",
+        label, counts["input_tokens"], counts["output_tokens"], counts["x_posts_fetched"], counts["x_users_fetched"],
+    )
+
+
 def summarize_with_ai(text, prompt_prefix="Summarize this news item:"):
     """Summarize text using the xAI API. Returns None when unavailable."""
     clean_text = strip_html(text)
@@ -1528,7 +1552,9 @@ def summarize_with_ai(text, prompt_prefix="Summarize this news item:"):
             timeout=AI_TIMEOUT,
         )
         raise_for_xai(response)
-        content = response.json()["choices"][0]["message"]["content"].strip()
+        body = response.json()
+        record_xai_usage("AI summary", body)
+        content = body["choices"][0]["message"]["content"].strip()
         if not content:
             raise ValueError("Empty summary response")
         return content
@@ -1552,9 +1578,9 @@ def tidy_headline(text):
     return CAPS_RUN_RE.sub(lambda match: match.group(0).title(), text)
 
 
-def _news_item(entry, prompt):
-    """AI summary with keyword badges, or the tidied feed title as fallback."""
-    summary = summarize_with_ai(entry["content_text"], prompt) if XAI_AVAILABLE else None
+def _news_item(entry, prompt, summarize=True):
+    """AI summary with keyword badges, or the tidied feed title."""
+    summary = summarize_with_ai(entry["content_text"], prompt) if summarize and XAI_AVAILABLE else None
     if summary:
         headline = stylize_keywords(summary)
     else:
@@ -1608,8 +1634,8 @@ def _rss_entries(url, limit=5):
     return items
 
 
-def fetch_news(urls, limit=6, prompt="Summarize this content:", label="feed"):
-    """Collect up to `limit` unique stories across feeds in order, then summarise them."""
+def fetch_news(urls, limit=6, prompt="Summarize this content:", label="feed", summarize=True):
+    """Collect up to `limit` unique stories across feeds in order, optionally summarised."""
     chosen = []
     seen = set()
     for url in urls:
@@ -1627,19 +1653,19 @@ def fetch_news(urls, limit=6, prompt="Summarize this content:", label="feed"):
     if not chosen:
         logger.warning("No items found for %s feeds", label)
         return []
-    items = [_news_item(entry, prompt) for entry in chosen]
+    items = [_news_item(entry, prompt, summarize=summarize) for entry in chosen]
     logger.info("%s assembled %s items", label, len(items))
     return items
 
 
 def fetch_space_news():
-    """Fetch and summarize space news."""
+    """Fetch space news. Headlines only, no AI summaries."""
     logger.info("Fetching space news...")
     return fetch_news(
         SPACE_FEEDS,
         limit=6,
-        prompt="Summarize this content:",
         label="space",
+        summarize=False,
     )
 
 
@@ -1911,14 +1937,15 @@ def _fetch_x_personalized_grok(limit):
         "Skip celebrity gossip, sports scores, and meme coins unless they are market-moving. "
         "For each topic give: name (a short search query or hashtag, not a sentence); "
         "headline (Title Case, max 8 words); "
-        "summary (two factual sentences, max 55 words, on what happened and what people on X are saying, "
+        "summary (two factual sentences, max 45 words, on what happened and what people on X are saying, "
         "with specific names, numbers, and dates); "
-        "why_it_matters (one short sentence, max 20 words, on why this reader should care); "
+        "why_it_matters (one short sentence, max 16 words, on why this reader should care); "
         "category (one of Space, AI, Chips, Energy, Tesla, Palantir, Markets, Denmark, Europe); "
         "sentiment (Bullish, Bearish, Mixed, or Neutral); "
         "post_count (short volume hint like ~12k posts or Rising); "
-        "accounts (up to 2 real X handles driving the conversation). "
-        "Also give pulse: one sentence, max 35 words, reading today's overall X mood across these interests. "
+        "accounts (up to 2 X handles taken from posts you already found; do not run user searches). "
+        "Also give pulse: one sentence, max 25 words, reading today's overall X mood across these interests. "
+        "Use as few searches as possible: one or two broad searches covering all interests. "
         'Return JSON only: {"pulse":"...","trends":[{"name":"","headline":"","summary":"",'
         '"why_it_matters":"","category":"","sentiment":"","post_count":"","accounts":["@handle"]}]}.'
     )
@@ -1938,7 +1965,15 @@ def _fetch_x_personalized_grok(limit):
             },
             {"role": "user", "content": prompt},
         ],
-        "tools": [{"type": "x_search", "from_date": yesterday}],
+        # Searched posts are billed per post and re-sent as input each turn, so keep the search tight.
+        "tools": [{
+            "type": "x_search",
+            "from_date": yesterday,
+            "to_date": today,
+            "enable_image_understanding": False,
+            "enable_video_understanding": False,
+        }],
+        "max_turns": X_SEARCH_MAX_TURNS,
         "store": False,
     }
 
@@ -1951,8 +1986,12 @@ def _fetch_x_personalized_grok(limit):
             json=payload,
             timeout=90,
         )
+        if response.status_code == 400 and "max_turns" in (response.text or "") and payload.pop("max_turns", None):
+            raise RuntimeError("max_turns rejected; retrying without it")
         raise_for_xai(response, "xAI responses")
-        text = responses_output_text(response.json())
+        body = response.json()
+        record_xai_usage("Grok X search", body)
+        text = responses_output_text(body)
         if not extract_json_object(text):
             raise ValueError("Grok X search returned no JSON")
         return text
@@ -1974,7 +2013,9 @@ def _fetch_x_personalized_grok(limit):
             timeout=AI_TIMEOUT,
         )
         raise_for_xai(response)
-        return response.json()["choices"][0]["message"]["content"].strip()
+        body = response.json()
+        record_xai_usage("Grok X briefing", body)
+        return body["choices"][0]["message"]["content"].strip()
 
     cards = []
     pulse = None
@@ -2678,6 +2719,11 @@ def main():
         else:
             logger.warning("SEND_TO_SLACK enabled but no PDF was generated.")
 
+    logger.info(
+        "xAI totals: %s calls, %s in / %s out tokens, %s posts, %s profiles",
+        XAI_USAGE["calls"], XAI_USAGE["input_tokens"], XAI_USAGE["output_tokens"],
+        XAI_USAGE["x_posts_fetched"], XAI_USAGE["x_users_fetched"],
+    )
     logger.info("Done.")
 
 
