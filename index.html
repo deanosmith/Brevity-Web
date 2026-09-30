@@ -1,1264 +1,931 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Brevity · Wednesday, September 30</title>
-    <meta name="description" content="Daily automated morning brief covering weather, markets, X, sky watch, and curated news.">
+    <meta name="description" content="Daily morning brief covering weather, markets, X, sky watch, and curated news.">
     <meta name="brevity-date" content="2026-09-30">
+    <meta name="brevity-generated" content="2026-09-30T11:12:04+02:00" data-clock="11:12 am">
     <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#07080c">
     <link rel="icon" href="resources/favicon.png?v=eclipse" type="image/png">
     <link rel="icon" href="resources/favicon-32.png?v=eclipse" type="image/png" sizes="32x32">
     <link rel="icon" href="resources/favicon-16.png?v=eclipse" type="image/png" sizes="16x16">
     <link rel="apple-touch-icon" href="resources/apple-touch-icon.png?v=eclipse" sizes="180x180">
-    <link rel="stylesheet" href="brevity.css?v=12h-clock2">
-    <link rel="stylesheet" href="brevity-web.css?v=12h-clock2" media="screen">
+    <link rel="preconnect" href="https://fonts.googleapis.com" media="screen">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin media="screen">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:ital,wght@1,400;1,500&display=swap" media="screen">
+    <link rel="stylesheet" href="brevity.css?v=revamp1">
+    <link rel="stylesheet" href="brevity-web.css?v=revamp1" media="screen">
+    <script type="application/json" id="brevity-config">{"eclipses": [{"detail": "Visible from Europe", "link": "https://science.nasa.gov/eclipses/", "name": "Partial Lunar Eclipse", "when": "2026-08-28T04:13:00+00:00"}, {"detail": "South America and Africa", "link": "https://science.nasa.gov/eclipses/future-eclipses/eclipse-2027/", "name": "Annular Solar Eclipse", "when": "2027-02-06T16:00:00+00:00"}, {"detail": "Spain and North Africa", "link": "https://science.nasa.gov/eclipses/future-eclipses/eclipse-2027/", "name": "Total Solar Eclipse", "when": "2027-08-02T10:07:00+00:00"}, {"detail": "Americas and western Europe", "link": "https://science.nasa.gov/eclipses/", "name": "Annular Solar Eclipse", "when": "2028-01-26T15:08:00+00:00"}, {"detail": "Australia and New Zealand", "link": "https://science.nasa.gov/eclipses/", "name": "Total Solar Eclipse", "when": "2028-07-22T02:56:00+00:00"}], "verses_url": "resources/scripture-verses.json", "weather": {"lat": 55.6761, "lon": 12.5683, "timezone": "Europe/Copenhagen", "wind_max": 50}, "weather_codes": {"0": {"color": "#FFD700", "icon": "\u2600\ufe0f", "text": "Clear Sky"}, "1": {"color": "#87CEEB", "icon": "\u26c5\ufe0f", "text": "Partly Cloudy"}, "2": {"color": "#87CEEB", "icon": "\u26c5\ufe0f", "text": "Partly Cloudy"}, "3": {"color": "#87CEEB", "icon": "\u2601\ufe0f", "text": "Overcast"}, "45": {"color": "#708090", "icon": "\ud83c\udf2b\ufe0f", "text": "Foggy"}, "48": {"color": "#708090", "icon": "\ud83c\udf2b\ufe0f", "text": "Rime Fog"}, "51": {"color": "#4682B4", "icon": "\ud83c\udf26\ufe0f", "text": "Light Drizzle"}, "53": {"color": "#4682B4", "icon": "\ud83c\udf26\ufe0f", "text": "Drizzle"}, "55": {"color": "#4682B4", "icon": "\ud83c\udf27\ufe0f", "text": "Heavy Drizzle"}, "61": {"color": "#4682B4", "icon": "\ud83c\udf27\ufe0f", "text": "Light Rain"}, "63": {"color": "#4682B4", "icon": "\ud83c\udf27\ufe0f", "text": "Rain"}, "65": {"color": "#4682B4", "icon": "\ud83c\udf27\ufe0f", "text": "Heavy Rain"}, "71": {"color": "#E0FFFF", "icon": "\ud83c\udf28\ufe0f", "text": "Light Snow"}, "73": {"color": "#E0FFFF", "icon": "\ud83c\udf28\ufe0f", "text": "Snow"}, "75": {"color": "#E0FFFF", "icon": "\ud83c\udf28\ufe0f", "text": "Heavy Snow"}, "77": {"color": "#E0FFFF", "icon": "\ud83c\udf28\ufe0f", "text": "Snow Grains"}, "80": {"color": "#4682B4", "icon": "\ud83c\udf26\ufe0f", "text": "Showers"}, "81": {"color": "#4682B4", "icon": "\ud83c\udf26\ufe0f", "text": "Showers"}, "82": {"color": "#4682B4", "icon": "\ud83c\udf26\ufe0f", "text": "Showers"}, "95": {"color": "#9370DB", "icon": "\u26c8\ufe0f", "text": "Thunderstorm"}, "96": {"color": "#9370DB", "icon": "\u26c8\ufe0f", "text": "Thunderstorm"}, "99": {"color": "#9370DB", "icon": "\u26c8\ufe0f", "text": "Thunderstorm"}}}</script>
+    <script src="brevity.js?v=revamp1" defer></script>
 </head>
 
 <body>
     <div class="page">
-        <header class="site-header panel">
-            <div class="header-top">
-                <h1>
-                    <span class="date-text">Wednesday, September 30</span>
-                </h1>
-                <div class="year-progress" aria-label="Year Progress">
-                    <div class="year-progress-meta">
-                        <span class="year-progress-label">Year Progress</span>
-                        <span class="year-progress-value">74.8%</span>
-                    </div>
-                    <div class="year-progress-track">
-                        <div class="year-progress-fill" style="width: 74.8%;"></div>
-                    </div>
+        <nav class="topbar" aria-label="Sections">
+            <a class="brand" href="#top" aria-label="Brevity Home">
+                <span class="brand-mark" aria-hidden="true">B</span>
+                <span class="brand-name">Brevity</span>
+            </a>
+            <div class="topbar-links">
+                <a href="#weather">Weather</a>
+                <a href="#markets">Markets</a>
+                <a href="#scripture">Scripture</a>
+                <a href="#x">X</a>
+                <a href="#sky">Sky</a>
+                <a href="#copenhagen">News</a>
+            </div>
+            <button type="button" class="btn btn-primary" data-refresh-all>
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg><span>Refresh All</span>
+            </button>
+        </nav>
+
+        <header class="hero" id="top">
+            <div class="hero-copy">
+                <p class="eyebrow">Morning Brief · Copenhagen</p>
+                <h1 class="hero-title">Wednesday, September 30</h1>
+                <p class="hero-sub">Generated at 11:12 am. Refresh any block for the latest.</p>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-label">Right Now</span>
+                    <span class="stat-value">
+                        <span data-w="now-icon">⛅️</span>
+                        <span data-w="now-temp">17°</span>
+                    </span>
+                    <span class="stat-sub" data-w="now-cond">Partly Cloudy</span>
+                </div>
+                <div class="stat" data-part="markets">
+                    <span class="stat-label">Watchlist Today</span>
+                    <span class="stat-value green">+0.1%</span>
+                    <span class="stat-sub">Average Day Move</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Year Progress</span>
+                    <span class="stat-value">74.8%</span>
+                    <span class="progress" aria-hidden="true"><span class="progress-fill" style="width: 74.8%;"></span></span>
+                    <span class="stat-sub">Day 273 Of 365</span>
                 </div>
             </div>
         </header>
 
         <main class="layout">
-            <section class="panel weather-panel">
-                <div class="panel-head">
-                    <div>
-                        <h2>Weather</h2>
-                        <p class="panel-sub">
-                            Copenhagen
-                            
-                            · Source:
-                            <a class="source-link" href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>
-                            
-                        </p>
+            <section class="panel weather-panel" id="weather" data-block="weather" data-mode="live-weather">
+                <header class="panel-head">
+    <div class="panel-title">
+        <span class="panel-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></span>
+        <div class="panel-title-copy">
+            <h2>Weather</h2>
+            <p class="panel-sub">
+                <span data-f="subtitle">Copenhagen</span>
+                · <a class="source-link" href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>
+            </p>
+        </div>
+    </div>
+    <div class="panel-actions">
+        <span class="panel-stamp" data-stamp aria-live="polite">Updated 11:12 am</span>
+        <button type="button" class="icon-btn" data-refresh aria-label="Refresh: Weather" title="Refresh"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg></button>
+    </div>
+</header>
+                <div class="panel-body" data-part="weather">
+                <div class="weather-top">
+                    <div class="weather-now-column">
+                        <div class="weather-now-card" style="--now-color: #87CEEB;">
+                            <div class="weather-hero-icon" data-w="now-icon">⛅️</div>
+                            <div class="weather-now-copy">
+                                <div class="weather-now-temp" data-w="now-temp" style="color: #ff9747;">17°</div>
+                                <div class="weather-now-condition" data-w="now-cond">Partly Cloudy</div>
+                                <div class="weather-now-feels" data-w="now-feels">Feels Like 15°</div>
+                            </div>
+                        </div>
+
+                        <div class="sun-path" role="img" aria-label="Sunrise and sunset">
+                            <div class="sun-event">
+                                <svg class="sun-event-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                                    <defs><clipPath id="sunriseClip"><rect x="0" y="0" width="32" height="21" /></clipPath></defs>
+                                    <g clip-path="url(#sunriseClip)">
+                                        <circle cx="16" cy="21" r="7" fill="#ffd166" stroke="#cd9b50" stroke-width="1.4" />
+                                        <g fill="none" stroke="#cd9b50" stroke-width="1.5" stroke-linecap="round">
+                                            <line x1="16" y1="4" x2="16" y2="7.5" />
+                                            <line x1="7.2" y1="8.2" x2="9.6" y2="10.6" />
+                                            <line x1="24.8" y1="8.2" x2="22.4" y2="10.6" />
+                                            <line x1="4.5" y1="17" x2="8" y2="17" />
+                                            <line x1="27.5" y1="17" x2="24" y2="17" />
+                                        </g>
+                                    </g>
+                                    <line x1="3" y1="21" x2="29" y2="21" stroke="#c8c4bc" stroke-width="1.5" stroke-linecap="round" />
+                                </svg>
+                                <span class="sun-event-label">Sunrise</span>
+                                <span class="sun-event-time" data-w="sunrise">7:10 am</span>
+                            </div>
+                            <div class="sun-event">
+                                <svg class="sun-event-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                                    <defs><clipPath id="sunsetClip"><rect x="0" y="0" width="32" height="21" /></clipPath></defs>
+                                    <g clip-path="url(#sunsetClip)">
+                                        <circle cx="16" cy="23" r="7" fill="#e8a45a" stroke="#cd9b50" stroke-width="1.4" />
+                                        <g fill="none" stroke="#cd9b50" stroke-width="1.5" stroke-linecap="round">
+                                            <line x1="16" y1="8" x2="16" y2="11" />
+                                            <line x1="8.4" y1="11.2" x2="10.6" y2="13.2" />
+                                            <line x1="23.6" y1="11.2" x2="21.4" y2="13.2" />
+                                        </g>
+                                    </g>
+                                    <line x1="3" y1="21" x2="29" y2="21" stroke="#c8c4bc" stroke-width="1.5" stroke-linecap="round" />
+                                </svg>
+                                <span class="sun-event-label">Sunset</span>
+                                <span class="sun-event-time" data-w="sunset">6:47 pm</span>
+                            </div>
+                            <div class="sun-event sun-daylight">
+                                <span class="sun-event-label">Daylight</span>
+                                <span class="sun-event-time" data-w="daylight">11h 37m</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dial-row">
+                        <div class="dial-card">
+                            <div class="dial dial-temp" data-dial="temp" style="--start: 57.1; --end: 71.4; --accent: #ff9747;">
+                                <div class="dial-face">
+                                    <div class="dial-label">Temp</div>
+                                    <div class="dial-value" data-w="dial-temp-value" style="color: #ff9747;">20°</div>
+                                    <div class="dial-sub" data-w="dial-temp-sub" style="color: #ffc15c;">Low 15°</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dial-card">
+                            <div class="dial" data-dial="rain" style="--progress: 0.0; --accent: #374e6e;">
+                                <div class="dial-face">
+                                    <div class="dial-label">Rain</div>
+                                    <div class="dial-value" data-w="dial-rain-value" style="color: #374e6e;">0%</div>
+                                    <div class="dial-sub" data-w="dial-rain-sub"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dial-card">
+                            <div class="dial" data-dial="wind" style="--progress: 42.0; --accent: #b6308b;">
+                                <div class="dial-face">
+                                    <div class="dial-label">Wind</div>
+                                    <div class="dial-value" data-w="dial-wind-value" style="color: #b6308b;">21<span class="wind-arrow" style="--wind-dir: 108;" aria-hidden="true"><svg viewBox="0 0 26 14" focusable="false"><path d="M1 4.6h12.2V1.6L24.8 7 13.2 12.4V9.4H1z"/></svg></span></div>
+                                    <div class="dial-sub">km/h</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dial-card">
+                            <div class="dial" data-dial="uv" style="--progress: 28.6; --accent: #dee03f;">
+                                <div class="dial-face">
+                                    <div class="dial-label">UV</div>
+                                    <div class="dial-value" data-w="dial-uv-value" style="color: #dee03f;">3.1</div>
+                                    <div class="dial-sub">Index</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                
-                
-                
-                <div class="weather-today">
-                    <div class="weather-top">
-                        <div class="weather-now-column">
-                            <div class="weather-now-card">
-                                <div class="weather-hero-icon">☁️</div>
-                                <div class="weather-now-copy">
-                                    <div class="weather-now-temp" style="color: #ff8e43;">
-                                        
-                                        15°
-                                        
-                                    </div>
-                                    <div class="weather-now-condition">
-                                        Overcast
-                                    </div>
-                                    
-                                    <div class="weather-now-feels">Feels 14°</div>
-                                    
-                                </div>
-                            </div>
-
-                            
-                            <div class="sun-path" role="img" aria-label="Sunrise 7:10 am, sunset 6:47 pm">
-                                <div class="sun-event">
-                                    <svg class="sun-event-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-                                        <defs>
-                                            <clipPath id="sunriseClip">
-                                                <rect x="0" y="0" width="32" height="21" />
-                                            </clipPath>
-                                        </defs>
-                                        <g clip-path="url(#sunriseClip)">
-                                            <circle cx="16" cy="21" r="7" fill="#ffd166" stroke="#cd9b50" stroke-width="1.4" />
-                                            <g fill="none" stroke="#cd9b50" stroke-width="1.5" stroke-linecap="round">
-                                                <line x1="16" y1="4" x2="16" y2="7.5" />
-                                                <line x1="7.2" y1="8.2" x2="9.6" y2="10.6" />
-                                                <line x1="24.8" y1="8.2" x2="22.4" y2="10.6" />
-                                                <line x1="4.5" y1="17" x2="8" y2="17" />
-                                                <line x1="27.5" y1="17" x2="24" y2="17" />
-                                            </g>
-                                        </g>
-                                        <line x1="3" y1="21" x2="29" y2="21" stroke="#c8c4bc" stroke-width="1.5" stroke-linecap="round" />
-                                    </svg>
-                                    <span class="sun-event-time">7:10 am</span>
-                                </div>
-                                <div class="sun-event">
-                                    <svg class="sun-event-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-                                        <defs>
-                                            <clipPath id="sunsetClip">
-                                                <rect x="0" y="0" width="32" height="21" />
-                                            </clipPath>
-                                        </defs>
-                                        <g clip-path="url(#sunsetClip)">
-                                            <circle cx="16" cy="23" r="7" fill="#e8a45a" stroke="#cd9b50" stroke-width="1.4" />
-                                            <g fill="none" stroke="#cd9b50" stroke-width="1.5" stroke-linecap="round">
-                                                <line x1="16" y1="8" x2="16" y2="11" />
-                                                <line x1="8.4" y1="11.2" x2="10.6" y2="13.2" />
-                                                <line x1="23.6" y1="11.2" x2="21.4" y2="13.2" />
-                                            </g>
-                                        </g>
-                                        <line x1="3" y1="21" x2="29" y2="21" stroke="#c8c4bc" stroke-width="1.5" stroke-linecap="round" />
-                                    </svg>
-                                    <span class="sun-event-time">6:47 pm</span>
-                                </div>
-                            </div>
-                            
+                <div class="period-strip">
+                    <div class="period-grid">
+                        <div class="period-card" data-period="morning">
+                            <div class="period-label">Morning</div>
+                            <div class="period-icon" data-f="icon">☁️</div>
+                            <div class="period-temp" data-f="temp" style="color: #87CEEB;">16°</div>
+                            <div class="period-feels" data-f="feels">Feels 14°</div>
+                            <div class="period-rain" data-f="rain">0% Rain</div>
                         </div>
-
-                        <div class="dial-row">
-                            <div class="dial-card">
-                                <div class="dial dial-temp" style="--start: 57.1; --end: 74.3; --accent: #ff8e43;">
-                                    <div class="dial-face">
-                                        <div class="dial-label">Temp</div>
-                                        <div class="dial-value" style="color: #ff8e43;">
-                                            21°
-                                        </div>
-                                        <div class="dial-sub" style="color: #ffc15c;">
-                                            L 15°
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="dial-card">
-                                <div class="dial" style="--progress: 0.0; --accent: #374e6e;">
-                                    <div class="dial-face">
-                                        <div class="dial-label">Rain</div>
-                                        <div class="dial-value" style="color: #374e6e;">
-                                            0%
-                                        </div>
-                                        <div class="dial-sub">
-                                            &nbsp;
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="dial-card">
-                                <div class="dial" style="--progress: 44.0; --accent: #bb3687;">
-                                    <div class="dial-face">
-                                        <div class="dial-label">Wind</div>
-                                        <div class="dial-value" style="color: #bb3687;">
-                                            
-                                            22<span class="wind-arrow" style="--wind-dir: 111;" aria-hidden="true"><svg viewBox="0 0 26 14" focusable="false"><path d="M1 4.6h12.2V1.6L24.8 7 13.2 12.4V9.4H1z"/></svg></span>
-                                            
-                                        </div>
-                                        <div class="dial-sub">
-                                            km/h
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="dial-card">
-                                <div class="dial" style="--progress: 28.6; --accent: #dee03f;">
-                                    <div class="dial-face">
-                                        <div class="dial-label">UV</div>
-                                        <div class="dial-value" style="color: #dee03f;">
-                                            3.1
-                                        </div>
-                                        <div class="dial-sub">Index</div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="period-card" data-period="afternoon">
+                            <div class="period-label">Afternoon</div>
+                            <div class="period-icon" data-f="icon">☀️</div>
+                            <div class="period-temp" data-f="temp" style="color: #FFD700;">20°</div>
+                            <div class="period-feels" data-f="feels">Feels 17°</div>
+                            <div class="period-rain" data-f="rain">0% Rain</div>
+                        </div>
+                        <div class="period-card" data-period="evening">
+                            <div class="period-label">Evening</div>
+                            <div class="period-icon" data-f="icon">☀️</div>
+                            <div class="period-temp" data-f="temp" style="color: #FFD700;">17°</div>
+                            <div class="period-feels" data-f="feels">Feels 14°</div>
+                            <div class="period-rain" data-f="rain">0% Rain</div>
                         </div>
                     </div>
-
-                    <div class="period-strip">
-                        <div class="period-grid">
-                            
-                            <div class="period-card">
-                                <div class="period-label">Morning</div>
-                                <div class="period-icon">☁️</div>
-                                <div class="period-temp" style="color: #87CEEB;">
-                                    16°
-                                </div>
-                                <div class="period-feels">
-                                    feels 14°
-                                </div>
-                                <div class="period-rain">
-                                    0% rain
-                                </div>
-                            </div>
-                            
-                            <div class="period-card">
-                                <div class="period-label">Afternoon</div>
-                                <div class="period-icon">☀️</div>
-                                <div class="period-temp" style="color: #FFD700;">
-                                    20°
-                                </div>
-                                <div class="period-feels">
-                                    feels 18°
-                                </div>
-                                <div class="period-rain">
-                                    0% rain
-                                </div>
-                            </div>
-                            
-                            <div class="period-card">
-                                <div class="period-label">Evening</div>
-                                <div class="period-icon">☀️</div>
-                                <div class="period-temp" style="color: #FFD700;">
-                                    17°
-                                </div>
-                                <div class="period-feels">
-                                    feels 14°
-                                </div>
-                                <div class="period-rain">
-                                    0% rain
-                                </div>
-                            </div>
-                            
-                        </div>
-                        
-                        
-                        <div class="rain-timeline" style="--rain-color: #374e6e;">
-                            <div class="rain-timeline-head">
-                                
-                            </div>
-                            <div class="rain-timeline-track" aria-hidden="true">
-                                
-                                <div class="rain-bar" style="--rain: 0;" title="6:00 am · 0%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                
-                                <div class="rain-bar" style="--rain: 0;" title="7:00 am · 0%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                
-                                <div class="rain-bar" style="--rain: 0;" title="8:00 am · 0%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                
-                                <div class="rain-bar" style="--rain: 0;" title="9:00 am · 0%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                
-                                <div class="rain-bar" style="--rain: 0;" title="10:00 am · 0%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                
-                                <div class="rain-bar" style="--rain: 0;" title="11:00 am · 0%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                
-                                <div class="rain-bar" style="--rain: 0;" title="12:00 pm · 0%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                
-                                <div class="rain-bar" style="--rain: 0;" title="1:00 pm · 0%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                
-                                <div class="rain-bar" style="--rain: 0;" title="2:00 pm · 0%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                
-                                <div class="rain-bar" style="--rain: 0;" title="3:00 pm · 0%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                
-                                <div class="rain-bar" style="--rain: 0;" title="4:00 pm · 0%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                
-                                <div class="rain-bar" style="--rain: 0;" title="5:00 pm · 0%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                
-                                <div class="rain-bar" style="--rain: 0;" title="6:00 pm · 0%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                
-                                <div class="rain-bar" style="--rain: 0;" title="7:00 pm · 0%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                
-                                <div class="rain-bar" style="--rain: 0;" title="8:00 pm · 0%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                
-                                <div class="rain-bar" style="--rain: 0;" title="9:00 pm · 0%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                
-                                <div class="rain-bar" style="--rain: 0;" title="10:00 pm · 0%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                
-                                <div class="rain-bar" style="--rain: 0;" title="11:00 pm · 0%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                
-                            </div>
-                            <div class="rain-timeline-labels">
-                                
-                                <span class="rain-hour">6 am</span>
-                                
-                                <span class="rain-hour is-empty"></span>
-                                
-                                <span class="rain-hour is-empty"></span>
-                                
-                                <span class="rain-hour">9 am</span>
-                                
-                                <span class="rain-hour is-empty"></span>
-                                
-                                <span class="rain-hour is-empty"></span>
-                                
-                                <span class="rain-hour">12 pm</span>
-                                
-                                <span class="rain-hour is-empty"></span>
-                                
-                                <span class="rain-hour is-empty"></span>
-                                
-                                <span class="rain-hour">3 pm</span>
-                                
-                                <span class="rain-hour is-empty"></span>
-                                
-                                <span class="rain-hour is-empty"></span>
-                                
-                                <span class="rain-hour">6 pm</span>
-                                
-                                <span class="rain-hour is-empty"></span>
-                                
-                                <span class="rain-hour is-empty"></span>
-                                
-                                <span class="rain-hour">9 pm</span>
-                                
-                                <span class="rain-hour is-empty"></span>
-                                
-                                <span class="rain-hour">11 pm</span>
-                                
-                            </div>
-                        </div>
-                        
-                    </div>
+                    <div class="rain-timeline" data-rain="today" style="--rain-color: #374e6e;">
+    <div class="rain-timeline-head">
+        <span class="rain-timeline-peak" data-f="peak">No Rain Expected</span>
+    </div>
+    <div class="rain-timeline-track" aria-hidden="true">
+        <div class="rain-bar" style="--rain: 0;" title="6:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="7:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="8:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="9:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="10:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="11:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="12:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="1:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="2:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="3:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="4:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="5:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="6:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="7:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="8:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="9:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="10:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="11:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+    </div>
+    <div class="rain-timeline-labels">
+        <span class="rain-hour">6 am</span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour">9 am</span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour">12 pm</span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour">3 pm</span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour">6 pm</span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour">9 pm</span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour">11 pm</span>
+    </div>
+</div>
                 </div>
-
-                
                 <div class="forecast-block">
                     <h3 class="block-title">Next 2 Days</h3>
                     <div class="forecast-grid">
-                        
-                        <div class="forecast-card">
-                            <div class="forecast-day">Tomorrow</div>
+                        <div class="forecast-card" data-day="1">
+                            <div class="forecast-day" data-f="label">Tomorrow</div>
                             <div class="forecast-main">
-                                <div class="forecast-icon">☁️</div>
+                                <div class="forecast-icon" data-f="icon">☁️</div>
                                 <div>
-                                    <div class="forecast-condition">Overcast</div>
+                                    <div class="forecast-condition" data-f="condition">Overcast</div>
                                     <div class="forecast-temps">
-                                        <span class="hi" style="color: #ff9a49;">20°</span>
-                                        <span class="lo" style="color: #ffc75f;">14°</span>
+                                        <span class="hi" data-f="hi" style="color: #ff9948;">20°</span>
+                                        <span class="lo" data-f="lo" style="color: #ffc45d;">15°</span>
                                     </div>
                                 </div>
                             </div>
-                            
-                            
-                            <div class="rain-timeline compact" style="--rain-color: #374e6e;">
-                                <div class="rain-timeline-head">
-                                    <span class="rain-timeline-peak">
-                                        0%
-                                        
-                                    </span>
-                                </div>
-                                <div class="rain-timeline-track" aria-hidden="true">
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="12:00 am · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="1:00 am · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="2:00 am · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="3:00 am · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="4:00 am · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="5:00 am · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="6:00 am · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="7:00 am · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="8:00 am · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="9:00 am · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="10:00 am · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="11:00 am · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="12:00 pm · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="1:00 pm · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="2:00 pm · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="3:00 pm · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="4:00 pm · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="5:00 pm · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="6:00 pm · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="7:00 pm · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="8:00 pm · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="9:00 pm · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="10:00 pm · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 0;" title="11:00 pm · 0%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                </div>
-                                <div class="rain-timeline-labels">
-                                    
-                                    <span class="rain-hour">12 am</span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour">9 am</span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour">12 pm</span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour">3 pm</span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour">6 pm</span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour">9 pm</span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour">11 pm</span>
-                                    
-                                </div>
-                            </div>
-                            
+                            <div class="rain-timeline compact" data-rain="day-1" style="--rain-color: #374e6e;">
+    <div class="rain-timeline-head">
+        <span class="rain-timeline-peak" data-f="peak">0% Rain</span>
+    </div>
+    <div class="rain-timeline-track" aria-hidden="true">
+        <div class="rain-bar" style="--rain: 0;" title="12:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="1:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="2:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="3:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="4:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="5:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="6:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="7:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="8:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="9:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="10:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="11:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="12:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="1:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="2:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="3:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="4:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="5:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="6:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="7:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="8:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="9:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="10:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="11:00 pm · 0%"><span class="rain-bar-fill"></span></div>
+    </div>
+    <div class="rain-timeline-labels">
+        <span class="rain-hour">12 am</span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour">9 am</span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour">12 pm</span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour">3 pm</span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour">6 pm</span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour">9 pm</span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour">11 pm</span>
+    </div>
+</div>
                         </div>
-                        
-                        <div class="forecast-card">
-                            <div class="forecast-day">In 2 days</div>
+                        <div class="forecast-card" data-day="2">
+                            <div class="forecast-day" data-f="label">In 2 Days</div>
                             <div class="forecast-main">
-                                <div class="forecast-icon">🌫️</div>
+                                <div class="forecast-icon" data-f="icon">🌫️</div>
                                 <div>
-                                    <div class="forecast-condition">Foggy</div>
+                                    <div class="forecast-condition" data-f="condition">Foggy</div>
                                     <div class="forecast-temps">
-                                        <span class="hi" style="color: #ffad52;">17°</span>
-                                        <span class="lo" style="color: #ffd465;">13°</span>
+                                        <span class="hi" data-f="hi" style="color: #ffa24d;">19°</span>
+                                        <span class="lo" data-f="lo" style="color: #fdd668;">12°</span>
                                     </div>
                                 </div>
                             </div>
-                            
-                            
-                            <div class="rain-timeline compact" style="--rain-color: #3a739b;">
-                                <div class="rain-timeline-head">
-                                    <span class="rain-timeline-peak">
-                                        31%
-                                         · Peak 10:00 am
-                                    </span>
-                                </div>
-                                <div class="rain-timeline-track" aria-hidden="true">
-                                    
-                                    <div class="rain-bar" style="--rain: 1;" title="12:00 am · 1%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 3;" title="1:00 am · 3%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 6;" title="2:00 am · 6%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 12;" title="3:00 am · 12%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 19;" title="4:00 am · 19%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 24;" title="5:00 am · 24%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 27;" title="6:00 am · 27%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 28;" title="7:00 am · 28%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 29;" title="8:00 am · 29%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 30;" title="9:00 am · 30%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 31;" title="10:00 am · 31%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 31;" title="11:00 am · 31%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 31;" title="12:00 pm · 31%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 30;" title="1:00 pm · 30%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 29;" title="2:00 pm · 29%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 27;" title="3:00 pm · 27%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 25;" title="4:00 pm · 25%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 22;" title="5:00 pm · 22%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 17;" title="6:00 pm · 17%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 12;" title="7:00 pm · 12%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 8;" title="8:00 pm · 8%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 6;" title="9:00 pm · 6%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 5;" title="10:00 pm · 5%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                    <div class="rain-bar" style="--rain: 4;" title="11:00 pm · 4%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    
-                                </div>
-                                <div class="rain-timeline-labels">
-                                    
-                                    <span class="rain-hour">12 am</span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour">9 am</span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour">12 pm</span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour">3 pm</span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour">6 pm</span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour">9 pm</span>
-                                    
-                                    <span class="rain-hour is-empty"></span>
-                                    
-                                    <span class="rain-hour">11 pm</span>
-                                    
-                                </div>
-                            </div>
-                            
+                            <div class="rain-timeline compact" data-rain="day-2" style="--rain-color: #396a91;">
+    <div class="rain-timeline-head">
+        <span class="rain-timeline-peak" data-f="peak">24% Rain · Peak 11:00 am</span>
+    </div>
+    <div class="rain-timeline-track" aria-hidden="true">
+        <div class="rain-bar" style="--rain: 0;" title="12:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="1:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="2:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="3:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="4:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 0;" title="5:00 am · 0%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 2;" title="6:00 am · 2%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 6;" title="7:00 am · 6%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 10;" title="8:00 am · 10%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 15;" title="9:00 am · 15%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 21;" title="10:00 am · 21%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 24;" title="11:00 am · 24%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 24;" title="12:00 pm · 24%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 22;" title="1:00 pm · 22%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 20;" title="2:00 pm · 20%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 20;" title="3:00 pm · 20%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 19;" title="4:00 pm · 19%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 18;" title="5:00 pm · 18%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 14;" title="6:00 pm · 14%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 9;" title="7:00 pm · 9%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 6;" title="8:00 pm · 6%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 5;" title="9:00 pm · 5%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 6;" title="10:00 pm · 6%"><span class="rain-bar-fill"></span></div>
+        <div class="rain-bar" style="--rain: 6;" title="11:00 pm · 6%"><span class="rain-bar-fill"></span></div>
+    </div>
+    <div class="rain-timeline-labels">
+        <span class="rain-hour">12 am</span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour">9 am</span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour">12 pm</span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour">3 pm</span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour">6 pm</span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour">9 pm</span>
+        <span class="rain-hour is-empty"></span>
+        <span class="rain-hour">11 pm</span>
+    </div>
+</div>
                         </div>
-                        
                     </div>
                 </div>
-                
-
-                
+                </div>
             </section>
 
-            <section class="panel markets-panel">
-                
-                <div class="panel-head">
-                    <div>
-                        <h2>Markets</h2>
+            <div class="stack">
+            <section class="panel markets-panel" id="markets" data-block="markets" data-mode="snapshot">
+                <header class="panel-head">
+    <div class="panel-title">
+        <span class="panel-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 6-6"/><path d="M16 7h4v4"/></svg></span>
+        <div class="panel-title-copy">
+            <h2>Markets</h2>
+            <p class="panel-sub">
+                <span data-f="subtitle">Watchlist Close</span>
+            </p>
+        </div>
+    </div>
+    <div class="panel-actions">
+        <span class="panel-stamp" data-stamp aria-live="polite">Updated 11:12 am</span>
+        <button type="button" class="icon-btn" data-refresh aria-label="Refresh: Markets" title="Refresh"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg></button>
+    </div>
+</header>
+                <div class="panel-body" data-part="markets">
+                    <div class="market-summary">
+                        <span class="market-summary-label">Average Day Move</span>
+                        <span class="avg-pill green">+0.1%</span>
                     </div>
-                    <div class="avg-pill green">
-                        +0.1%
-                    </div>
-                </div>
-
-                
-                
-                <div class="stock-list">
-                    <div class="stock-row stock-header">
-                        <div class="stock-identity">Name</div>
-                        <div class="stock-metrics">
-                            <div class="stock-metric">
+                    <div class="stock-list">
+                        <div class="stock-row stock-header">
+                            <div class="stock-identity">Name</div>
+                            <div class="stock-metrics">
                                 <div class="stock-metric-label">Day</div>
-                            </div>
-                            <div class="stock-metric">
                                 <div class="stock-metric-label">7D</div>
-                            </div>
-                            <div class="stock-metric">
                                 <div class="stock-metric-label">1M</div>
                             </div>
                         </div>
-                    </div>
-                    
-                    
-                    
-                    <div class="stock-row">
-                        <div class="stock-identity">
-                            <div class="stock-name">Tesla</div>
-                            
-                            <div class="stock-symbol">TSLA</div>
-                            
-                            <div class="stock-price">
-                                352.84
+                        <div class="stock-row">
+                            <div class="stock-identity">
+                                <div class="stock-name">Tesla</div>
+                                <div class="stock-sub"><span class="stock-symbol">TSLA</span>
+                                    <span class="stock-price">352.84</span>
+                                </div>
+                            </div>
+                            <div class="stock-metrics">
+                                <div class="stock-change stock-change-day red">-1.3%</div>
+                                <div class="stock-change red">-6.9%</div>
+                                <div class="stock-change green">+1.2%</div>
                             </div>
                         </div>
-                        <div class="stock-metrics">
-                            <div class="stock-metric">
-                                <div class="stock-change stock-change-day red">
-                                    -1.3%
+                        <div class="stock-row">
+                            <div class="stock-identity">
+                                <div class="stock-name">SPCX</div>
+                                <div class="stock-sub"><span class="stock-symbol">SPCX</span>
+                                    <span class="stock-price">149.24</span>
                                 </div>
                             </div>
-                            <div class="stock-metric">
-                                <div class="stock-change red">
-                                    -6.9%
-                                </div>
-                            </div>
-                            <div class="stock-metric">
-                                <div class="stock-change green">
-                                    +1.2%
-                                </div>
+                            <div class="stock-metrics">
+                                <div class="stock-change stock-change-day green">+2.6%</div>
+                                <div class="stock-change red">-3.5%</div>
+                                <div class="stock-change green">+5.5%</div>
                             </div>
                         </div>
-                    </div>
-                    
-                    
-                    
-                    
-                    <div class="stock-row">
-                        <div class="stock-identity">
-                            <div class="stock-name">SPCX</div>
-                            
-                            <div class="stock-symbol">SPCX</div>
-                            
-                            <div class="stock-price">
-                                149.24
+                        <div class="stock-row">
+                            <div class="stock-identity">
+                                <div class="stock-name">Nvidia</div>
+                                <div class="stock-sub"><span class="stock-symbol">NVDA</span>
+                                    <span class="stock-price">227.21</span>
+                                </div>
+                            </div>
+                            <div class="stock-metrics">
+                                <div class="stock-change stock-change-day red">-0.7%</div>
+                                <div class="stock-change red">-0.7%</div>
+                                <div class="stock-change green">+4.6%</div>
                             </div>
                         </div>
-                        <div class="stock-metrics">
-                            <div class="stock-metric">
-                                <div class="stock-change stock-change-day green">
-                                    +2.6%
+                        <div class="stock-row">
+                            <div class="stock-identity">
+                                <div class="stock-name">Oklo</div>
+                                <div class="stock-sub"><span class="stock-symbol">OKLO</span>
+                                    <span class="stock-price">37.11</span>
                                 </div>
                             </div>
-                            <div class="stock-metric">
-                                <div class="stock-change red">
-                                    -3.5%
-                                </div>
-                            </div>
-                            <div class="stock-metric">
-                                <div class="stock-change green">
-                                    +5.5%
-                                </div>
+                            <div class="stock-metrics">
+                                <div class="stock-change stock-change-day green">+0.0%</div>
+                                <div class="stock-change red">-8.3%</div>
+                                <div class="stock-change red">-7.5%</div>
                             </div>
                         </div>
-                    </div>
-                    
-                    
-                    
-                    
-                    <div class="stock-row">
-                        <div class="stock-identity">
-                            <div class="stock-name">Nvidia</div>
-                            
-                            <div class="stock-symbol">NVDA</div>
-                            
-                            <div class="stock-price">
-                                227.21
+                        <div class="stock-row">
+                            <div class="stock-identity">
+                                <div class="stock-name">Micron</div>
+                                <div class="stock-sub"><span class="stock-symbol">MU</span>
+                                    <span class="stock-price">1,065.08</span>
+                                </div>
+                            </div>
+                            <div class="stock-metrics">
+                                <div class="stock-change stock-change-day green">+1.1%</div>
+                                <div class="stock-change red">-2.8%</div>
+                                <div class="stock-change green">+14.2%</div>
                             </div>
                         </div>
-                        <div class="stock-metrics">
-                            <div class="stock-metric">
-                                <div class="stock-change stock-change-day red">
-                                    -0.7%
+                        <div class="stock-row">
+                            <div class="stock-identity">
+                                <div class="stock-name">Palantir</div>
+                                <div class="stock-sub"><span class="stock-symbol">PLTR</span>
+                                    <span class="stock-price">186.97</span>
                                 </div>
                             </div>
-                            <div class="stock-metric">
-                                <div class="stock-change red">
-                                    -0.7%
-                                </div>
-                            </div>
-                            <div class="stock-metric">
-                                <div class="stock-change green">
-                                    +4.6%
-                                </div>
+                            <div class="stock-metrics">
+                                <div class="stock-change stock-change-day red">-0.3%</div>
+                                <div class="stock-change green">+1.1%</div>
+                                <div class="stock-change green">+0.4%</div>
                             </div>
                         </div>
-                    </div>
-                    
-                    
-                    
-                    
-                    <div class="stock-row">
-                        <div class="stock-identity">
-                            <div class="stock-name">Oklo</div>
-                            
-                            <div class="stock-symbol">OKLO</div>
-                            
-                            <div class="stock-price">
-                                37.11
+                        <div class="stock-row">
+                            <div class="stock-identity">
+                                <div class="stock-name">Bitcoin</div>
+                                <div class="stock-sub"><span class="stock-symbol">BTC-USD</span>
+                                    <span class="stock-price">83,204.45</span>
+                                </div>
+                            </div>
+                            <div class="stock-metrics">
+                                <div class="stock-change stock-change-day red">-0.5%</div>
+                                <div class="stock-change red">-1.0%</div>
+                                <div class="stock-change green">+6.3%</div>
                             </div>
                         </div>
-                        <div class="stock-metrics">
-                            <div class="stock-metric">
-                                <div class="stock-change stock-change-day green">
-                                    +0.0%
+                        <div class="stock-row">
+                            <div class="stock-identity">
+                                <div class="stock-name">Vanguard S&amp;P 500</div>
+                                <div class="stock-sub"><span class="stock-symbol">VUSA.AS</span>
+                                    <span class="stock-price">128.23</span>
                                 </div>
                             </div>
-                            <div class="stock-metric">
-                                <div class="stock-change red">
-                                    -8.3%
-                                </div>
-                            </div>
-                            <div class="stock-metric">
-                                <div class="stock-change red">
-                                    -7.5%
-                                </div>
+                            <div class="stock-metrics">
+                                <div class="stock-change stock-change-day green">+0.2%</div>
+                                <div class="stock-change red">-0.2%</div>
+                                <div class="stock-change green">+2.6%</div>
                             </div>
                         </div>
                     </div>
-                    
-                    
-                    
-                    
-                    <div class="stock-row">
-                        <div class="stock-identity">
-                            <div class="stock-name">Micron</div>
-                            
-                            <div class="stock-symbol">MU</div>
-                            
-                            <div class="stock-price">
-                                1065.08
-                            </div>
-                        </div>
-                        <div class="stock-metrics">
-                            <div class="stock-metric">
-                                <div class="stock-change stock-change-day green">
-                                    +1.1%
-                                </div>
-                            </div>
-                            <div class="stock-metric">
-                                <div class="stock-change red">
-                                    -2.8%
-                                </div>
-                            </div>
-                            <div class="stock-metric">
-                                <div class="stock-change green">
-                                    +14.2%
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    
-                    
-                    
-                    <div class="stock-row">
-                        <div class="stock-identity">
-                            <div class="stock-name">Palantir</div>
-                            
-                            <div class="stock-symbol">PLTR</div>
-                            
-                            <div class="stock-price">
-                                186.97
-                            </div>
-                        </div>
-                        <div class="stock-metrics">
-                            <div class="stock-metric">
-                                <div class="stock-change stock-change-day red">
-                                    -0.3%
-                                </div>
-                            </div>
-                            <div class="stock-metric">
-                                <div class="stock-change green">
-                                    +1.1%
-                                </div>
-                            </div>
-                            <div class="stock-metric">
-                                <div class="stock-change green">
-                                    +0.4%
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    
-                    
-                    
-                    <div class="stock-row">
-                        <div class="stock-identity">
-                            <div class="stock-name">Bitcoin</div>
-                            
-                            <div class="stock-symbol">BTC-USD</div>
-                            
-                            <div class="stock-price">
-                                83322.69
-                            </div>
-                        </div>
-                        <div class="stock-metrics">
-                            <div class="stock-metric">
-                                <div class="stock-change stock-change-day red">
-                                    -0.2%
-                                </div>
-                            </div>
-                            <div class="stock-metric">
-                                <div class="stock-change red">
-                                    -1.3%
-                                </div>
-                            </div>
-                            <div class="stock-metric">
-                                <div class="stock-change green">
-                                    +6.2%
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    
-                    
-                    
-                    <div class="stock-row">
-                        <div class="stock-identity">
-                            <div class="stock-name">Vanguard S&P 500</div>
-                            
-                            <div class="stock-symbol">VUSA.AS</div>
-                            
-                            <div class="stock-price">
-                                127.96
-                            </div>
-                        </div>
-                        <div class="stock-metrics">
-                            <div class="stock-metric">
-                                <div class="stock-change stock-change-day red">
-                                    -0.3%
-                                </div>
-                            </div>
-                            <div class="stock-metric">
-                                <div class="stock-change green">
-                                    +0.2%
-                                </div>
-                            </div>
-                            <div class="stock-metric">
-                                <div class="stock-change green">
-                                    +1.1%
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    
-                    
-                    
-                </div>
-                
-            </section>
-
-            
-            <section class="panel reflection-panel">
-                <div class="panel-head">
-                    <div>
-                        <h2>Scripture</h2>
-                        <p class="panel-sub">English Standard Version</p>
-                    </div>
-                </div>
-                <div class="empty-state">Scripture unavailable</div>
-            </section>
-            
-
-            <div class="news-pair matched-pair watch-pair">
-            <section class="panel x-panel">
-                <div class="panel-head">
-                    <div>
-                        <h2>Personalized</h2>
-                        <p class="panel-sub">Live from X</p>
-                    </div>
-                </div>
-
-                
-                
-                
-                <div class="trend-list">
-                    
-                    
-                    <a class="trend-card" href="https://x.com/search?q=Starlink&src=typed_query" target="_blank" rel="noopener noreferrer">
-                        <div class="trend-name">Starlink</div>
-                        <div class="trend-meta">
-                            <span>~45k posts</span>
-                            
-                        </div>
-                    </a>
-                    
-                    <a class="trend-card" href="https://x.com/search?q=Starship&src=typed_query" target="_blank" rel="noopener noreferrer">
-                        <div class="trend-name">Starship</div>
-                        <div class="trend-meta">
-                            <span>Rising</span>
-                            
-                        </div>
-                    </a>
-                    
-                    <a class="trend-card" href="https://x.com/search?q=Grok%20Tesla&src=typed_query" target="_blank" rel="noopener noreferrer">
-                        <div class="trend-name">Grok Tesla</div>
-                        <div class="trend-meta">
-                            <span>~18k posts</span>
-                            
-                        </div>
-                    </a>
-                    
-                    <a class="trend-card" href="https://x.com/search?q=AI%20nuclear%20Europe&src=typed_query" target="_blank" rel="noopener noreferrer">
-                        <div class="trend-name">AI nuclear Europe</div>
-                        <div class="trend-meta">
-                            <span>Rising</span>
-                            
-                        </div>
-                    </a>
-                    
-                    <a class="trend-card" href="https://x.com/search?q=Palantir%20AI&src=typed_query" target="_blank" rel="noopener noreferrer">
-                        <div class="trend-name">Palantir AI</div>
-                        <div class="trend-meta">
-                            <span>~9k posts</span>
-                            
-                        </div>
-                    </a>
-                    
-                    
                 </div>
             </section>
 
-            <section class="panel sky-panel">
-                <div class="panel-head">
-                    <div>
-                        <h2>Sky Watch</h2>
-                        <p class="panel-sub">Over Copenhagen</p>
-                    </div>
+            <section class="panel scripture-panel" id="scripture" data-block="scripture" data-mode="verse">
+                <header class="panel-head">
+    <div class="panel-title">
+        <span class="panel-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg></span>
+        <div class="panel-title-copy">
+            <h2>Scripture</h2>
+            <p class="panel-sub">
+                <span data-f="subtitle">King James Version</span>
+            </p>
+        </div>
+    </div>
+    <div class="panel-actions">
+        <span class="panel-stamp" data-stamp aria-live="polite">Updated 11:12 am</span>
+        <button type="button" class="icon-btn" data-refresh aria-label="New Verse: Scripture" title="New Verse"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg></button>
+    </div>
+</header>
+                <div class="panel-body" data-part="scripture">
+                    <figure class="verse">
+                        <blockquote class="verse-text" data-f="text">To receive the instruction of wisdom, justice, and judgment, and equity;</blockquote>
+                        <figcaption class="verse-caption">
+                            <a class="verse-ref" data-f="ref" href="https://www.biblegateway.com/passage/?search=Proverbs%201%3A3&amp;version=KJV" target="_blank" rel="noopener noreferrer">Proverbs 1:3</a>
+                        </figcaption>
+                    </figure>
                 </div>
-                
-                <div class="trend-list">
-                    
-                    <a class="trend-card" href="https://www.swpc.noaa.gov/" target="_blank" rel="noopener noreferrer">
-                        <div class="trend-name">Quiet Aurora</div>
-                        <div class="trend-meta">
-                            <span class="trend-detail">Geomagnetic Index Kp 0.3</span>
-                            
-                            <span class="trend-when">Visible Aurora Unlikely Tonight</span>
-                            
-                        </div>
-                    </a>
-                    
-                    <a class="trend-card" href="https://www.swpc.noaa.gov/products/goes-x-ray-flux" target="_blank" rel="noopener noreferrer">
-                        <div class="trend-name">Solar Class C5.7</div>
-                        <div class="trend-meta">
-                            <span class="trend-detail">Goes Satellite X-Ray Reading</span>
-                            
-                            <span class="trend-when">Modest C-Class Activity</span>
-                            
-                        </div>
-                    </a>
-                    
-                    <a class="trend-card" href="https://moon.nasa.gov/moon-in-motion/moon-phases/" target="_blank" rel="noopener noreferrer">
-                        <div class="trend-name">Waning Gibbous</div>
-                        <div class="trend-meta">
-                            <span class="trend-detail">Moon 87% Illuminated</span>
-                            
-                            <span class="trend-when">Visible Tonight Over Copenhagen</span>
-                            
-                        </div>
-                    </a>
-                    
-                    <a class="trend-card" href="https://spacelaunchnow.me/launch/18441371-8b2e-457c-afb5-1ec1b11ab630/" target="_blank" rel="noopener noreferrer">
-                        <div class="trend-name">Falcon 9 Block 5</div>
-                        <div class="trend-meta">
-                            <span class="trend-detail">Mission Crew-13</span>
-                            
-                            <span class="trend-when">Launch Tomorrow At 5:10 pm</span>
-                            
-                        </div>
-                    </a>
-                    
-                    <a class="trend-card" href="https://science.nasa.gov/eclipses/future-eclipses/eclipse-2027/" target="_blank" rel="noopener noreferrer">
-                        <div class="trend-name">Annular Solar Eclipse</div>
-                        <div class="trend-meta">
-                            <span class="trend-detail">Visible From South America and Africa</span>
-                            
-                            <span class="trend-when">Next Visible On Feb 6, 2027</span>
-                            
-                        </div>
-                    </a>
-                    
-                </div>
-                
             </section>
             </div>
 
-            <div class="news-pair matched-pair">
-            <section class="panel news-panel copenhagen-panel">
-                <div class="panel-head">
-                    <div>
-                        <h2>Copenhagen Today</h2>
-                        <p class="panel-sub">Local news</p>
+            <section class="panel x-panel" id="x" data-block="x" data-mode="snapshot">
+                <header class="panel-head">
+    <div class="panel-title">
+        <span class="panel-icon"><svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></span>
+        <div class="panel-title-copy">
+            <h2>For You On X</h2>
+            <p class="panel-sub">
+                <span data-f="subtitle">What Your Interests Are Talking About</span>
+            </p>
+        </div>
+    </div>
+    <div class="panel-actions">
+        <span class="panel-stamp" data-stamp aria-live="polite">Updated 11:12 am</span>
+        <button type="button" class="icon-btn" data-refresh aria-label="Refresh: For You On X" title="Refresh"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg></button>
+    </div>
+</header>
+                <div class="panel-body" data-part="x">
+                    <p class="x-pulse"><span class="x-pulse-label">Today's Pulse</span>Optimistic momentum around Starship&#39;s first orbital payload success and V3 Starlink deployment, alongside EU nuclear revival debates and Palantir&#39;s growing European influence; AI/chips show steady investor interest while Tesla and…</p>
+                    <div class="x-list">
+                        <article class="x-card">
+                            <div class="x-card-top">
+                                <span class="chip" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">Space</span>
+                                <span class="chip sentiment sentiment-bullish">Bullish</span>
+                                <span class="x-volume">~8k posts</span>
+                            </div>
+                            <h3 class="x-card-title"><a class="stretched-link" href="https://x.com/search?q=Starship%20V3&amp;src=typed_query" target="_blank" rel="noopener noreferrer">Starship Deploys First V3 Starlink</a></h3>
+                            <p class="x-card-summary">On September 29 2026 SpaceX&#39;s Starship achieved its first orbital insertion with a real payload, deploying 26 next-gen Starlink V3 satellites (60 Tbps capacity per flight) marking shift from testing to revenue missions; X users including @visegrad24 and Elon Musk highlight &gt;50 flights expected in 2027 and massive AI…</p>
+                            <p class="x-card-why"><span>Why It Matters</span>Directly accelerates Starlink coverage over Europe and enables orbital data centers critical for SpaceX&#39;s long-term AI ambitions.</p>
+                            <div class="x-card-foot">
+                                <span class="x-query">Search: Starship V3</span>
+                                <span class="x-accounts">
+                                    <a href="https://x.com/elonmusk" target="_blank" rel="noopener noreferrer">@elonmusk</a>
+                                    <a href="https://x.com/visegrad24" target="_blank" rel="noopener noreferrer">@visegrad24</a>
+                                </span>
+                            </div>
+                        </article>
+                        <article class="x-card">
+                            <div class="x-card-top">
+                                <span class="chip" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Energy</span>
+                                <span class="chip sentiment sentiment-bullish">Bullish</span>
+                                <span class="x-volume">Rising</span>
+                            </div>
+                            <h3 class="x-card-title"><a class="stretched-link" href="https://x.com/search?q=EU%20Nuclear&amp;src=typed_query" target="_blank" rel="noopener noreferrer">Europe Pushes Nuclear Revival</a></h3>
+                            <p class="x-card-summary">Discussions intensified around Poland&#39;s 0.3-0.6 GW SMR plans by mid-2030s, France&#39;s forward deterrence nuclear sharing ideas (Macron speech March 2 2026), and calls for EU-wide baseload to reduce Russian gas dependence; users like @SNEu235 and @DGodefridi criticize past EU sabotage while noting existing ~97 GW fleet.</p>
+                            <p class="x-card-why"><span>Why It Matters</span>Nuclear expansion would secure affordable clean power for Denmark/Europe&#39;s AI data centers and industry competitiveness.</p>
+                            <div class="x-card-foot">
+                                <span class="x-query">Search: EU Nuclear</span>
+                                <span class="x-accounts">
+                                    <a href="https://x.com/EU_NonProlif" target="_blank" rel="noopener noreferrer">@EU_NonProlif</a>
+                                    <a href="https://x.com/DGodefridi" target="_blank" rel="noopener noreferrer">@DGodefridi</a>
+                                </span>
+                            </div>
+                        </article>
+                        <article class="x-card">
+                            <div class="x-card-top">
+                                <span class="chip" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Palantir</span>
+                                <span class="chip sentiment sentiment-mixed">Mixed</span>
+                                <span class="x-volume">~3k posts</span>
+                            </div>
+                            <h3 class="x-card-title"><a class="stretched-link" href="https://x.com/search?q=Palantir%20UK&amp;src=typed_query" target="_blank" rel="noopener noreferrer">Palantir Faces UK Big Brother Backlash</a></h3>
+                            <p class="x-card-summary">Labour MP @labourlewis revealed warnings from Tom Watson (now Palantir exec) over criticising the firm amid its £330m NHS contract; X posters including @thenerve_news and @sunlovinswimmer call it implicit threat and state capture with &#39;Big Brother&#39; concerns.</p>
+                            <p class="x-card-why"><span>Why It Matters</span>Palantir&#39;s expanding European government contracts could influence AI-driven policy and data infrastructure relevant to Denmark.</p>
+                            <div class="x-card-foot">
+                                <span class="x-query">Search: Palantir UK</span>
+                                <span class="x-accounts">
+                                    <a href="https://x.com/thenerve_news" target="_blank" rel="noopener noreferrer">@thenerve_news</a>
+                                    <a href="https://x.com/labourlewis" target="_blank" rel="noopener noreferrer">@labourlewis</a>
+                                </span>
+                            </div>
+                        </article>
+                        <article class="x-card">
+                            <div class="x-card-top">
+                                <span class="chip" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Chips</span>
+                                <span class="chip sentiment sentiment-bullish">Bullish</span>
+                                <span class="x-volume">~5k posts</span>
+                            </div>
+                            <h3 class="x-card-title"><a class="stretched-link" href="https://x.com/search?q=Nvidia%20AI%20Agents&amp;src=typed_query" target="_blank" rel="noopener noreferrer">Nvidia Advances AI Agent Security</a></h3>
+                            <p class="x-card-summary">Nvidia announced new security layer for AI agents while Ark Invest bought $81M in shares; conversations note concentration risk with Apple+Nvidia &gt;15% of S&amp;P 500 and growing narratives around AI compute including orbital ideas tied to Starship.</p>
+                            <p class="x-card-why"><span>Why It Matters</span>Semiconductor leadership underpins AI progress powering Tesla, Palantir, and European tech autonomy.</p>
+                            <div class="x-card-foot">
+                                <span class="x-query">Search: Nvidia AI Agents</span>
+                                <span class="x-accounts">
+                                    <a href="https://x.com/varindiamag" target="_blank" rel="noopener noreferrer">@varindiamag</a>
+                                    <a href="https://x.com/arkinvest" target="_blank" rel="noopener noreferrer">@arkinvest</a>
+                                </span>
+                            </div>
+                        </article>
+                        <article class="x-card">
+                            <div class="x-card-top">
+                                <span class="chip" style="--kw-bg: #4a375f; --kw-border: #5f4c78; --kw-text: #f0e3ff;">Tesla</span>
+                                <span class="chip sentiment sentiment-mixed">Mixed</span>
+                                <span class="x-volume">~4k posts</span>
+                            </div>
+                            <h3 class="x-card-title"><a class="stretched-link" href="https://x.com/search?q=Tesla%20AI%20Spend&amp;src=typed_query" target="_blank" rel="noopener noreferrer">Tesla Secures $30B For AI Push</a></h3>
+                            <p class="x-card-summary">Tesla is lining up $30B credit lines as 2026 capex exceeds $25B focused on Robotaxi, Optimus, AI chips and factories; X commentary links it to Starship&#39;s role in future space-based AI compute, with some bearish views on execution.</p>
+                            <p class="x-card-why"><span>Why It Matters</span>Heavy AI investment positions Tesla as key player in autonomy and robotics, with potential European Gigafactory and FSD rollout implications.</p>
+                            <div class="x-card-foot">
+                                <span class="x-query">Search: Tesla AI Spend</span>
+                                <span class="x-accounts">
+                                    <a href="https://x.com/elonmusk" target="_blank" rel="noopener noreferrer">@elonmusk</a>
+                                    <a href="https://x.com/WholeMarsBlog" target="_blank" rel="noopener noreferrer">@WholeMarsBlog</a>
+                                </span>
+                            </div>
+                        </article>
                     </div>
+                    <p class="panel-note">Via Grok X Search</p>
                 </div>
-                
-                <div class="news-list">
-                    
-                    <article class="news-item">
-                        <a href="https://cphpost.dk/2026-09-29/news/round-up/denmark-plans-new-animal-welfare-agency-more-inspections-and-tougher-penalties/" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">Denmark</span><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">AnimalWelfare</span><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">Inspections</span></span><span class="keyword-text">Denmark to create new animal welfare agency, boost inspections 50% and raise max prison term from 2 to 6 years.</span></a>
-                    </article>
-                    
-                    <article class="news-item">
-                        <a href="https://cphpost.dk/2026-09-29/news/round-up/denmark-adds-5-6-billion-kroner-in-support-for-hydrogen-pipeline-to-germany/" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">Denmark</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Hydrogen</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Pipeline</span></span><span class="keyword-text">Denmark adds 5.6 billion kroner in operating support for hydrogen pipeline from Jutland to Germany, easing producer requirements on top of prior 10.9 billion kroner.</span></a>
-                    </article>
-                    
-                    <article class="news-item">
-                        <a href="https://cphpost.dk/2026-09-29/news/round-up/worlds-largest-ship-by-gross-tonnage-passed-under-denmarks-great-belt-bridge/" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">Shipping</span><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">Denmark</span><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">Bridge</span></span><span class="keyword-text">Pioneering Spirit, world&#x27;s largest ship by gross tonnage, passed under Denmark&#x27;s Great Belt Bridge at reduced 5.4 km/h speed after a three-hour traffic delay.</span></a>
-                    </article>
-                    
-                    <article class="news-item">
-                        <a href="https://cphpost.dk/2026-09-29/global/estonia-accuses-russian-intelligence-of-ordering-arson-attack-on-defense-company/" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">Estonia</span><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">Russia</span><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">Sabotage</span></span><span class="keyword-text">Estonia accuses Russian intelligence of ordering an arson attack on defense firm Milrem Robotics in mid-August, which Russia denies.</span></a>
-                    </article>
-                    
-                    <article class="news-item">
-                        <a href="https://cphpost.dk/2026-09-29/global/teacher-killed-in-slovakia-school-knife-attack/" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Slovakia</span><span class="keyword-badge" style="--kw-bg: #4a375f; --kw-border: #5f4c78; --kw-text: #f0e3ff;">School</span><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">KnifeAttack</span></span><span class="keyword-text">A knife attack by an eighth-grade student at a school in northwestern Slovakia killed a 61-year-old female teacher and injured an adult and a child.</span></a>
-                    </article>
-                    
-                    <article class="news-item">
-                        <a href="https://cphpost.dk/2026-09-29/business-education/career/5-steps-to-help-you-bounce-back-from-defeat-after-a-layoff/" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Copenhagen</span><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">Layoff</span><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">JobMarket</span></span><span class="keyword-text">Expert shares 5 steps to bounce back from layoff and ease return to Denmark&#x27;s competitive job market.</span></a>
-                    </article>
-                    
-                </div>
-                
             </section>
 
-            <section class="panel news-panel south-africa-panel">
-                <div class="panel-head">
-                    <div>
-                        <h2>South Africa</h2>
-                        <p class="panel-sub">Government, Finance, Diplomacy</p>
+            <section class="panel sky-panel" id="sky" data-block="sky" data-mode="live-sky">
+                <header class="panel-head">
+    <div class="panel-title">
+        <span class="panel-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 13.5A8 8 0 1 1 10.5 4a6.5 6.5 0 0 0 9.5 9.5z"/></svg></span>
+        <div class="panel-title-copy">
+            <h2>Sky Watch</h2>
+            <p class="panel-sub">
+                <span data-f="subtitle">Over Copenhagen</span>
+            </p>
+        </div>
+    </div>
+    <div class="panel-actions">
+        <span class="panel-stamp" data-stamp aria-live="polite">Updated 11:12 am</span>
+        <button type="button" class="icon-btn" data-refresh aria-label="Refresh: Sky Watch" title="Refresh"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg></button>
+    </div>
+</header>
+                <div class="panel-body" data-part="sky">
+                    <div class="trend-list" data-f="list">
+                        <a class="trend-card" href="https://www.swpc.noaa.gov/products/goes-x-ray-flux" target="_blank" rel="noopener noreferrer">
+                            <div class="trend-name">Solar Class A1.2</div>
+                            <div class="trend-meta">
+                                <span class="trend-detail">Goes Satellite X-Ray Reading</span>
+                                <span class="trend-when">Quiet Sun, No Major Flares</span>
+                            </div>
+                        </a>
+                        <a class="trend-card" href="https://www.swpc.noaa.gov/" target="_blank" rel="noopener noreferrer">
+                            <div class="trend-name">Quiet Aurora</div>
+                            <div class="trend-meta">
+                                <span class="trend-detail">Geomagnetic Index Kp 0</span>
+                                <span class="trend-when">Visible Aurora Unlikely Tonight</span>
+                            </div>
+                        </a>
+                        <a class="trend-card" href="https://moon.nasa.gov/moon-in-motion/moon-phases/" target="_blank" rel="noopener noreferrer">
+                            <div class="trend-name">Waning Gibbous</div>
+                            <div class="trend-meta">
+                                <span class="trend-detail">Moon 85% Illuminated</span>
+                                <span class="trend-when">Visible Tonight Over Copenhagen</span>
+                            </div>
+                        </a>
+                        <a class="trend-card" href="https://spacelaunchnow.me/launch/18441371-8b2e-457c-afb5-1ec1b11ab630/" target="_blank" rel="noopener noreferrer">
+                            <div class="trend-name">Falcon 9 Block 5</div>
+                            <div class="trend-meta">
+                                <span class="trend-detail">Mission Crew-13</span>
+                                <span class="trend-when">Launch Tomorrow At 5:10 pm</span>
+                            </div>
+                        </a>
+                        <a class="trend-card" href="https://science.nasa.gov/eclipses/future-eclipses/eclipse-2027/" target="_blank" rel="noopener noreferrer">
+                            <div class="trend-name">Annular Solar Eclipse</div>
+                            <div class="trend-meta">
+                                <span class="trend-detail">Visible From South America and Africa</span>
+                                <span class="trend-when">Next Visible On Feb 6, 2027</span>
+                            </div>
+                        </a>
                     </div>
                 </div>
-                
-                <div class="news-list">
-                    
-                    <article class="news-item">
-                        <a href="https://www.sanews.gov.za/south-africa/violence-against-women-inhuman-says-president-ramaphosa" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">GenderViolence</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Ramaphosa</span><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">NationalInvestigation</span></span><span class="keyword-text">President Ramaphosa condemned violence against women as inhuman, elevated a specialised multidisciplinary national investigation into recent killings, and admitted current measures have been insufficient.</span></a>
-                    </article>
-                    
-                    <article class="news-item">
-                        <a href="https://www.sanews.gov.za/south-africa/statement-cabinet-meeting-wednesday-23-september-2026" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Brics</span><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">Economy</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Transnet</span></span><span class="keyword-text">Cabinet welcomed BRICS Summit outcomes advancing South Africa&#x27;s industrialisation and critical minerals value addition while approving Transnet National Ports Authority separation for improved logistics competitiveness and ratifying aviation security conventions.</span></a>
-                    </article>
-                    
-                    <article class="news-item">
-                        <a href="https://www.gcis.gov.za/full-statement-on-the-cabinet-meeting-23-september-2026" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">SouthAfrica</span><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Cabinet</span><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">Meeting</span></span><span class="keyword-text">Cabinet held its regular meeting on 23 September 2026 and issued an official statement detailing national government decisions.</span></a>
-                    </article>
-                    
-                    <article class="news-item">
-                        <a href="https://www.gcis.gov.za/minister-khumbudzo-ntshavheni-briefs-media-on-outcomes-of-the-cabinet-meeting-29-sept" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">SouthAfrica</span><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Cabinet</span><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">Government</span></span><span class="keyword-text">Minister Khumbudzo Ntshavheni briefed the media on key outcomes from the South African Cabinet meeting held on 29 September.</span></a>
-                    </article>
-                    
-                    <article class="news-item">
-                        <a href="https://www.moneyweb.co.za/qa/should-i-move-my-provident-fund-investment-to-cash-before-retiring/" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #4a375f; --kw-border: #5f4c78; --kw-text: #f0e3ff;">ProvidentFund</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Retirement</span><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">Investment</span></span><span class="keyword-text">Moving a South African provident fund entirely to cash before retirement risks forgoing market growth if equities rebound.</span></a>
-                    </article>
-                    
-                    <article class="news-item">
-                        <a href="https://www.moneyweb.co.za/in-depth/vilasita/unique-vilasita-the-latest-part-of-ifas-r50bn-zimbali-lakes-investment/" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">Investment</span><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">Property</span><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">Ifa</span></span><span class="keyword-text">IFA advances its R50bn Zimbali Lakes development with new Unique Vilasita villa units offering rare lake-and-sea views in South Africa’s fastest-growing coastal corridor.</span></a>
-                    </article>
-                    
-                </div>
-                
             </section>
-            </div>
 
-            <div class="news-pair news-pair-wide">
-            <section class="panel news-panel space-panel">
-                <div class="panel-head">
-                    <div>
-                        <h2>Space News</h2>
-                        <p class="panel-sub">Orbit, launch, industry</p>
-                    </div>
+            <section class="panel news-panel copenhagen-panel" id="copenhagen" data-block="copenhagen" data-mode="snapshot">
+    <header class="panel-head">
+    <div class="panel-title">
+        <span class="panel-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 22s7-7.1 7-12.5a7 7 0 1 0-14 0C5 14.9 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+        <div class="panel-title-copy">
+            <h2>Copenhagen Today</h2>
+            <p class="panel-sub">
+                <span data-f="subtitle">Local News</span>
+            </p>
+        </div>
+    </div>
+    <div class="panel-actions">
+        <span class="panel-stamp" data-stamp aria-live="polite">Updated 11:12 am</span>
+        <button type="button" class="icon-btn" data-refresh aria-label="Refresh: Copenhagen Today" title="Refresh"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg></button>
+    </div>
+</header>
+    <div class="panel-body" data-part="copenhagen">
+        <div class="news-list">
+            <a class="news-item" href="https://cphpost.dk/2026-09-30/news/round-up/higher-winter-electricity-tariffs-set-to-take-effect-across-denmark/" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">Denmark</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Electricity</span><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Tariffs</span></span><span class="keyword-text">Higher winter electricity grid tariffs take effect across Denmark from Thursday, raising costs during 5-9 PM peak hours to ease grid strain and shift usage.</span></div>
+                <div class="news-foot">
+                    <span class="news-source">The Copenhagen Post</span>
+                    <span class="news-arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></span>
                 </div>
-                
-                <div class="news-list">
-                    
-                    <article class="news-item">
-                        <a href="https://spacenews.com/commercial-defense-satcom-service-revenues-to-surpass-22-6b-by-2035/" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">Defense</span><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">Satcom</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Revenues</span></span><span class="keyword-text">Commercial defense satellite communications service revenues projected to exceed $22.6 billion by 2035.</span></a>
-                    </article>
-                    
-                    <article class="news-item">
-                        <a href="https://spacenews.com/terran-orbital-names-jamin-brown-chief-operating-officer/" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">TerranOrbital</span><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">Coo</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">JaminBrown</span></span><span class="keyword-text">Terran Orbital appoints Jamin Brown as Chief Operating Officer.</span></a>
-                    </article>
-                    
-                    <article class="news-item">
-                        <a href="https://spacenews.com/if-ai-cannot-be-trusted-in-a-classroom-why-should-it-be-trusted-in-orbit/" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Ai</span><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">Trust</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Orbit</span></span><span class="keyword-text">Evan Hubinger warns of &gt;10% AI extinction risk, questioning its reliability in space if untrustworthy in classrooms.</span></a>
-                    </article>
-                    
-                    <article class="news-item">
-                        <a href="https://spacenews.com/space-is-everyones-business-economist-enterprises-4th-annual-space-economy-summit-returns-to-orlando/" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">SpaceEconomy</span><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Summit</span><span class="keyword-badge" style="--kw-bg: #4a375f; --kw-border: #5f4c78; --kw-text: #f0e3ff;">Orlando</span></span><span class="keyword-text">Economist Enterprise’s 4th annual Space Economy Summit returns to Orlando on Sept 28 2026, highlighting space as a practical business tool across industries.</span></a>
-                    </article>
-                    
-                    <article class="news-item">
-                        <a href="https://spacenews.com/agile-space-industries-expands-leadership-structure-to-support-next-phase-of-growth/" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">AgileSpace</span><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">Leadership</span><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">Growth</span></span><span class="keyword-text">Agile Space Industries appoints Jason Wright as President to bolster operational leadership and drive next phase of expansion.</span></a>
-                    </article>
-                    
-                    <article class="news-item">
-                        <a href="https://spacenews.com/true-or-false-on-space-industry-trends-with-pacome-revillon/" target="_blank" rel="noopener noreferrer"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Spacenews</span><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Novaspace</span><span class="keyword-badge" style="--kw-bg: #4a375f; --kw-border: #5f4c78; --kw-text: #f0e3ff;">Trends</span></span><span class="keyword-text">SpaceNews’ Mike Gruss and Novaspace CEO Pacôme Révillon play true or false to forecast key space industry trends for the next year.</span></a>
-                    </article>
-                    
+            </a>
+            <a class="news-item" href="https://cphpost.dk/2026-09-30/global/eu-energy-commissioner-warns-of-high-energy-prices-this-winter-calls-for-faster-renewable-transition/" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Energy</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Renewables</span><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Eu</span></span><span class="keyword-text">EU Energy Commissioner Dan Jørgensen warns of very high prices this winter and urges faster renewable transition to cut imported fossil fuel dependence.</span></div>
+                <div class="news-foot">
+                    <span class="news-source">The Copenhagen Post</span>
+                    <span class="news-arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></span>
                 </div>
-                
-            </section>
-            </div>
+            </a>
+            <a class="news-item" href="https://cphpost.dk/2026-09-30/news/round-up/denmark-introduces-new-measures-to-crack-down-on-phone-scams/" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">PhoneScams</span><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">Denmark</span><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Telecom</span></span><span class="keyword-text">Denmark mandates telecoms to block spoofed foreign calls mimicking Danish numbers from 2027 to combat fraud.</span></div>
+                <div class="news-foot">
+                    <span class="news-source">The Copenhagen Post</span>
+                    <span class="news-arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></span>
+                </div>
+            </a>
+            <a class="news-item" href="https://cphpost.dk/2026-09-30/global/u-s-import-ban-on-canadian-goods-takes-effect-after-trade-talks-fail/" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">Trade</span><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">Us</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Canada</span></span><span class="keyword-text">US import ban on Canadian beer, wine, spirits, whey and molasses takes effect after failed August trade talks.</span></div>
+                <div class="news-foot">
+                    <span class="news-source">The Copenhagen Post</span>
+                    <span class="news-arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></span>
+                </div>
+            </a>
+            <a class="news-item" href="https://cphpost.dk/2026-09-30/news/round-up/september-records-denmarks-highest-raw-electricity-prices-since-december-2022/" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">Denmark</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Electricity</span><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">Prices</span></span><span class="keyword-text">September saw Denmark&#x27;s highest raw electricity prices since Dec 2022 due to low wind, limited sunshine and high gas costs.</span></div>
+                <div class="news-foot">
+                    <span class="news-source">The Copenhagen Post</span>
+                    <span class="news-arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></span>
+                </div>
+            </a>
+            <a class="news-item" href="https://cphpost.dk/2026-09-30/global/morocco-gets-its-first-female-prime-minister-in-fatima-ezzahra-el-mansouri/" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Morocco</span><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">Politics</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Women</span></span><span class="keyword-text">Morocco appoints Fatima Ezzahra El Mansouri as its first female prime minister after her party won parliamentary elections.</span></div>
+                <div class="news-foot">
+                    <span class="news-source">The Copenhagen Post</span>
+                    <span class="news-arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></span>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+            <section class="panel news-panel south-africa-panel" id="south-africa" data-block="south-africa" data-mode="snapshot">
+    <header class="panel-head">
+    <div class="panel-title">
+        <span class="panel-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span>
+        <div class="panel-title-copy">
+            <h2>South Africa</h2>
+            <p class="panel-sub">
+                <span data-f="subtitle">Government, Finance, Diplomacy</span>
+            </p>
+        </div>
+    </div>
+    <div class="panel-actions">
+        <span class="panel-stamp" data-stamp aria-live="polite">Updated 11:12 am</span>
+        <button type="button" class="icon-btn" data-refresh aria-label="Refresh: South Africa" title="Refresh"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg></button>
+    </div>
+</header>
+    <div class="panel-body" data-part="south-africa">
+        <div class="news-list">
+            <a class="news-item" href="https://www.gcis.gov.za/full-statement-on-the-cabinet-meeting-23-september-2026" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">SouthAfrica</span><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Cabinet</span><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">Meeting</span></span><span class="keyword-text">Cabinet held its regular meeting on 23 September 2026 and issued a full official statement detailing key decisions.</span></div>
+                <div class="news-foot">
+                    <span class="news-source">Government Communication and Information System (GCIS) - The pulse of communication excellence in government</span>
+                    <span class="news-arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></span>
+                </div>
+            </a>
+            <a class="news-item" href="https://www.gcis.gov.za/minister-khumbudzo-ntshavheni-briefs-media-on-outcomes-of-the-cabinet-meeting-29-sept" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">SouthAfrica</span><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Cabinet</span><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">Government</span></span><span class="keyword-text">Minister Khumbudzo Ntshavheni briefed the media on key outcomes from the South African Cabinet meeting held on 29 September.</span></div>
+                <div class="news-foot">
+                    <span class="news-source">Government Communication and Information System (GCIS) - The pulse of communication excellence in government</span>
+                    <span class="news-arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></span>
+                </div>
+            </a>
+            <a class="news-item" href="https://www.dailymaverick.co.za/article/2026-09-30-inside-the-gathering-2026-south-africas-cities-crisis-collides-with-chaotic-election-preparation/" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">SouthAfrica</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Elections</span><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">LocalGovernment</span></span><span class="keyword-text">South Africa&#x27;s governing party missed deadlines ahead of chaotic 4 November local elections amid cities crisis discussions at The Gathering 2026.</span></div>
+                <div class="news-foot">
+                    <span class="news-source">Daily Maverick - Latest News</span>
+                    <span class="news-arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></span>
+                </div>
+            </a>
+            <a class="news-item" href="https://www.dailymaverick.co.za/article/2026-09-29-ramaphosa-admits-the-government-has-failed-women-and-vows-action/" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">GenderBasedViolence</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Ramaphosa</span><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">Government</span></span><span class="keyword-text">President Cyril Ramaphosa admitted the South African government has failed women on gender-based violence and promised four new interventions.</span></div>
+                <div class="news-foot">
+                    <span class="news-source">Daily Maverick - Latest News</span>
+                    <span class="news-arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></span>
+                </div>
+            </a>
+            <a class="news-item" href="https://mg.co.za/news/south-africa/2026-09-30-ramaphosa-orders-gbv-case-crackdown/" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">SouthAfrica</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Ramaphosa</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Gbv</span></span><span class="keyword-text">President Cyril Ramaphosa has ordered a nationwide crackdown with strict deadlines for police, prosecutors and municipalities to resolve unresolved murders, rapes and sexual offences against women and children.</span></div>
+                <div class="news-foot">
+                    <span class="news-source">The Mail &amp; Guardian | Africa&#39;s Better Future</span>
+                    <span class="news-arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></span>
+                </div>
+            </a>
+            <a class="news-item" href="https://mg.co.za/news/south-africa/2026-09-29-ramaphosa-orders-urgent-action-as-ekurhuleni-killings-put-gbvf-response-under-scrutiny/" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Gbv</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Ramaphosa</span><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">Government</span></span><span class="keyword-text">President Cyril Ramaphosa announced four national measures to combat gender-based violence, clear forensic backlogs and enhance community safety following Ekurhuleni women murders.</span></div>
+                <div class="news-foot">
+                    <span class="news-source">The Mail &amp; Guardian | Africa&#39;s Better Future</span>
+                    <span class="news-arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></span>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+            <section class="panel news-panel space-panel" id="space" data-block="space" data-mode="snapshot">
+    <header class="panel-head">
+    <div class="panel-title">
+        <span class="panel-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2"/><path d="M9 15l-3-3c1.5-4 5-9 12-9 0 7-5 10.5-9 12z"/><circle cx="14.5" cy="9.5" r="1.5"/></svg></span>
+        <div class="panel-title-copy">
+            <h2>Space News</h2>
+            <p class="panel-sub">
+                <span data-f="subtitle">Orbit, Launch, Industry</span>
+            </p>
+        </div>
+    </div>
+    <div class="panel-actions">
+        <span class="panel-stamp" data-stamp aria-live="polite">Updated 11:12 am</span>
+        <button type="button" class="icon-btn" data-refresh aria-label="Refresh: Space News" title="Refresh"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg></button>
+    </div>
+</header>
+    <div class="panel-body" data-part="space">
+        <div class="news-list">
+            <a class="news-item" href="https://spacenews.com/commercial-defense-satcom-service-revenues-to-surpass-22-6b-by-2035/" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">Defense</span><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">Satcom</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Revenues</span></span><span class="keyword-text">Commercial defense satellite communications service revenues projected to exceed $22.6 billion by 2035.</span></div>
+                <div class="news-foot">
+                    <span class="news-source">SpaceNews</span>
+                    <span class="news-arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></span>
+                </div>
+            </a>
+            <a class="news-item" href="https://spacenews.com/terran-orbital-names-jamin-brown-chief-operating-officer/" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">TerranOrbital</span><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">Coo</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">JaminBrown</span></span><span class="keyword-text">Terran Orbital appoints Jamin Brown as Chief Operating Officer at the Lockheed Martin satellite company.</span></div>
+                <div class="news-foot">
+                    <span class="news-source">SpaceNews</span>
+                    <span class="news-arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></span>
+                </div>
+            </a>
+            <a class="news-item" href="https://spacenews.com/if-ai-cannot-be-trusted-in-a-classroom-why-should-it-be-trusted-in-orbit/" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Ai</span><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">Trust</span><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Orbit</span></span><span class="keyword-text">Evan Hubinger warns of &gt;10% AI extinction risk, questioning its reliability in space if untrustworthy in classrooms.</span></div>
+                <div class="news-foot">
+                    <span class="news-source">SpaceNews</span>
+                    <span class="news-arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></span>
+                </div>
+            </a>
+            <a class="news-item" href="https://spacenews.com/space-is-everyones-business-economist-enterprises-4th-annual-space-economy-summit-returns-to-orlando/" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;">SpaceEconomy</span><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Summit</span><span class="keyword-badge" style="--kw-bg: #4a375f; --kw-border: #5f4c78; --kw-text: #f0e3ff;">Orlando</span></span><span class="keyword-text">Economist Enterprise’s 4th annual Space Economy Summit returns to Orlando on Sept 28 2026, highlighting space tech as a practical business tool across industries.</span></div>
+                <div class="news-foot">
+                    <span class="news-source">SpaceNews</span>
+                    <span class="news-arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></span>
+                </div>
+            </a>
+            <a class="news-item" href="https://spacenews.com/agile-space-industries-expands-leadership-structure-to-support-next-phase-of-growth/" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">Space</span><span class="keyword-badge" style="--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;">Leadership</span><span class="keyword-badge" style="--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;">Growth</span></span><span class="keyword-text">Agile Space Industries appoints Jason Wright as President to bolster operational leadership and fuel next phase of expansion.</span></div>
+                <div class="news-foot">
+                    <span class="news-source">SpaceNews</span>
+                    <span class="news-arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></span>
+                </div>
+            </a>
+            <a class="news-item" href="https://spacenews.com/true-or-false-on-space-industry-trends-with-pacome-revillon/" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline"><span class="keyword-badges"><span class="keyword-badge" style="--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;">Spacenews</span><span class="keyword-badge" style="--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;">Novaspace</span><span class="keyword-badge" style="--kw-bg: #4a375f; --kw-border: #5f4c78; --kw-text: #f0e3ff;">Trends</span></span><span class="keyword-text">SpaceNews’ Mike Gruss and Novaspace CEO Pacôme Révillon play true or false on key space industry trends for the coming year.</span></div>
+                <div class="news-foot">
+                    <span class="news-source">SpaceNews</span>
+                    <span class="news-arrow"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg></span>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
         </main>
 
         <footer class="site-footer">
-            Built daily from open feeds, market data, Open-Meteo, and xAI summaries.
+            <p>Built daily from open feeds, market data, Open-Meteo, NOAA, and xAI summaries.</p>
+            <p>Weather and Sky Watch refresh live. Other blocks load the latest published brief.</p>
         </footer>
     </div>
 </body>
