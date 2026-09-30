@@ -60,4 +60,5 @@ jobs:
             resources/favicon-512.png
             resources/apple-touch-icon.png
             resources/scripture-history.json
+            resources/brief-data.json
           if-no-files-found: warn

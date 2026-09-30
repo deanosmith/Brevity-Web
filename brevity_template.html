@@ -20,31 +20,27 @@
 {%- endif -%}
 {%- endmacro -%}
 
-{%- macro panel_head(title, subtitle, icon_name, action="Refresh", source=None) -%}
+{%- macro panel_head(title, subtitle, icon_name, source=None) -%}
 <header class="panel-head">
     <div class="panel-title">
         <span class="panel-icon">{{ icon(icon_name) }}</span>
         <div class="panel-title-copy">
             <h2>{{ title }}</h2>
             <p class="panel-sub">
-                <span data-f="subtitle">{{ subtitle }}</span>
+                {{ subtitle }}
                 {%- if source and source.url %}
                 · <a class="source-link" href="{{ source.url }}" target="_blank" rel="noopener noreferrer">{{ source.name }}</a>
                 {%- endif %}
             </p>
         </div>
     </div>
-    <div class="panel-actions">
-        <span class="panel-stamp" data-stamp aria-live="polite">Updated {{ generated_clock }}</span>
-        <button type="button" class="icon-btn" data-refresh aria-label="{{ action }}: {{ title }}" title="{{ action }}">{{ icon("refresh") }}</button>
-    </div>
 </header>
 {%- endmacro -%}
 
-{%- macro rain_timeline(tl, key, head_text, compact=False) -%}
-<div class="rain-timeline{% if compact %} compact{% endif %}" data-rain="{{ key }}" style="--rain-color: {{ tl.color or '#40c4ff' }};">
+{%- macro rain_timeline(tl, head_text, compact=False) -%}
+<div class="rain-timeline{% if compact %} compact{% endif %}" style="--rain-color: {{ tl.color or '#40c4ff' }};">
     <div class="rain-timeline-head">
-        <span class="rain-timeline-peak" data-f="peak">{{ head_text }}</span>
+        <span class="rain-timeline-peak">{{ head_text }}</span>
     </div>
     <div class="rain-timeline-track" aria-hidden="true">
         {%- for point in tl.points %}
@@ -60,9 +56,9 @@
 {%- endmacro -%}
 
 {%- macro news_panel(block, title, subtitle, icon_name, items, empty_text, extra_class="") -%}
-<section class="panel news-panel {{ extra_class }}" id="{{ block }}" data-block="{{ block }}" data-mode="snapshot">
+<section class="panel news-panel {{ extra_class }}" id="{{ block }}">
     {{ panel_head(title, subtitle, icon_name) }}
-    <div class="panel-body" data-part="{{ block }}">
+    <div class="panel-body">
         {%- if items %}
         <div class="news-list">
             {%- for item in items %}
@@ -104,10 +100,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" media="screen">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin media="screen">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:ital,wght@1,400;1,500&display=swap" media="screen">
-    <link rel="stylesheet" href="brevity.css?v=revamp1">
-    <link rel="stylesheet" href="brevity-web.css?v=revamp1" media="screen">
-    <script type="application/json" id="brevity-config">{{ client_config|tojson }}</script>
-    <script src="brevity.js?v=revamp1" defer></script>
+    <link rel="stylesheet" href="brevity.css?v=revamp2">
+    <link rel="stylesheet" href="brevity-web.css?v=revamp2" media="screen">
+    <script src="brevity.js?v=revamp2" defer></script>
 </head>
 
 <body>
@@ -125,8 +120,8 @@
                 <a href="#sky">Sky</a>
                 <a href="#copenhagen">News</a>
             </div>
-            <button type="button" class="btn btn-primary" data-refresh-all>
-                {{ icon("refresh") }}<span>Refresh All</span>
+            <button type="button" class="btn btn-primary" data-refresh-all data-repo="{{ github_repo }}" data-workflow="{{ github_workflow }}">
+                {{ icon("refresh") }}<span data-refresh-label>Refresh All</span>
             </button>
         </nav>
 
@@ -134,18 +129,18 @@
             <div class="hero-copy">
                 <p class="eyebrow">Morning Brief · {{ weather.location if weather and weather.location else "Copenhagen" }}</p>
                 <h1 class="hero-title">{{ date }}</h1>
-                <p class="hero-sub">Generated at {{ generated_clock }}. Refresh any block for the latest.</p>
+                <p class="hero-sub">Generated at {{ generated_clock }}.</p>
             </div>
             <div class="hero-stats">
                 <div class="stat">
                     <span class="stat-label">Right Now</span>
                     <span class="stat-value">
-                        <span data-w="now-icon">{{ weather_today.current.icon if weather_today and weather_today.current else "—" }}</span>
-                        <span data-w="now-temp">{% if weather_today and weather_today.current and weather_today.current.temp is not none %}{{ weather_today.current.temp }}°{% else %}—{% endif %}</span>
+                        <span>{{ weather_today.current.icon if weather_today and weather_today.current else "—" }}</span>
+                        <span>{% if weather_today and weather_today.current and weather_today.current.temp is not none %}{{ weather_today.current.temp }}°{% else %}—{% endif %}</span>
                     </span>
-                    <span class="stat-sub" data-w="now-cond">{{ weather_today.current.condition if weather_today and weather_today.current else "Weather Unavailable" }}</span>
+                    <span class="stat-sub">{{ weather_today.current.condition if weather_today and weather_today.current else "Weather Unavailable" }}</span>
                 </div>
-                <div class="stat" data-part="markets">
+                <div class="stat">
                     <span class="stat-label">Watchlist Today</span>
                     <span class="stat-value {{ market_class }}">{{ market_avg_text }}</span>
                     <span class="stat-sub">Average Day Move</span>
@@ -160,22 +155,22 @@
         </header>
 
         <main class="layout">
-            <section class="panel weather-panel" id="weather" data-block="weather" data-mode="live-weather">
+            <section class="panel weather-panel" id="weather">
                 {{ panel_head("Weather", weather.location if weather and weather.location else "Copenhagen", "weather", source=weather.source if weather else None) }}
-                <div class="panel-body" data-part="weather">
+                <div class="panel-body">
                 {%- if weather_today %}
                 {%- set today = weather_today %}
                 {%- set dials = today.dials %}
                 <div class="weather-top">
                     <div class="weather-now-column">
                         <div class="weather-now-card" style="--now-color: {{ today.current.color if today.current else today.color }};">
-                            <div class="weather-hero-icon" data-w="now-icon">{{ today.current.icon if today.current else today.icon }}</div>
+                            <div class="weather-hero-icon">{{ today.current.icon if today.current else today.icon }}</div>
                             <div class="weather-now-copy">
-                                <div class="weather-now-temp" data-w="now-temp" style="color: {{ today.high_color or '#f2f2f2' }};">
+                                <div class="weather-now-temp" style="color: {{ today.high_color or '#f2f2f2' }};">
                                     {%- if today.current and today.current.temp is not none %}{{ today.current.temp }}°{% elif today.high is not none %}{{ today.high }}°{% else %}—{% endif -%}
                                 </div>
-                                <div class="weather-now-condition" data-w="now-cond">{{ (today.current.condition if today.current else today.condition) or "—" }}</div>
-                                <div class="weather-now-feels" data-w="now-feels">{% if today.current and today.current.feels_like is not none %}Feels Like {{ today.current.feels_like }}°{% endif %}</div>
+                                <div class="weather-now-condition">{{ (today.current.condition if today.current else today.condition) or "—" }}</div>
+                                <div class="weather-now-feels">{% if today.current and today.current.feels_like is not none %}Feels Like {{ today.current.feels_like }}°{% endif %}</div>
                             </div>
                         </div>
 
@@ -196,7 +191,7 @@
                                     <line x1="3" y1="21" x2="29" y2="21" stroke="#c8c4bc" stroke-width="1.5" stroke-linecap="round" />
                                 </svg>
                                 <span class="sun-event-label">Sunrise</span>
-                                <span class="sun-event-time" data-w="sunrise">{{ today.sunrise or "—" }}</span>
+                                <span class="sun-event-time">{{ today.sunrise or "—" }}</span>
                             </div>
                             <div class="sun-event">
                                 <svg class="sun-event-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
@@ -212,12 +207,12 @@
                                     <line x1="3" y1="21" x2="29" y2="21" stroke="#c8c4bc" stroke-width="1.5" stroke-linecap="round" />
                                 </svg>
                                 <span class="sun-event-label">Sunset</span>
-                                <span class="sun-event-time" data-w="sunset">{{ today.sunset or "—" }}</span>
+                                <span class="sun-event-time">{{ today.sunset or "—" }}</span>
                             </div>
                             {%- if today.sun_path and today.sun_path.daylight %}
                             <div class="sun-event sun-daylight">
                                 <span class="sun-event-label">Daylight</span>
-                                <span class="sun-event-time" data-w="daylight">{{ today.sun_path.daylight }}</span>
+                                <span class="sun-event-time">{{ today.sun_path.daylight }}</span>
                             </div>
                             {%- endif %}
                         </div>
@@ -225,28 +220,28 @@
 
                     <div class="dial-row">
                         <div class="dial-card">
-                            <div class="dial dial-temp" data-dial="temp" style="--start: {{ (dials.temp.low_progress * 100)|round(1) }}; --end: {{ (dials.temp.high_progress * 100)|round(1) }}; --accent: {{ dials.temp.high_color }};">
+                            <div class="dial dial-temp" style="--start: {{ (dials.temp.low_progress * 100)|round(1) }}; --end: {{ (dials.temp.high_progress * 100)|round(1) }}; --accent: {{ dials.temp.high_color }};">
                                 <div class="dial-face">
                                     <div class="dial-label">Temp</div>
-                                    <div class="dial-value" data-w="dial-temp-value" style="color: {{ today.high_color or '#ffd166' }};">{% if today.high is not none %}{{ today.high }}°{% else %}—{% endif %}</div>
-                                    <div class="dial-sub" data-w="dial-temp-sub" style="color: {{ today.low_color or '#8ab4ff' }};">{% if today.low is not none %}Low {{ today.low }}°{% endif %}</div>
+                                    <div class="dial-value" style="color: {{ today.high_color or '#ffd166' }};">{% if today.high is not none %}{{ today.high }}°{% else %}—{% endif %}</div>
+                                    <div class="dial-sub" style="color: {{ today.low_color or '#8ab4ff' }};">{% if today.low is not none %}Low {{ today.low }}°{% endif %}</div>
                                 </div>
                             </div>
                         </div>
                         <div class="dial-card">
-                            <div class="dial" data-dial="rain" style="--progress: {{ (dials.rain.progress * 100)|round(1) }}; --accent: {{ dials.rain.color }};">
+                            <div class="dial" style="--progress: {{ (dials.rain.progress * 100)|round(1) }}; --accent: {{ dials.rain.color }};">
                                 <div class="dial-face">
                                     <div class="dial-label">Rain</div>
-                                    <div class="dial-value" data-w="dial-rain-value" style="color: {{ dials.rain.color }};">{% if today.rain_chance is not none %}{{ today.rain_chance }}%{% else %}—{% endif %}</div>
-                                    <div class="dial-sub" data-w="dial-rain-sub">{{ today.rain_peak_time or "" }}</div>
+                                    <div class="dial-value" style="color: {{ dials.rain.color }};">{% if today.rain_chance is not none %}{{ today.rain_chance }}%{% else %}—{% endif %}</div>
+                                    <div class="dial-sub">{{ today.rain_peak_time or "" }}</div>
                                 </div>
                             </div>
                         </div>
                         <div class="dial-card">
-                            <div class="dial" data-dial="wind" style="--progress: {{ (dials.wind.progress * 100)|round(1) }}; --accent: {{ dials.wind.color }};">
+                            <div class="dial" style="--progress: {{ (dials.wind.progress * 100)|round(1) }}; --accent: {{ dials.wind.color }};">
                                 <div class="dial-face">
                                     <div class="dial-label">Wind</div>
-                                    <div class="dial-value" data-w="dial-wind-value" style="color: {{ dials.wind.color }};">
+                                    <div class="dial-value" style="color: {{ dials.wind.color }};">
                                         {%- if today.wind_max is not none %}{{ today.wind_max }}{% if today.wind_dir is not none %}<span class="wind-arrow" style="--wind-dir: {{ today.wind_dir }};" aria-hidden="true"><svg viewBox="0 0 26 14" focusable="false"><path d="M1 4.6h12.2V1.6L24.8 7 13.2 12.4V9.4H1z"/></svg></span>{% endif %}{% else %}—{% endif -%}
                                     </div>
                                     <div class="dial-sub">km/h</div>
@@ -254,10 +249,10 @@
                             </div>
                         </div>
                         <div class="dial-card">
-                            <div class="dial" data-dial="uv" style="--progress: {{ (dials.uv.progress * 100)|round(1) }}; --accent: {{ dials.uv.color }};">
+                            <div class="dial" style="--progress: {{ (dials.uv.progress * 100)|round(1) }}; --accent: {{ dials.uv.color }};">
                                 <div class="dial-face">
                                     <div class="dial-label">UV</div>
-                                    <div class="dial-value" data-w="dial-uv-value" style="color: {{ dials.uv.color }};">{% if today.uv_max is not none %}{{ "%.1f"|format(today.uv_max) }}{% else %}—{% endif %}</div>
+                                    <div class="dial-value" style="color: {{ dials.uv.color }};">{% if today.uv_max is not none %}{{ "%.1f"|format(today.uv_max) }}{% else %}—{% endif %}</div>
                                     <div class="dial-sub">Index</div>
                                 </div>
                             </div>
@@ -268,17 +263,17 @@
                 <div class="period-strip">
                     <div class="period-grid">
                         {%- for label, period in [("Morning", today.morning), ("Afternoon", today.afternoon), ("Evening", today.evening)] %}
-                        <div class="period-card" data-period="{{ label|lower }}">
+                        <div class="period-card">
                             <div class="period-label">{{ label }}</div>
-                            <div class="period-icon" data-f="icon">{{ period.icon if period else "—" }}</div>
-                            <div class="period-temp" data-f="temp"{% if period and period.temp is not none %} style="color: {{ period.color }};"{% endif %}>{% if period and period.temp is not none %}{{ period.temp }}°{% else %}—{% endif %}</div>
-                            <div class="period-feels" data-f="feels">{% if period and period.feels_like is not none %}Feels {{ period.feels_like }}°{% endif %}</div>
-                            <div class="period-rain" data-f="rain">{% if period and period.precip is not none %}{{ period.precip }}% Rain{% else %}—{% endif %}</div>
+                            <div class="period-icon">{{ period.icon if period else "—" }}</div>
+                            <div class="period-temp"{% if period and period.temp is not none %} style="color: {{ period.color }};"{% endif %}>{% if period and period.temp is not none %}{{ period.temp }}°{% else %}—{% endif %}</div>
+                            <div class="period-feels">{% if period and period.feels_like is not none %}Feels {{ period.feels_like }}°{% endif %}</div>
+                            <div class="period-rain">{% if period and period.precip is not none %}{{ period.precip }}% Rain{% else %}—{% endif %}</div>
                         </div>
                         {%- endfor %}
                     </div>
                     {%- if today.rain_timeline and today.rain_timeline.points %}
-                    {{ rain_timeline(today.rain_timeline, "today", ("Rain Peak " ~ today.rain_timeline.peak_time) if today.rain_timeline.peak_time else "No Rain Expected") }}
+                    {{ rain_timeline(today.rain_timeline, ("Rain Peak " ~ today.rain_timeline.peak_time) if today.rain_timeline.peak_time else "No Rain Expected") }}
                     {%- endif %}
                 </div>
 
@@ -287,20 +282,20 @@
                     <h3 class="block-title">Next 2 Days</h3>
                     <div class="forecast-grid">
                         {%- for day in weather.upcoming %}
-                        <div class="forecast-card" data-day="{{ loop.index }}">
-                            <div class="forecast-day" data-f="label">{{ day.label }}</div>
+                        <div class="forecast-card">
+                            <div class="forecast-day">{{ day.label }}</div>
                             <div class="forecast-main">
-                                <div class="forecast-icon" data-f="icon">{{ day.icon }}</div>
+                                <div class="forecast-icon">{{ day.icon }}</div>
                                 <div>
-                                    <div class="forecast-condition" data-f="condition">{{ day.condition }}</div>
+                                    <div class="forecast-condition">{{ day.condition }}</div>
                                     <div class="forecast-temps">
-                                        <span class="hi" data-f="hi" style="color: {{ day.high_color }};">{{ day.high if day.high is not none else "—" }}°</span>
-                                        <span class="lo" data-f="lo" style="color: {{ day.low_color }};">{{ day.low if day.low is not none else "—" }}°</span>
+                                        <span class="hi" style="color: {{ day.high_color }};">{{ day.high if day.high is not none else "—" }}°</span>
+                                        <span class="lo" style="color: {{ day.low_color }};">{{ day.low if day.low is not none else "—" }}°</span>
                                     </div>
                                 </div>
                             </div>
                             {%- if day.rain_timeline and day.rain_timeline.points %}
-                            {{ rain_timeline(day.rain_timeline, "day-" ~ loop.index, (day.rain_chance ~ "% Rain") ~ ((" · Peak " ~ day.rain_timeline.peak_time) if day.rain_timeline.peak_time else ""), compact=True) }}
+                            {{ rain_timeline(day.rain_timeline, (day.rain_chance ~ "% Rain") ~ ((" · Peak " ~ day.rain_timeline.peak_time) if day.rain_timeline.peak_time else ""), compact=True) }}
                             {%- endif %}
                         </div>
                         {%- endfor %}
@@ -308,15 +303,15 @@
                 </div>
                 {%- endif %}
                 {%- else %}
-                <div class="empty-state">Weather data unavailable. Try refreshing.</div>
+                <div class="empty-state">Weather data unavailable</div>
                 {%- endif %}
                 </div>
             </section>
 
             <div class="stack">
-            <section class="panel markets-panel" id="markets" data-block="markets" data-mode="snapshot">
+            <section class="panel markets-panel" id="markets">
                 {{ panel_head("Markets", "Watchlist Close", "markets") }}
-                <div class="panel-body" data-part="markets">
+                <div class="panel-body">
                     <div class="market-summary">
                         <span class="market-summary-label">Average Day Move</span>
                         <span class="avg-pill {{ market_class }}">{{ market_avg_text }}</span>
@@ -357,25 +352,26 @@
                 </div>
             </section>
 
-            <section class="panel scripture-panel" id="scripture" data-block="scripture" data-mode="verse">
-                {{ panel_head("Scripture", scripture.translation_label if scripture else "Proverbs And Ecclesiastes", "scripture", action="New Verse") }}
-                <div class="panel-body" data-part="scripture">
-                    <figure class="verse"{% if not (scripture and scripture.text) %} hidden{% endif %}>
-                        <blockquote class="verse-text" data-f="text">{{ scripture.text if scripture else "" }}</blockquote>
+            <section class="panel scripture-panel" id="scripture">
+                {{ panel_head("Scripture", scripture.translation_label if scripture else "Proverbs And Ecclesiastes", "scripture") }}
+                <div class="panel-body">
+                    {%- if scripture and scripture.text %}
+                    <figure class="verse">
+                        <blockquote class="verse-text">{{ scripture.text }}</blockquote>
                         <figcaption class="verse-caption">
-                            <a class="verse-ref" data-f="ref" href="{{ scripture.link if scripture and scripture.link else '#' }}" target="_blank" rel="noopener noreferrer">{{ scripture.ref if scripture else "" }}</a>
+                            <a class="verse-ref" href="{{ scripture.link or '#' }}" target="_blank" rel="noopener noreferrer">{{ scripture.ref }}</a>
                         </figcaption>
                     </figure>
-                    {%- if not (scripture and scripture.text) %}
-                    <div class="empty-state" data-f="empty">Scripture unavailable. Tap New Verse.</div>
+                    {%- else %}
+                    <div class="empty-state">Scripture unavailable</div>
                     {%- endif %}
                 </div>
             </section>
             </div>
 
-            <section class="panel x-panel" id="x" data-block="x" data-mode="snapshot">
+            <section class="panel x-panel" id="x">
                 {{ panel_head("For You On X", "What Your Interests Are Talking About", "x") }}
-                <div class="panel-body" data-part="x">
+                <div class="panel-body">
                     {%- if x_data %}
                     {%- if x_data.pulse %}
                     <p class="x-pulse"><span class="x-pulse-label">Today's Pulse</span>{{ x_data.pulse }}</p>
@@ -417,10 +413,10 @@
                 </div>
             </section>
 
-            <section class="panel sky-panel" id="sky" data-block="sky" data-mode="live-sky">
+            <section class="panel sky-panel" id="sky">
                 {{ panel_head("Sky Watch", "Over Copenhagen", "sky") }}
-                <div class="panel-body" data-part="sky">
-                    <div class="trend-list" data-f="list">
+                <div class="panel-body">
+                    <div class="trend-list">
                         {%- for item in (sky_watch or [])[:5] %}
                         <a class="trend-card" href="{{ item.link }}" target="_blank" rel="noopener noreferrer">
                             <div class="trend-name">{{ item.name }}</div>
@@ -445,9 +441,26 @@
 
         <footer class="site-footer">
             <p>Built daily from open feeds, market data, Open-Meteo, NOAA, and xAI summaries.</p>
-            <p>Weather and Sky Watch refresh live. Other blocks load the latest published brief.</p>
         </footer>
     </div>
+
+    <dialog class="modal" id="refresh-dialog" aria-labelledby="refresh-dialog-title">
+        <form method="dialog" class="modal-card" data-refresh-form>
+            <h2 id="refresh-dialog-title">Refresh The Whole Brief?</h2>
+            <p class="modal-text">This runs the full morning update for every block and uses AI tokens, the same as the 05:00 run. It takes about 2 to 3 minutes, and this page reloads itself when the new brief is published.</p>
+            <div class="modal-field" data-token-field hidden>
+                <label for="refresh-token">GitHub Token</label>
+                <input id="refresh-token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+                <p class="modal-hint">Needed once. Use a fine-grained token with Actions: Read And Write on this repository only. It is saved in this browser and nowhere else.</p>
+            </div>
+            <p class="modal-error" data-refresh-error role="alert" hidden></p>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-ghost" data-token-forget hidden>Forget Token</button>
+                <button type="submit" value="cancel" class="btn" formnovalidate>Cancel</button>
+                <button type="submit" value="confirm" class="btn btn-primary" data-refresh-confirm>Refresh All</button>
+            </div>
+        </form>
+    </dialog>
 </body>
 
 </html>

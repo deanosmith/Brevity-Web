@@ -40,8 +40,6 @@ load_dotenv()
 XAI_API_KEY = os.getenv("XAI_API_KEY")
 # Ignore blank overrides from empty GitHub Actions variables.
 XAI_MODEL = (os.getenv("XAI_MODEL") or "grok-4.20-non-reasoning").strip() or "grok-4.20-non-reasoning"
-# Agent turns for the X search; each turn re-sends every fetched post as input.
-X_SEARCH_MAX_TURNS = 2
 ESV_API_KEY = (os.getenv("ESV_API_KEY") or "").strip()
 SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN")
 SLACK_CHANNEL_ID = os.getenv("SLACK_CHANNEL_ID")
@@ -262,6 +260,12 @@ PLASMA_STOPS = (
 )
 
 SITE_HTML_PATH = "index.html"
+# Snapshot of each run's data; `--render-only` rebuilds index.html from it with no API calls.
+BRIEF_DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "resources", "brief-data.json")
+NEWS_KEYS = ("copenhagen", "south_africa", "space_news")
+# Refresh All in the browser dispatches this workflow (same as the 05:00 run).
+GITHUB_REPO = (os.getenv("GITHUB_REPOSITORY") or "deanosmith/Brevity-Web").strip()
+GITHUB_WORKFLOW = "main.yml"
 PDF_PATH = "brevity.pdf"
 _BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SCRIPTURE_VERSES_PATH = os.path.join(_BASE_DIR, "resources", "scripture-verses.json")
@@ -1587,6 +1591,8 @@ def _news_item(entry, prompt, summarize=True):
         headline = tidy_headline(entry["title"] or entry["content_text"][:220])
     return {
         "headline": headline,
+        # Raw text so --render-only can rebuild the badges without trusting stored HTML.
+        "ai_summary": summary,
         "link": entry["link"],
         "source": entry["source"],
     }
@@ -1943,9 +1949,8 @@ def _fetch_x_personalized_grok(limit):
         "category (one of Space, AI, Chips, Energy, Tesla, Palantir, Markets, Denmark, Europe); "
         "sentiment (Bullish, Bearish, Mixed, or Neutral); "
         "post_count (short volume hint like ~12k posts or Rising); "
-        "accounts (up to 2 X handles taken from posts you already found; do not run user searches). "
+        "accounts (up to 2 real X handles driving the conversation). "
         "Also give pulse: one sentence, max 25 words, reading today's overall X mood across these interests. "
-        "Use as few searches as possible: one or two broad searches covering all interests. "
         'Return JSON only: {"pulse":"...","trends":[{"name":"","headline":"","summary":"",'
         '"why_it_matters":"","category":"","sentiment":"","post_count":"","accounts":["@handle"]}]}.'
     )
@@ -1965,15 +1970,7 @@ def _fetch_x_personalized_grok(limit):
             },
             {"role": "user", "content": prompt},
         ],
-        # Searched posts are billed per post and re-sent as input each turn, so keep the search tight.
-        "tools": [{
-            "type": "x_search",
-            "from_date": yesterday,
-            "to_date": today,
-            "enable_image_understanding": False,
-            "enable_video_understanding": False,
-        }],
-        "max_turns": X_SEARCH_MAX_TURNS,
+        "tools": [{"type": "x_search", "from_date": yesterday}],
         "store": False,
     }
 
@@ -1986,8 +1983,6 @@ def _fetch_x_personalized_grok(limit):
             json=payload,
             timeout=90,
         )
-        if response.status_code == 400 and "max_turns" in (response.text or "") and payload.pop("max_turns", None):
-            raise RuntimeError("max_turns rejected; retrying without it")
         raise_for_xai(response, "xAI responses")
         body = response.json()
         record_xai_usage("Grok X search", body)
@@ -2630,31 +2625,6 @@ def send_to_slack(pdf_path):
         logger.error("Slack upload failed after retries.")
 
 
-def build_client_config():
-    """Settings the browser needs to refresh weather, sky, and scripture live."""
-    codes = set(WEATHER_TEXT) | set(WEATHER_ICONS) | set(WEATHER_COLORS)
-    return {
-        "weather": {
-            "lat": WEATHER_LAT,
-            "lon": WEATHER_LON,
-            "timezone": WEATHER_TIMEZONE,
-            "wind_max": WIND_DIAL_MAX_KMH,
-        },
-        "weather_codes": {
-            str(code): {
-                "text": get_weather_text(code),
-                "icon": get_weather_icon(code),
-                "color": get_weather_color(code),
-            }
-            for code in sorted(codes)
-        },
-        "eclipses": [
-            {**event, "when": event["when"].isoformat()} for event in UPCOMING_ECLIPSES
-        ],
-        "verses_url": "resources/scripture-verses.json",
-    }
-
-
 def build_brief_data(today=None):
     """Fetch all sources and assemble the daily brief payload."""
     today = today or copenhagen_now().date()
@@ -2689,11 +2659,36 @@ def build_brief_data(today=None):
         "scripture": scripture,
         "x_trending": x_trending,
         "sky_watch": sky_watch,
-        "client_config": build_client_config(),
+        "github_repo": GITHUB_REPO,
+        "github_workflow": GITHUB_WORKFLOW,
     }
 
 
+def write_brief_data(data, path=BRIEF_DATA_PATH):
+    """Save the run's data so the page can be re-rendered locally without API calls."""
+    with open(path, "w", encoding="utf-8") as file:
+        json.dump(json_safe(data), file, ensure_ascii=False, indent=1)
+        file.write("\n")
+    logger.info("Brief data written to %s", path)
+
+
+def load_brief_data(path=BRIEF_DATA_PATH):
+    """Load saved run data and rebuild keyword badges from the raw AI summaries."""
+    with open(path, encoding="utf-8") as file:
+        data = json.load(file)
+    for key in NEWS_KEYS:
+        for item in data.get(key) or []:
+            if item.get("ai_summary"):
+                item["headline"] = stylize_keywords(item["ai_summary"])
+    return data
+
+
 def main():
+    if "--render-only" in sys.argv[1:]:
+        logger.info("Rendering %s from %s (no API calls)...", SITE_HTML_PATH, BRIEF_DATA_PATH)
+        write_site_html(load_brief_data())
+        return
+
     logger.info("Starting Brevity generation...")
     if XAI_AVAILABLE:
         logger.info("Using xAI model: %s", XAI_MODEL)
@@ -2708,6 +2703,10 @@ def main():
 
     # Public GitHub Pages only needs the rendered homepage.
     write_site_html(data)
+    try:
+        write_brief_data(data)
+    except Exception as exc:
+        logger.warning("Could not save brief data: %s", exc)
 
     # PDF is retained solely for optional Slack delivery.
     pdf_path = None

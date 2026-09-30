@@ -120,7 +120,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
           # Publish only the files the GitHub Pages site actually serves.
-          git add index.html brevity.css brevity-web.css brevity.js resources/favicon.png resources/favicon-16.png resources/favicon-32.png resources/favicon-512.png resources/apple-touch-icon.png resources/scripture-history.json
+          git add index.html brevity.css brevity-web.css brevity.js resources/favicon.png resources/favicon-16.png resources/favicon-32.png resources/favicon-512.png resources/apple-touch-icon.png resources/scripture-history.json resources/brief-data.json
           # Drop previously published artifacts that the site no longer uses.
           git rm -f --ignore-unmatch resources/brevity.json brevity.pdf || true
 

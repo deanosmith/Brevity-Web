@@ -8,18 +8,19 @@ The generator pulls weather, markets, X topics, sky data, and news feeds, summar
 
 - `index.html` for the public website
 - `brevity.css` / `brevity-web.css` for styling
-- `brevity.js` for per-block refresh
+- `brevity.js` for the Refresh All button
 
 PDF generation is kept only for optional Slack delivery and is not part of the public site.
 
-## Refreshing Blocks
+## Refresh All
 
-Every block has a refresh button, and the top bar has **Refresh All**.
+The **Refresh All** button in the top bar reruns the full daily workflow, the same one the 05:00 schedule runs, with force on. It uses the same xAI tokens as a normal morning run.
 
-- Weather reloads live from Open-Meteo.
-- Sky Watch reloads live from NOAA and Launch Library.
-- Scripture shows a new random verse from the bundled King James verse bank. **Refresh All** leaves the verse alone.
-- Markets, X, and news reload from the latest published brief. They need API keys, so they can't be fetched in the browser.
+1. A confirmation dialog must be accepted first.
+2. The first time, it asks for a fine-grained GitHub token with **Actions: Read and write** on this repository (the same kind cron-job.org uses). The token is stored only in that browser's local storage. **Forget Token** in the dialog removes it.
+3. After starting the run, the page checks every 20 seconds and reloads itself once the new brief is published (usually 2–3 minutes).
+
+Opening or reloading the page never triggers a run or uses AI tokens.
 
 ## Sections
 
@@ -58,6 +59,18 @@ Slack delivery is disabled by default. To re-enable it temporarily, set `SEND_TO
 uv sync
 uv run python brevity.py
 ```
+
+### Testing Locally With Real Data
+
+Every run saves its full data to `resources/brief-data.json`, which is committed with each publish. To test template or styling changes against the latest real brief, with no API calls or tokens:
+
+```bash
+git pull
+uv run python brevity.py --render-only
+python3 -m http.server 8000
+```
+
+A full local run needs a valid `XAI_API_KEY` in `.env` (or `~/.env`); otherwise X is empty and news isn't summarised.
 
 Useful environment variables:
 

@@ -81,33 +81,22 @@ h1, h2, h3, p {
     stroke: none;
 }
 
-.icon-btn,
 .btn {
     display: inline-flex;
+    flex: 0 0 auto;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    height: 38px;
+    padding: 0 16px;
+    border-radius: 999px;
     font: inherit;
+    font-size: 13px;
+    font-weight: 600;
     color: var(--text-2);
     background: var(--surface-soft);
     border: 1px solid var(--border);
     cursor: pointer;
-}
-
-.icon-btn {
-    width: 34px;
-    height: 34px;
-    padding: 0;
-    border-radius: 50%;
-}
-
-.btn {
-    flex: 0 0 auto;
-    height: 38px;
-    padding: 0 16px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 600;
 }
 
 .btn-primary {
@@ -116,10 +105,96 @@ h1, h2, h3, p {
     background: linear-gradient(135deg, #7ee7ff 0%, #a5b4fc 100%);
 }
 
-.icon-btn:disabled,
+.btn-ghost {
+    margin-right: auto;
+    background: transparent;
+    border-color: transparent;
+    color: var(--text-3);
+}
+
 .btn:disabled {
     cursor: progress;
     opacity: 0.7;
+}
+
+/* ------------------------------------------------------------ Dialog */
+
+.modal {
+    width: min(92vw, 460px);
+    padding: 0;
+    color: var(--text);
+    background: transparent;
+    border: none;
+}
+
+.modal::backdrop {
+    background: rgba(3, 5, 9, 0.7);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+}
+
+.modal-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 24px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-lg);
+    background: var(--surface-raised);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.modal-card h2 {
+    font-size: 20px;
+}
+
+.modal-text,
+.modal-hint {
+    color: var(--text-2);
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.modal-hint {
+    font-size: 12px;
+    color: var(--text-3);
+}
+
+.modal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.modal-field label {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.modal-field input {
+    height: 40px;
+    padding: 0 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+}
+
+.modal-error {
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    color: #fecaca;
+    background: rgba(248, 113, 113, 0.12);
+    font-size: 13px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 4px;
 }
 
 /* ------------------------------------------------------------ Top Bar & Hero */
@@ -363,24 +438,6 @@ h2 {
     text-decoration: underline;
     text-decoration-color: var(--border-strong);
     text-underline-offset: 3px;
-}
-
-.panel-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex: 0 0 auto;
-}
-
-.panel-stamp {
-    color: var(--text-3);
-    font-size: 12px;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-}
-
-.panel.is-error .panel-stamp {
-    color: var(--red);
 }
 
 .panel-body {
@@ -1240,8 +1297,7 @@ h2 {
 }
 
 @media print {
-    .topbar,
-    .panel-actions {
+    .topbar {
         display: none;
     }
 }
