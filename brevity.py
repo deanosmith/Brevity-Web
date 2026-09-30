@@ -159,6 +159,8 @@ COPENHAGEN_FEEDS = [
 ]
 SPACE_FEEDS = [
     "https://spacenews.com/feed/",
+    "https://spaceflightnow.com/feed/",
+    "https://www.nasaspaceflight.com/feed/",
 ]
 # National government, finance, and diplomacy. Crime and sport are filtered later.
 SOUTH_AFRICA_FEEDS = [
@@ -285,11 +287,11 @@ SCRIPTURE_FALLBACK = [
     },
 ]
 ESV_API_URL = "https://api.esv.org/v3/passage/text/"
-ESV_SOURCE = {
-    "name": "English Standard Version",
-    "url": "https://www.esv.org/",
+# ESV comes from Crossway's API; KJV is the bundled public-domain verse bank.
+SCRIPTURE_TRANSLATIONS = {
+    "Esv": {"name": "English Standard Version", "url": "https://www.esv.org/", "gateway": "ESV"},
+    "Kjv": {"name": "King James Version", "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/", "gateway": "KJV"},
 }
-SCRIPTURE_TRANSLATION = "Esv"
 DEFAULT_HEADERS = {"User-Agent": "Brevity/1.0 (+https://deanosmith.github.io/Brevity-Web/)"}
 REQUEST_TIMEOUT = 30
 AI_TIMEOUT = 60
@@ -769,7 +771,7 @@ def weekday_label(iso_day, today_iso=None):
             if delta == 1:
                 return "Tomorrow"
             if delta == 2:
-                return "In 2 days"
+                return "In 2 Days"
         except ValueError:
             pass
     return parsed.strftime("%a")
@@ -799,11 +801,18 @@ def build_retry_session():
 HTTP_SESSION = build_retry_session()
 
 
+class NoRetry(Exception):
+    """Permanent failure (e.g. bad API key); retrying cannot help."""
+
+
 def retry_call(label, func, attempts=RETRY_ATTEMPTS, base_delay=1.0, max_delay=8.0):
     """Retry a callable with exponential backoff and logging."""
     for attempt in range(1, attempts + 1):
         try:
             return func()
+        except NoRetry as exc:
+            logger.error("%s failed permanently: %s", label, exc)
+            return None
         except Exception as exc:
             if attempt < attempts:
                 delay = min(max_delay, base_delay * (2 ** (attempt - 1)))
@@ -1424,12 +1433,13 @@ def fetch_stocks():
 
         try:
             current_close = closes[-1]
-            prev_close = closes[-2] if len(closes) > 1 else current_close
-            change = current_close - prev_close
-            percent_change = (change / prev_close) * 100 if prev_close else 0.0
+            prev_close = closes[-2] if len(closes) > 1 else None
+            change = current_close - prev_close if prev_close else None
+            percent_change = (change / prev_close) * 100 if prev_close else None
             # Approximate calendar windows with trading sessions.
             percent_7d = _percent_from_closes(closes, 5)
             percent_1m = _percent_from_closes(closes, 21)
+            color_day, arrow_day = _change_style(percent_change)
             color_7d, arrow_7d = _change_style(percent_7d)
             color_1m, arrow_1m = _change_style(percent_1m)
             stock_data[name] = {
@@ -1437,8 +1447,8 @@ def fetch_stocks():
                 "price": current_close,
                 "change": change,
                 "percent": percent_change,
-                "color": "green" if change >= 0 else "red",
-                "arrow": "↑" if change >= 0 else "↓",
+                "color": color_day,
+                "arrow": arrow_day,
                 "percent_7d": percent_7d,
                 "color_7d": color_7d,
                 "arrow_7d": arrow_7d,
@@ -1455,7 +1465,7 @@ def fetch_stocks():
         for data in stock_data.values()
         if isinstance(data, dict) and isinstance(data.get("percent"), (int, float))
     ]
-    stock_data["average_percent"] = sum(percents) / len(percents) if percents else 0.0
+    stock_data["average_percent"] = sum(percents) / len(percents) if percents else None
     return stock_data
 
 
@@ -1471,13 +1481,24 @@ def mark_xai_unavailable(reason):
     XAI_AVAILABLE = False
 
 
+def raise_for_xai(response, label="xAI"):
+    """Raise on xAI errors; auth failures disable xAI and are not retried."""
+    if response.status_code < 400:
+        return
+    body = (response.text or "")[:300]
+    lower = body.lower()
+    message = f"{label} {response.status_code}: {body}"
+    if response.status_code in {401, 403} or "incorrect api key" in lower or "invalid api key" in lower:
+        mark_xai_unavailable(message)
+        raise NoRetry(message)
+    raise RuntimeError(message)
+
+
 def summarize_with_ai(text, prompt_prefix="Summarize this news item:"):
-    """Summarize text using the xAI API."""
+    """Summarize text using the xAI API. Returns None when unavailable."""
     clean_text = strip_html(text)
-    if not clean_text:
-        return "Content unavailable"
-    if not XAI_AVAILABLE:
-        return clean_text
+    if not clean_text or not XAI_AVAILABLE:
+        return None
 
     headers = {
         "Authorization": f"Bearer {XAI_API_KEY}",
@@ -1498,18 +1519,15 @@ def summarize_with_ai(text, prompt_prefix="Summarize this news item:"):
     }
 
     def _summarize():
+        if not XAI_AVAILABLE:
+            raise NoRetry("xAI disabled for this run")
         response = HTTP_SESSION.post(
             "https://api.x.ai/v1/chat/completions",
             headers=headers,
             json=payload,
             timeout=AI_TIMEOUT,
         )
-        if response.status_code >= 400:
-            body = (response.text or "")[:300]
-            lower = body.lower()
-            if response.status_code in {401, 403} or "incorrect api key" in lower or "invalid api key" in lower:
-                mark_xai_unavailable(f"xAI {response.status_code}: {body}")
-            raise RuntimeError(f"xAI {response.status_code}: {body}")
+        raise_for_xai(response)
         content = response.json()["choices"][0]["message"]["content"].strip()
         if not content:
             raise ValueError("Empty summary response")
@@ -1517,9 +1535,35 @@ def summarize_with_ai(text, prompt_prefix="Summarize this news item:"):
 
     summary = retry_call("AI summarization", _summarize)
     if not summary:
-        logger.error("AI summarization failed; falling back to raw text")
-        return clean_text
+        logger.warning("AI summarization failed; using the feed title")
+        return None
     return summary
+
+
+CAPS_RUN_RE = re.compile(r"\b[A-Z][A-Z'’]{3,}(?:[\s-]+[A-Z][A-Z'’]{3,})+\b")
+
+
+def tidy_headline(text):
+    """Convert shouted feed titles (runs of capitalised words) to Title Case."""
+    text = strip_html(text)
+    letters = [ch for ch in text if ch.isalpha()]
+    if letters and all(ch.isupper() for ch in letters):
+        return text.title()
+    return CAPS_RUN_RE.sub(lambda match: match.group(0).title(), text)
+
+
+def _news_item(entry, prompt):
+    """AI summary with keyword badges, or the tidied feed title as fallback."""
+    summary = summarize_with_ai(entry["content_text"], prompt) if XAI_AVAILABLE else None
+    if summary:
+        headline = stylize_keywords(summary)
+    else:
+        headline = tidy_headline(entry["title"] or entry["content_text"][:220])
+    return {
+        "headline": headline,
+        "link": entry["link"],
+        "source": entry["source"],
+    }
 
 
 def fetch_feed(url):
@@ -1564,45 +1608,34 @@ def _rss_entries(url, limit=5):
     return items
 
 
-def fetch_rss_feed(url, limit=5, prompt="Summarize this content:", summarize=True):
-    """Fetch and optionally summarize items from an RSS feed."""
-    news_items = []
-    for entry in _rss_entries(url, limit=limit):
-        try:
-            if summarize and XAI_AVAILABLE:
-                item_summary = summarize_with_ai(entry["content_text"], prompt)
-                item_summary = stylize_keywords(item_summary)
-            else:
-                # Keep the page useful even when AI is unavailable.
-                item_summary = entry["title"] or entry["content_text"]
-            if item_summary:
-                news_items.append({
-                    "headline": item_summary,
-                    "link": entry["link"],
-                    "source": entry["source"],
-                })
-        except Exception as exc:
-            logger.warning("Error parsing feed entry from %s: %s", url, exc)
-
-    return news_items
-
-
-def fetch_first_rss(urls, limit=5, prompt="Summarize this content:", label="feed"):
-    """Try multiple RSS URLs until one returns items."""
+def fetch_news(urls, limit=6, prompt="Summarize this content:", label="feed"):
+    """Collect up to `limit` unique stories across feeds in order, then summarise them."""
+    chosen = []
+    seen = set()
     for url in urls:
+        if len(chosen) >= limit:
+            break
         logger.info("Trying %s feed: %s", label, url)
-        items = fetch_rss_feed(url, limit=limit, prompt=prompt)
-        if items:
-            logger.info("%s feed ok via %s (%s items)", label, url, len(items))
-            return items
-    logger.warning("No items found for %s feeds", label)
-    return []
+        for entry in _rss_entries(url, limit=limit * 2):
+            key = _story_key(entry["title"]) or entry["link"]
+            if not key or key in seen:
+                continue
+            seen.add(key)
+            chosen.append(entry)
+            if len(chosen) >= limit:
+                break
+    if not chosen:
+        logger.warning("No items found for %s feeds", label)
+        return []
+    items = [_news_item(entry, prompt) for entry in chosen]
+    logger.info("%s assembled %s items", label, len(items))
+    return items
 
 
 def fetch_space_news():
     """Fetch and summarize space news."""
     logger.info("Fetching space news...")
-    return fetch_first_rss(
+    return fetch_news(
         SPACE_FEEDS,
         limit=6,
         prompt="Summarize this content:",
@@ -1613,7 +1646,7 @@ def fetch_space_news():
 def fetch_copenhagen_events():
     """Fetch and summarize Copenhagen events/news with source fallbacks."""
     logger.info("Fetching Copenhagen events...")
-    return fetch_first_rss(
+    return fetch_news(
         COPENHAGEN_FEEDS,
         limit=6,
         prompt="Summarize this Copenhagen/Denmark news item.",
@@ -1707,23 +1740,7 @@ def fetch_south_africa_news():
         "Prefer national government decisions, major financial developments, or international relations. "
         "Omit petty municipal, crime, celebrity, and sports detail."
     )
-    news_items = []
-    for entry in chosen:
-        try:
-            if XAI_AVAILABLE:
-                item_summary = summarize_with_ai(entry["content_text"], prompt)
-                item_summary = stylize_keywords(item_summary)
-            else:
-                item_summary = entry["title"] or entry["content_text"]
-            if item_summary:
-                news_items.append({
-                    "headline": item_summary,
-                    "link": entry["link"],
-                    "source": entry["source"],
-                })
-        except Exception as exc:
-            logger.warning("Error summarising South Africa item: %s", exc)
-
+    news_items = [_news_item(entry, prompt) for entry in chosen]
     logger.info("South Africa feed assembled %s items", len(news_items))
     return news_items
 
@@ -1737,20 +1754,59 @@ def _format_post_count(value):
     return text or None
 
 
-def _trend_card(name, post_count=None, category="Personalized", trending_since=None, link=None):
+X_SENTIMENTS = {"bullish", "bearish", "mixed", "neutral"}
+X_HANDLE_RE = re.compile(r"^@?([A-Za-z0-9_]{1,15})$")
+
+
+def _clip_text(value, limit):
+    """Plain text trimmed to a word boundary."""
+    text = strip_html(str(value or "")).strip()
+    if len(text) <= limit:
+        return text
+    return text[:limit].rsplit(" ", 1)[0].rstrip(",;:-") + "…"
+
+
+def _x_accounts(raw):
+    """Validated @handles with profile links."""
+    if isinstance(raw, str):
+        raw = re.split(r"[,\s]+", raw)
+    accounts = []
+    for value in raw or []:
+        match = X_HANDLE_RE.match(str(value).strip())
+        if not match:
+            continue
+        handle = match.group(1)
+        if any(item["handle"].lower() == handle.lower() for item in accounts):
+            continue
+        accounts.append({"handle": handle, "link": f"https://x.com/{handle}"})
+        if len(accounts) >= 3:
+            break
+    return accounts
+
+
+def _trend_card(name, post_count=None, category="Personalized", trending_since=None, link=None, details=None):
     """One card in the Personalized / Sky Watch lists."""
     raw_name = strip_html(str(name or "")).strip()
     if not raw_name:
         return None
+    details = details or {}
     search_term = extract_search_term(raw_name) or raw_name
     since = format_trending_since(trending_since) if trending_since else None
     if since and since[:1].isdigit():
         since = f"Since {since}"
+    sentiment = strip_html(str(details.get("sentiment") or "")).strip().lower()
+    category = _clip_text(category, 24) or "Personalized"
     return {
         "name": raw_name,
+        "headline": _clip_text(details.get("headline"), 90) or raw_name,
+        "summary": _clip_text(details.get("summary"), 320),
+        "why": _clip_text(details.get("why_it_matters"), 180),
+        "sentiment": sentiment.title() if sentiment in X_SENTIMENTS else None,
+        "accounts": _x_accounts(details.get("accounts")),
         "search_term": search_term,
         "post_count": _format_post_count(post_count) or "Live",
-        "category": category or "Personalized",
+        "category": category,
+        "category_style": keyword_style(category),
         "trending_since": since,
         "link": link or x_search_link(search_term),
         "source": category,
@@ -1768,6 +1824,7 @@ def _collect_trend_cards(raw_items, category, max_items):
             post_count=trend.get("post_count", trend.get("tweet_count", trend.get("tweet_volume"))),
             category=trend.get("category") or category,
             trending_since=trend.get("trending_since"),
+            details=trend,
         )
         if not item:
             continue
@@ -1837,9 +1894,9 @@ def _fetch_x_personalized_official(limit):
 
 
 def _fetch_x_personalized_grok(limit):
-    """Live For-You topics from Grok's X search, tuned to this brief's interests."""
+    """Live For-You topics from Grok's X search. Returns (cards, pulse)."""
     if not XAI_AVAILABLE:
-        return []
+        return [], None
 
     today = date.today().isoformat()
     yesterday = (date.today() - timedelta(days=1)).isoformat()
@@ -1848,10 +1905,18 @@ def _fetch_x_personalized_grok(limit):
         "Choose what would matter to someone in Copenhagen who follows spaceflight and SpaceX, "
         "AI and semiconductors, nuclear energy, Tesla, Palantir, and Denmark or Europe. "
         "Skip celebrity gossip, sports scores, and meme coins unless they are market-moving. "
-        "Each name must be a short search query or hashtag, not a sentence. "
-        'Return JSON only: {"trends":[{"name":"Topic","post_count":"Rising or ~12k posts",'
-        '"category":"Space"}]}. '
-        "post_count should be a short volume hint, not a paragraph."
+        "For each topic give: name (a short search query or hashtag, not a sentence); "
+        "headline (Title Case, max 8 words); "
+        "summary (two factual sentences on what happened and what people on X are saying, "
+        "with specific names, numbers, and dates); "
+        "why_it_matters (one short sentence on why this reader should care); "
+        "category (one of Space, AI, Chips, Energy, Tesla, Palantir, Markets, Denmark, Europe); "
+        "sentiment (Bullish, Bearish, Mixed, or Neutral); "
+        "post_count (short volume hint like ~12k posts or Rising); "
+        "accounts (up to 2 real X handles driving the conversation). "
+        "Also give pulse: one sentence reading today's overall X mood across these interests. "
+        'Return JSON only: {"pulse":"...","trends":[{"name":"","headline":"","summary":"",'
+        '"why_it_matters":"","category":"","sentiment":"","post_count":"","accounts":["@handle"]}]}.'
     )
     headers = {
         "Authorization": f"Bearer {XAI_API_KEY}",
@@ -1874,79 +1939,76 @@ def _fetch_x_personalized_grok(limit):
     }
 
     def _request():
+        if not XAI_AVAILABLE:
+            raise NoRetry("xAI disabled for this run")
         response = HTTP_SESSION.post(
             "https://api.x.ai/v1/responses",
             headers=headers,
             json=payload,
             timeout=90,
         )
-        if response.status_code >= 400:
-            body = (response.text or "")[:300]
-            lower = body.lower()
-            if response.status_code in {401, 403} or "incorrect api key" in lower or "invalid api key" in lower:
-                mark_xai_unavailable(f"xAI {response.status_code}: {body}")
-            raise RuntimeError(f"xAI responses {response.status_code}: {body}")
-        return response.json()
+        raise_for_xai(response, "xAI responses")
+        text = responses_output_text(response.json())
+        if not extract_json_object(text):
+            raise ValueError("Grok X search returned no JSON")
+        return text
 
-    result = retry_call("Grok X search", _request, attempts=2)
-    parsed = extract_json_object(responses_output_text(result)) if result else None
+    def _chat():
+        if not XAI_AVAILABLE:
+            raise NoRetry("xAI disabled for this run")
+        response = HTTP_SESSION.post(
+            "https://api.x.ai/v1/chat/completions",
+            headers=headers,
+            json={
+                "model": XAI_MODEL,
+                "messages": [
+                    {"role": "system", "content": "You curate a tight morning X briefing. Output JSON only."},
+                    {"role": "user", "content": prompt},
+                ],
+                "response_format": {"type": "json_object"},
+            },
+            timeout=AI_TIMEOUT,
+        )
+        raise_for_xai(response)
+        return response.json()["choices"][0]["message"]["content"].strip()
 
-    if not parsed:
-        # Chat completions fallback without live search still beats an empty column.
-        chat_payload = {
-            "model": XAI_MODEL,
-            "messages": [
-                {
-                    "role": "system",
-                    "content": "You curate a tight morning X briefing. Output JSON only.",
-                },
-                {"role": "user", "content": prompt},
-            ],
-            "response_format": {"type": "json_object"},
-        }
-
-        def _chat():
-            response = HTTP_SESSION.post(
-                "https://api.x.ai/v1/chat/completions",
-                headers=headers,
-                json=chat_payload,
-                timeout=AI_TIMEOUT,
-            )
-            if response.status_code >= 400:
-                body = (response.text or "")[:300]
-                lower = body.lower()
-                if response.status_code in {401, 403} or "incorrect api key" in lower or "invalid api key" in lower:
-                    mark_xai_unavailable(f"xAI {response.status_code}: {body}")
-                raise RuntimeError(f"xAI {response.status_code}: {body}")
-            return response.json()["choices"][0]["message"]["content"].strip()
-
-        content = retry_call("Grok X briefing", _chat, attempts=2)
-        parsed = extract_json_object(content) if content else None
-
-    raw_trends = []
-    if isinstance(parsed, dict):
+    cards = []
+    pulse = None
+    # Live X search first; the chat model (no live search) only tops up a short list.
+    for label, call in (("Grok X search", _request), ("Grok X briefing", _chat)):
+        if len(cards) >= limit or not XAI_AVAILABLE:
+            break
+        parsed = extract_json_object(retry_call(label, call, attempts=2) or "")
+        if not parsed:
+            continue
         raw_trends = parsed.get("trends") or parsed.get("topics") or parsed.get("items") or []
-    cards = _collect_trend_cards(raw_trends, "Personalized", limit)
-    if cards:
-        logger.info("Grok returned %s personalized X topics.", len(cards))
-    return cards
+        known = {card["name"].lower() for card in cards}
+        extra = [card for card in _collect_trend_cards(raw_trends, "Personalized", limit) if card["name"].lower() not in known]
+        cards.extend(extra[: limit - len(cards)])
+        pulse = pulse or _clip_text(parsed.get("pulse"), 240) or None
+        logger.info("%s gave %s topics (%s total).", label, len(extra), len(cards))
+    return cards, pulse
 
 
 def fetch_x_trending(limit=5):
     """
-    Personalized X topics for the left Watch column.
+    Personalized X topics with context.
 
     Tries the official personalized_trends endpoint first. That route now
     requires X Premium, so Grok X search is the reliable fallback, tuned to
     this brief (Copenhagen, space, AI, energy).
     """
     logger.info("Fetching personalized X topics...")
-    official = _fetch_x_personalized_official(limit)
-    personalized = official if official else _fetch_x_personalized_grok(limit)
-    if not personalized:
+    pulse = None
+    source = "X Personalized Trends"
+    topics = _fetch_x_personalized_official(limit)
+    if not topics:
+        topics, pulse = _fetch_x_personalized_grok(limit)
+        source = "Grok X Search"
+    if not topics:
         logger.warning("Personalized X topics unavailable.")
-        return []
-    return [("Personalized", personalized)]
+        return None
+    return {"pulse": pulse, "topics": topics, "source": source}
 
 
 def _moon_watch(now_utc):
@@ -2033,9 +2095,9 @@ def _sky_aurora_card():
         aurora = best
 
     if kp is None:
-        chance = "No Geomagnetic Reading"
-        name = "Aurora"
-    elif kp >= 6 or (aurora is not None and aurora >= 20):
+        logger.warning("No Kp reading; skipping aurora card")
+        return None
+    if kp >= 6 or (aurora is not None and aurora >= 20):
         chance = "Visible Aurora Possible Tonight"
         name = "Aurora Watch"
     elif kp >= 4:
@@ -2063,13 +2125,16 @@ def _sky_solar_card():
     )
     longs = [
         row for row in (xrays or [])
-        if isinstance(row, dict) and row.get("energy") == "0.1-0.8nm"
+        if isinstance(row, dict)
+        and row.get("energy") == "0.1-0.8nm"
+        and (safe_number(row.get("flux")) or 0) > 0
     ]
     flux = longs[-1].get("flux") if longs else None
     flare = _solar_flare_class(flux)
     if not flare:
-        name, meta = "Solar Flux", "No Current Reading"
-    elif flare.startswith("X") or flare.startswith("M"):
+        logger.warning("No GOES X-ray reading; skipping solar card")
+        return None
+    if flare.startswith("X") or flare.startswith("M"):
         name, meta = f"Solar Class {flare}", "Active Sun, Major Flare Risk"
     elif flare.startswith("C"):
         name, meta = f"Solar Class {flare}", "Modest C-Class Activity"
@@ -2156,6 +2221,32 @@ def _sky_eclipse_card(now_utc):
     }
 
 
+def _moon_milestone_cards(now_utc):
+    """Next full and new moon. Local backup cards when a live source fails."""
+    known_new = datetime(2000, 1, 6, 18, 14, tzinfo=timezone.utc)
+    synodic = 29.530588853
+    phase = (((now_utc - known_new).total_seconds() / 86400.0) / synodic) % 1.0
+    cards = []
+    for name, target, link in (
+        ("Next Full Moon", 0.5, "https://moon.nasa.gov/moon-in-motion/moon-phases/"),
+        ("Next New Moon", 1.0, "https://moon.nasa.gov/moon-in-motion/moon-phases/"),
+    ):
+        days = ((target - phase) % 1.0) * synodic
+        when = now_utc + timedelta(days=days)
+        whole = int(round(days))
+        detail = "Tonight" if whole == 0 else ("In 1 Day" if whole == 1 else f"In {whole} Days")
+        date_label = when.astimezone(COPENHAGEN_TZ).strftime("%a %b %d").replace(" 0", " ")
+        cards.append({
+            "name": name,
+            "post_count": f"{name.replace('Next ', '')} {detail}",
+            "trending_since": f"On {date_label}",
+            "link": link,
+            "category": "Sky Watch",
+            "sort_at": when.isoformat(),
+        })
+    return cards
+
+
 def fetch_sky_watch(limit=5):
     """
     Copenhagen-facing sky briefing: moon, aurora, solar weather, next launch, next eclipse.
@@ -2182,6 +2273,11 @@ def fetch_sky_watch(limit=5):
         if not card or not card.get("name"):
             continue
         cards.append(card)
+
+    for backup in _moon_milestone_cards(now_utc):
+        if len(cards) >= limit:
+            break
+        cards.append(backup)
 
     far_future = datetime.max.replace(tzinfo=timezone.utc)
 
@@ -2220,19 +2316,20 @@ def _is_esv_scripture(verse):
     return translation == "esv" or "english standard" in label
 
 
-def _esv_scripture_payload(ref, book="", text=""):
-    """Shape an English Standard Version verse for the template."""
+def _scripture_payload(ref, book="", text="", translation="Esv"):
+    """Shape a verse for the template."""
     ref = str(ref or "").strip()
+    source = SCRIPTURE_TRANSLATIONS.get(translation) or SCRIPTURE_TRANSLATIONS["Esv"]
     payload = {
         "text": str(text or "").strip(),
         "focus": ref,
         "ref": ref,
         "book": str(book or "").strip(),
-        "translation": SCRIPTURE_TRANSLATION,
-        "translation_label": ESV_SOURCE["name"],
-        "source": dict(ESV_SOURCE),
+        "translation": translation,
+        "translation_label": source["name"],
+        "source": {"name": source["name"], "url": source["url"]},
     }
-    link = scripture_gateway_url(ref)
+    link = scripture_gateway_url(ref, version=source["gateway"])
     if link:
         payload["link"] = link
     return payload
@@ -2278,13 +2375,16 @@ def _fetch_esv_text(ref):
 
 
 def _resolve_scripture_text(verse):
-    """Load English Standard Version text from Crossway. Never use another translation."""
+    """Prefer ESV from Crossway; fall back to the bundled King James text."""
     ref = str((verse or {}).get("ref") or "").strip()
     book = str((verse or {}).get("book") or "").strip()
     esv_text = _fetch_esv_text(ref)
-    if not esv_text:
-        return None
-    return _esv_scripture_payload(ref, book=book, text=esv_text)
+    if esv_text:
+        return _scripture_payload(ref, book=book, text=esv_text, translation="Esv")
+    kjv_text = str((verse or {}).get("text") or "").strip()
+    if kjv_text:
+        return _scripture_payload(ref, book=book, text=kjv_text, translation="Kjv")
+    return None
 
 
 def _load_scripture_verses():
@@ -2306,6 +2406,7 @@ def _load_scripture_verses():
         cleaned.append({
             "ref": ref,
             "book": str(item.get("book") or "").strip(),
+            "text": str(item.get("text") or "").strip(),
         })
     return cleaned or list(SCRIPTURE_FALLBACK)
 
@@ -2334,11 +2435,11 @@ def _save_scripture_history(history):
 
 def pick_scripture(seed_date=None):
     """
-    Choose a random Proverbs or Ecclesiastes verse and load ESV text.
+    Choose a random Proverbs or Ecclesiastes verse.
 
     Verses are not reused until every verse in the bank has been shown.
-    Re-running on the same date keeps the same reference. Text comes only from
-    Crossway's English Standard Version API.
+    Re-running on the same date keeps the same reference. ESV text is used when
+    ESV_API_KEY works, otherwise the bundled King James text.
     """
     today = seed_date or date.today()
     today_iso = today.isoformat() if hasattr(today, "isoformat") else str(today)
@@ -2354,13 +2455,14 @@ def pick_scripture(seed_date=None):
         current.get("date") == today_iso
         and current.get("ref")
         and current.get("text")
-        and _is_esv_scripture(current)
+        and (_is_esv_scripture(current) or not ESV_API_KEY)
     ):
         logger.info("Reusing today's scripture: %s", current.get("ref"))
-        return _esv_scripture_payload(
+        return _scripture_payload(
             current.get("ref"),
             book=current.get("book") or "",
             text=current.get("text") or "",
+            translation=current.get("translation") or "Esv",
         )
 
     chosen = None
@@ -2385,7 +2487,7 @@ def pick_scripture(seed_date=None):
         "used_refs": used_refs,
         "current": {
             "date": today_iso,
-            **(payload or _esv_scripture_payload(chosen["ref"], book=chosen.get("book") or "")),
+            **(payload or _scripture_payload(chosen["ref"], book=chosen.get("book") or "")),
         },
     }
     try:
@@ -2393,10 +2495,7 @@ def pick_scripture(seed_date=None):
     except Exception as exc:
         logger.warning("Could not save scripture history: %s", exc)
     if not payload or not payload.get("text"):
-        logger.warning(
-            "English Standard Version text unavailable for %s; hiding scripture panel.",
-            chosen["ref"],
-        )
+        logger.warning("Scripture text unavailable for %s; hiding scripture panel.", chosen["ref"])
         return None
     remaining = max(0, len(verses) - len(used_refs))
     logger.info(
@@ -2415,7 +2514,10 @@ def pick_scripture(seed_date=None):
 
 def render_html(data):
     """Render the Jinja2 template for the website (and Slack PDF when enabled)."""
-    env = Environment(loader=FileSystemLoader(os.path.dirname(__file__) or "."))
+    env = Environment(
+        loader=FileSystemLoader(os.path.dirname(__file__) or "."),
+        autoescape=True,
+    )
     template = env.get_template("brevity_template.html")
     return template.render(**data)
 
@@ -2483,6 +2585,31 @@ def send_to_slack(pdf_path):
         logger.error("Slack upload failed after retries.")
 
 
+def build_client_config():
+    """Settings the browser needs to refresh weather, sky, and scripture live."""
+    codes = set(WEATHER_TEXT) | set(WEATHER_ICONS) | set(WEATHER_COLORS)
+    return {
+        "weather": {
+            "lat": WEATHER_LAT,
+            "lon": WEATHER_LON,
+            "timezone": WEATHER_TIMEZONE,
+            "wind_max": WIND_DIAL_MAX_KMH,
+        },
+        "weather_codes": {
+            str(code): {
+                "text": get_weather_text(code),
+                "icon": get_weather_icon(code),
+                "color": get_weather_color(code),
+            }
+            for code in sorted(codes)
+        },
+        "eclipses": [
+            {**event, "when": event["when"].isoformat()} for event in UPCOMING_ECLIPSES
+        ],
+        "verses_url": "resources/scripture-verses.json",
+    }
+
+
 def build_brief_data(today=None):
     """Fetch all sources and assemble the daily brief payload."""
     today = today or copenhagen_now().date()
@@ -2498,13 +2625,17 @@ def build_brief_data(today=None):
     day_of_year = today.timetuple().tm_yday
     days_in_year = 366 if calendar.isleap(today.year) else 365
     year_percent = (day_of_year / days_in_year) * 100
-    generated_at = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M %Z")
+    generated = copenhagen_now()
 
     return {
-        "date": today.strftime("%A, %B %d"),
+        "date": today.strftime("%A, %B %d").replace(" 0", " "),
         "iso_date": today.isoformat(),
-        "generated_at": generated_at,
+        "generated_at": generated.strftime("%Y-%m-%d %H:%M %Z"),
+        "generated_iso": generated.isoformat(timespec="seconds"),
+        "generated_clock": format_clock_12(generated.strftime("%H:%M")),
         "year_percent": year_percent,
+        "day_of_year": day_of_year,
+        "days_in_year": days_in_year,
         "weather": weather,
         "stocks": stocks,
         "space_news": space_news,
@@ -2513,6 +2644,7 @@ def build_brief_data(today=None):
         "scripture": scripture,
         "x_trending": x_trending,
         "sky_watch": sky_watch,
+        "client_config": build_client_config(),
     }
 
 
@@ -2525,7 +2657,7 @@ def main():
     if ESV_API_KEY:
         logger.info("Scripture will use the English Standard Version API.")
     else:
-        logger.warning("ESV_API_KEY missing; scripture panel will stay hidden.")
+        logger.warning("ESV_API_KEY missing; scripture will use the bundled King James text.")
 
     data = build_brief_data()
 

@@ -53,6 +53,7 @@ jobs:
             index.html
             brevity.css
             brevity-web.css
+            brevity.js
             resources/favicon.png
             resources/favicon-16.png
             resources/favicon-32.png

@@ -8,8 +8,18 @@ The generator pulls weather, markets, X topics, sky data, and news feeds, summar
 
 - `index.html` for the public website
 - `brevity.css` / `brevity-web.css` for styling
+- `brevity.js` for per-block refresh
 
 PDF generation is kept only for optional Slack delivery and is not part of the public site.
+
+## Refreshing Blocks
+
+Every block has a refresh button, and the top bar has **Refresh All**.
+
+- Weather reloads live from Open-Meteo.
+- Sky Watch reloads live from NOAA and Launch Library.
+- Scripture shows a new random verse from the bundled King James verse bank. **Refresh All** leaves the verse alone.
+- Markets, X, and news reload from the latest published brief. They need API keys, so they can't be fetched in the browser.
 
 ## Sections
 
@@ -17,9 +27,10 @@ PDF generation is kept only for optional Slack delivery and is not part of the p
 - Copenhagen weather (Open-Meteo), including next 2 days and peak rain time
 - General stock watchlist
 - Daily Proverbs or Ecclesiastes verse (no repeats until the full bank has been shown)
-- Personalized topics from X
+- For You On X: topics with a summary, why it matters, sentiment, volume, key accounts, and an overall pulse
 - Sky Watch (moon, aurora, solar weather, next launch, next eclipse)
 - Copenhagen news
+- South Africa news
 - Space news
 
 ## Automation
@@ -37,7 +48,7 @@ Create a fine-grained GitHub token for this repo with **Actions: Read and write*
 
 Published artifacts are committed back to `main`, which GitHub Pages serves from the repository root.
 
-The daily verse is chosen from Proverbs and Ecclesiastes and loaded only from Crossway's [ESV API](https://api.esv.org/). Set `ESV_API_KEY` locally and as the GitHub Actions secret of the same name. Shown references are stored in `resources/scripture-history.json` so the same verse is not reused until every verse has appeared. That history file is committed with each publish. If the API key is missing, the Scripture panel is omitted rather than showing another translation.
+The daily verse is chosen from Proverbs and Ecclesiastes. Text comes from Crossway's [ESV API](https://api.esv.org/) when `ESV_API_KEY` is set, both locally and as the GitHub Actions secret of the same name. Without the key, or if the API fails, the bundled King James text in `resources/scripture-verses.json` is used. Shown references are stored in `resources/scripture-history.json` so the same verse is not reused until every verse has appeared. That history file is committed with each publish.
 
 Slack delivery is disabled by default. To re-enable it temporarily, set `SEND_TO_SLACK=true` in the workflow environment and provide Slack secrets.
 
@@ -51,7 +62,7 @@ uv run python brevity.py
 Useful environment variables:
 
 - `XAI_API_KEY` required for summarisation and personalized X topics
-- `ESV_API_KEY` required for English Standard Version scripture; create a free key at [api.esv.org](https://api.esv.org/)
+- `ESV_API_KEY` optional; enables English Standard Version scripture (free key at [api.esv.org](https://api.esv.org/)), otherwise King James is used
 - `XAI_MODEL` optional model override (default: `grok-4.20-non-reasoning`)
 - `CONSUMER_KEY`, `CONSUMER_SECRET`, `ACCESS_TOKEN`, `ACCESS_TOKEN_SECRET` optional; used if the X account has Premium personalized trends
 - `SEND_TO_SLACK=true` only if you explicitly want Slack upload again (generates a PDF for Slack only)

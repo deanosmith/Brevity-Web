@@ -1,502 +1,451 @@
 <!DOCTYPE html>
 <html lang="en">
 
+{%- macro icon(name) -%}
+{%- if name == "x" -%}
+<svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+{%- else -%}
+<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+{%- if name == "refresh" -%}<path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/>
+{%- elif name == "weather" -%}<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+{%- elif name == "markets" -%}<path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 6-6"/><path d="M16 7h4v4"/>
+{%- elif name == "scripture" -%}<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/>
+{%- elif name == "sky" -%}<path d="M20 13.5A8 8 0 1 1 10.5 4a6.5 6.5 0 0 0 9.5 9.5z"/>
+{%- elif name == "pin" -%}<path d="M12 22s7-7.1 7-12.5a7 7 0 1 0-14 0C5 14.9 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.5"/>
+{%- elif name == "globe" -%}<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>
+{%- elif name == "rocket" -%}<path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2"/><path d="M9 15l-3-3c1.5-4 5-9 12-9 0 7-5 10.5-9 12z"/><circle cx="14.5" cy="9.5" r="1.5"/>
+{%- elif name == "external" -%}<path d="M7 17L17 7"/><path d="M8 7h9v9"/>
+{%- endif -%}
+</svg>
+{%- endif -%}
+{%- endmacro -%}
+
+{%- macro panel_head(title, subtitle, icon_name, action="Refresh", source=None) -%}
+<header class="panel-head">
+    <div class="panel-title">
+        <span class="panel-icon">{{ icon(icon_name) }}</span>
+        <div class="panel-title-copy">
+            <h2>{{ title }}</h2>
+            <p class="panel-sub">
+                <span data-f="subtitle">{{ subtitle }}</span>
+                {%- if source and source.url %}
+                · <a class="source-link" href="{{ source.url }}" target="_blank" rel="noopener noreferrer">{{ source.name }}</a>
+                {%- endif %}
+            </p>
+        </div>
+    </div>
+    <div class="panel-actions">
+        <span class="panel-stamp" data-stamp aria-live="polite">Updated {{ generated_clock }}</span>
+        <button type="button" class="icon-btn" data-refresh aria-label="{{ action }}: {{ title }}" title="{{ action }}">{{ icon("refresh") }}</button>
+    </div>
+</header>
+{%- endmacro -%}
+
+{%- macro rain_timeline(tl, key, head_text, compact=False) -%}
+<div class="rain-timeline{% if compact %} compact{% endif %}" data-rain="{{ key }}" style="--rain-color: {{ tl.color or '#40c4ff' }};">
+    <div class="rain-timeline-head">
+        <span class="rain-timeline-peak" data-f="peak">{{ head_text }}</span>
+    </div>
+    <div class="rain-timeline-track" aria-hidden="true">
+        {%- for point in tl.points %}
+        <div class="rain-bar" style="--rain: {{ point.precip if point.precip is not none else 0 }};" title="{{ point.clock or '' }} · {{ point.precip if point.precip is not none else 0 }}%"><span class="rain-bar-fill"></span></div>
+        {%- endfor %}
+    </div>
+    <div class="rain-timeline-labels">
+        {%- for point in tl.points %}
+        <span class="rain-hour{% if not point.label %} is-empty{% endif %}">{{ point.label or "" }}</span>
+        {%- endfor %}
+    </div>
+</div>
+{%- endmacro -%}
+
+{%- macro news_panel(block, title, subtitle, icon_name, items, empty_text, extra_class="") -%}
+<section class="panel news-panel {{ extra_class }}" id="{{ block }}" data-block="{{ block }}" data-mode="snapshot">
+    {{ panel_head(title, subtitle, icon_name) }}
+    <div class="panel-body" data-part="{{ block }}">
+        {%- if items %}
+        <div class="news-list">
+            {%- for item in items %}
+            <a class="news-item" href="{{ item.link }}" target="_blank" rel="noopener noreferrer">
+                <div class="news-headline">{{ item.headline }}</div>
+                <div class="news-foot">
+                    <span class="news-source">{{ item.source or "Source" }}</span>
+                    <span class="news-arrow">{{ icon("external") }}</span>
+                </div>
+            </a>
+            {%- endfor %}
+        </div>
+        {%- else %}
+        <div class="empty-state">{{ empty_text }}</div>
+        {%- endif %}
+    </div>
+</section>
+{%- endmacro -%}
+
+{%- set weather_today = weather.today if weather and weather.today else None -%}
+{%- set market_avg = stocks.average_percent if stocks else None -%}
+{%- set market_class = 'grey' if market_avg is none else ('green' if market_avg >= 0 else 'red') -%}
+{%- set market_avg_text = '—' if market_avg is none else ('%+.1f'|format(market_avg) ~ '%') -%}
+{%- set x_data = x_trending if x_trending and x_trending.topics else None -%}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Brevity{% if date %} · {{ date }}{% endif %}</title>
-    <meta name="description" content="Daily automated morning brief covering weather, markets, X, sky watch, and curated news.">
+    <meta name="description" content="Daily morning brief covering weather, markets, X, sky watch, and curated news.">
     <meta name="brevity-date" content="{{ iso_date }}">
+    <meta name="brevity-generated" content="{{ generated_iso }}" data-clock="{{ generated_clock }}">
     <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#07080c">
     <link rel="icon" href="resources/favicon.png?v=eclipse" type="image/png">
     <link rel="icon" href="resources/favicon-32.png?v=eclipse" type="image/png" sizes="32x32">
     <link rel="icon" href="resources/favicon-16.png?v=eclipse" type="image/png" sizes="16x16">
     <link rel="apple-touch-icon" href="resources/apple-touch-icon.png?v=eclipse" sizes="180x180">
-    <link rel="stylesheet" href="brevity.css?v=12h-clock2">
-    <link rel="stylesheet" href="brevity-web.css?v=12h-clock2" media="screen">
+    <link rel="preconnect" href="https://fonts.googleapis.com" media="screen">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin media="screen">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:ital,wght@1,400;1,500&display=swap" media="screen">
+    <link rel="stylesheet" href="brevity.css?v=revamp1">
+    <link rel="stylesheet" href="brevity-web.css?v=revamp1" media="screen">
+    <script type="application/json" id="brevity-config">{{ client_config|tojson }}</script>
+    <script src="brevity.js?v=revamp1" defer></script>
 </head>
 
 <body>
     <div class="page">
-        <header class="site-header panel">
-            <div class="header-top">
-                <h1>
-                    <span class="date-text">{{ date }}</span>
-                </h1>
-                <div class="year-progress" aria-label="Year Progress">
-                    <div class="year-progress-meta">
-                        <span class="year-progress-label">Year Progress</span>
-                        <span class="year-progress-value">{{ "%.1f"|format(year_percent) }}%</span>
-                    </div>
-                    <div class="year-progress-track">
-                        <div class="year-progress-fill" style="width: {{ year_percent|round(1) }}%;"></div>
-                    </div>
+        <nav class="topbar" aria-label="Sections">
+            <a class="brand" href="#top" aria-label="Brevity Home">
+                <span class="brand-mark" aria-hidden="true">B</span>
+                <span class="brand-name">Brevity</span>
+            </a>
+            <div class="topbar-links">
+                <a href="#weather">Weather</a>
+                <a href="#markets">Markets</a>
+                <a href="#scripture">Scripture</a>
+                <a href="#x">X</a>
+                <a href="#sky">Sky</a>
+                <a href="#copenhagen">News</a>
+            </div>
+            <button type="button" class="btn btn-primary" data-refresh-all>
+                {{ icon("refresh") }}<span>Refresh All</span>
+            </button>
+        </nav>
+
+        <header class="hero" id="top">
+            <div class="hero-copy">
+                <p class="eyebrow">Morning Brief · {{ weather.location if weather and weather.location else "Copenhagen" }}</p>
+                <h1 class="hero-title">{{ date }}</h1>
+                <p class="hero-sub">Generated at {{ generated_clock }}. Refresh any block for the latest.</p>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-label">Right Now</span>
+                    <span class="stat-value">
+                        <span data-w="now-icon">{{ weather_today.current.icon if weather_today and weather_today.current else "—" }}</span>
+                        <span data-w="now-temp">{% if weather_today and weather_today.current and weather_today.current.temp is not none %}{{ weather_today.current.temp }}°{% else %}—{% endif %}</span>
+                    </span>
+                    <span class="stat-sub" data-w="now-cond">{{ weather_today.current.condition if weather_today and weather_today.current else "Weather Unavailable" }}</span>
+                </div>
+                <div class="stat" data-part="markets">
+                    <span class="stat-label">Watchlist Today</span>
+                    <span class="stat-value {{ market_class }}">{{ market_avg_text }}</span>
+                    <span class="stat-sub">Average Day Move</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Year Progress</span>
+                    <span class="stat-value">{{ "%.1f"|format(year_percent) }}%</span>
+                    <span class="progress" aria-hidden="true"><span class="progress-fill" style="width: {{ year_percent|round(1) }}%;"></span></span>
+                    <span class="stat-sub">Day {{ day_of_year }} Of {{ days_in_year }}</span>
                 </div>
             </div>
         </header>
 
         <main class="layout">
-            <section class="panel weather-panel">
-                <div class="panel-head">
-                    <div>
-                        <h2>Weather</h2>
-                        <p class="panel-sub">
-                            {{ weather.location if weather and weather.location else "Copenhagen" }}
-                            {% if weather and weather.source %}
-                            · Source:
-                            <a class="source-link" href="{{ weather.source.url }}" target="_blank" rel="noopener noreferrer">{{ weather.source.name }}</a>
-                            {% endif %}
-                        </p>
+            <section class="panel weather-panel" id="weather" data-block="weather" data-mode="live-weather">
+                {{ panel_head("Weather", weather.location if weather and weather.location else "Copenhagen", "weather", source=weather.source if weather else None) }}
+                <div class="panel-body" data-part="weather">
+                {%- if weather_today %}
+                {%- set today = weather_today %}
+                {%- set dials = today.dials %}
+                <div class="weather-top">
+                    <div class="weather-now-column">
+                        <div class="weather-now-card" style="--now-color: {{ today.current.color if today.current else today.color }};">
+                            <div class="weather-hero-icon" data-w="now-icon">{{ today.current.icon if today.current else today.icon }}</div>
+                            <div class="weather-now-copy">
+                                <div class="weather-now-temp" data-w="now-temp" style="color: {{ today.high_color or '#f2f2f2' }};">
+                                    {%- if today.current and today.current.temp is not none %}{{ today.current.temp }}°{% elif today.high is not none %}{{ today.high }}°{% else %}—{% endif -%}
+                                </div>
+                                <div class="weather-now-condition" data-w="now-cond">{{ (today.current.condition if today.current else today.condition) or "—" }}</div>
+                                <div class="weather-now-feels" data-w="now-feels">{% if today.current and today.current.feels_like is not none %}Feels Like {{ today.current.feels_like }}°{% endif %}</div>
+                            </div>
+                        </div>
+
+                        <div class="sun-path" role="img" aria-label="Sunrise and sunset">
+                            <div class="sun-event">
+                                <svg class="sun-event-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                                    <defs><clipPath id="sunriseClip"><rect x="0" y="0" width="32" height="21" /></clipPath></defs>
+                                    <g clip-path="url(#sunriseClip)">
+                                        <circle cx="16" cy="21" r="7" fill="#ffd166" stroke="#cd9b50" stroke-width="1.4" />
+                                        <g fill="none" stroke="#cd9b50" stroke-width="1.5" stroke-linecap="round">
+                                            <line x1="16" y1="4" x2="16" y2="7.5" />
+                                            <line x1="7.2" y1="8.2" x2="9.6" y2="10.6" />
+                                            <line x1="24.8" y1="8.2" x2="22.4" y2="10.6" />
+                                            <line x1="4.5" y1="17" x2="8" y2="17" />
+                                            <line x1="27.5" y1="17" x2="24" y2="17" />
+                                        </g>
+                                    </g>
+                                    <line x1="3" y1="21" x2="29" y2="21" stroke="#c8c4bc" stroke-width="1.5" stroke-linecap="round" />
+                                </svg>
+                                <span class="sun-event-label">Sunrise</span>
+                                <span class="sun-event-time" data-w="sunrise">{{ today.sunrise or "—" }}</span>
+                            </div>
+                            <div class="sun-event">
+                                <svg class="sun-event-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+                                    <defs><clipPath id="sunsetClip"><rect x="0" y="0" width="32" height="21" /></clipPath></defs>
+                                    <g clip-path="url(#sunsetClip)">
+                                        <circle cx="16" cy="23" r="7" fill="#e8a45a" stroke="#cd9b50" stroke-width="1.4" />
+                                        <g fill="none" stroke="#cd9b50" stroke-width="1.5" stroke-linecap="round">
+                                            <line x1="16" y1="8" x2="16" y2="11" />
+                                            <line x1="8.4" y1="11.2" x2="10.6" y2="13.2" />
+                                            <line x1="23.6" y1="11.2" x2="21.4" y2="13.2" />
+                                        </g>
+                                    </g>
+                                    <line x1="3" y1="21" x2="29" y2="21" stroke="#c8c4bc" stroke-width="1.5" stroke-linecap="round" />
+                                </svg>
+                                <span class="sun-event-label">Sunset</span>
+                                <span class="sun-event-time" data-w="sunset">{{ today.sunset or "—" }}</span>
+                            </div>
+                            {%- if today.sun_path and today.sun_path.daylight %}
+                            <div class="sun-event sun-daylight">
+                                <span class="sun-event-label">Daylight</span>
+                                <span class="sun-event-time" data-w="daylight">{{ today.sun_path.daylight }}</span>
+                            </div>
+                            {%- endif %}
+                        </div>
+                    </div>
+
+                    <div class="dial-row">
+                        <div class="dial-card">
+                            <div class="dial dial-temp" data-dial="temp" style="--start: {{ (dials.temp.low_progress * 100)|round(1) }}; --end: {{ (dials.temp.high_progress * 100)|round(1) }}; --accent: {{ dials.temp.high_color }};">
+                                <div class="dial-face">
+                                    <div class="dial-label">Temp</div>
+                                    <div class="dial-value" data-w="dial-temp-value" style="color: {{ today.high_color or '#ffd166' }};">{% if today.high is not none %}{{ today.high }}°{% else %}—{% endif %}</div>
+                                    <div class="dial-sub" data-w="dial-temp-sub" style="color: {{ today.low_color or '#8ab4ff' }};">{% if today.low is not none %}Low {{ today.low }}°{% endif %}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dial-card">
+                            <div class="dial" data-dial="rain" style="--progress: {{ (dials.rain.progress * 100)|round(1) }}; --accent: {{ dials.rain.color }};">
+                                <div class="dial-face">
+                                    <div class="dial-label">Rain</div>
+                                    <div class="dial-value" data-w="dial-rain-value" style="color: {{ dials.rain.color }};">{% if today.rain_chance is not none %}{{ today.rain_chance }}%{% else %}—{% endif %}</div>
+                                    <div class="dial-sub" data-w="dial-rain-sub">{{ today.rain_peak_time or "" }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dial-card">
+                            <div class="dial" data-dial="wind" style="--progress: {{ (dials.wind.progress * 100)|round(1) }}; --accent: {{ dials.wind.color }};">
+                                <div class="dial-face">
+                                    <div class="dial-label">Wind</div>
+                                    <div class="dial-value" data-w="dial-wind-value" style="color: {{ dials.wind.color }};">
+                                        {%- if today.wind_max is not none %}{{ today.wind_max }}{% if today.wind_dir is not none %}<span class="wind-arrow" style="--wind-dir: {{ today.wind_dir }};" aria-hidden="true"><svg viewBox="0 0 26 14" focusable="false"><path d="M1 4.6h12.2V1.6L24.8 7 13.2 12.4V9.4H1z"/></svg></span>{% endif %}{% else %}—{% endif -%}
+                                    </div>
+                                    <div class="dial-sub">km/h</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dial-card">
+                            <div class="dial" data-dial="uv" style="--progress: {{ (dials.uv.progress * 100)|round(1) }}; --accent: {{ dials.uv.color }};">
+                                <div class="dial-face">
+                                    <div class="dial-label">UV</div>
+                                    <div class="dial-value" data-w="dial-uv-value" style="color: {{ dials.uv.color }};">{% if today.uv_max is not none %}{{ "%.1f"|format(today.uv_max) }}{% else %}—{% endif %}</div>
+                                    <div class="dial-sub">Index</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {% if weather and weather.today %}
-                {% set today = weather.today %}
-                {% set dials = today.dials if today.dials else None %}
-                <div class="weather-today">
-                    <div class="weather-top">
-                        <div class="weather-now-column">
-                            <div class="weather-now-card">
-                                <div class="weather-hero-icon">{{ today.current.icon if today.current else today.icon }}</div>
-                                <div class="weather-now-copy">
-                                    <div class="weather-now-temp" style="color: {{ today.high_color or '#f2f2f2' }};">
-                                        {% if today.current and today.current.temp is not none %}
-                                        {{ today.current.temp }}°
-                                        {% elif today.high is not none %}
-                                        {{ today.high }}°
-                                        {% else %}
-                                        —
-                                        {% endif %}
-                                    </div>
-                                    <div class="weather-now-condition">
-                                        {{ (today.current.condition if today.current else today.condition) or "—" }}
-                                    </div>
-                                    {% if today.current and today.current.feels_like is not none %}
-                                    <div class="weather-now-feels">Feels {{ today.current.feels_like }}°</div>
-                                    {% endif %}
-                                </div>
-                            </div>
-
-                            {% if today.sunrise or today.sunset %}
-                            <div class="sun-path" role="img" aria-label="Sunrise {{ today.sunrise or '—' }}, sunset {{ today.sunset or '—' }}">
-                                <div class="sun-event">
-                                    <svg class="sun-event-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-                                        <defs>
-                                            <clipPath id="sunriseClip">
-                                                <rect x="0" y="0" width="32" height="21" />
-                                            </clipPath>
-                                        </defs>
-                                        <g clip-path="url(#sunriseClip)">
-                                            <circle cx="16" cy="21" r="7" fill="#ffd166" stroke="#cd9b50" stroke-width="1.4" />
-                                            <g fill="none" stroke="#cd9b50" stroke-width="1.5" stroke-linecap="round">
-                                                <line x1="16" y1="4" x2="16" y2="7.5" />
-                                                <line x1="7.2" y1="8.2" x2="9.6" y2="10.6" />
-                                                <line x1="24.8" y1="8.2" x2="22.4" y2="10.6" />
-                                                <line x1="4.5" y1="17" x2="8" y2="17" />
-                                                <line x1="27.5" y1="17" x2="24" y2="17" />
-                                            </g>
-                                        </g>
-                                        <line x1="3" y1="21" x2="29" y2="21" stroke="#c8c4bc" stroke-width="1.5" stroke-linecap="round" />
-                                    </svg>
-                                    <span class="sun-event-time">{{ today.sunrise or "—" }}</span>
-                                </div>
-                                <div class="sun-event">
-                                    <svg class="sun-event-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-                                        <defs>
-                                            <clipPath id="sunsetClip">
-                                                <rect x="0" y="0" width="32" height="21" />
-                                            </clipPath>
-                                        </defs>
-                                        <g clip-path="url(#sunsetClip)">
-                                            <circle cx="16" cy="23" r="7" fill="#e8a45a" stroke="#cd9b50" stroke-width="1.4" />
-                                            <g fill="none" stroke="#cd9b50" stroke-width="1.5" stroke-linecap="round">
-                                                <line x1="16" y1="8" x2="16" y2="11" />
-                                                <line x1="8.4" y1="11.2" x2="10.6" y2="13.2" />
-                                                <line x1="23.6" y1="11.2" x2="21.4" y2="13.2" />
-                                            </g>
-                                        </g>
-                                        <line x1="3" y1="21" x2="29" y2="21" stroke="#c8c4bc" stroke-width="1.5" stroke-linecap="round" />
-                                    </svg>
-                                    <span class="sun-event-time">{{ today.sunset or "—" }}</span>
-                                </div>
-                            </div>
-                            {% endif %}
+                <div class="period-strip">
+                    <div class="period-grid">
+                        {%- for label, period in [("Morning", today.morning), ("Afternoon", today.afternoon), ("Evening", today.evening)] %}
+                        <div class="period-card" data-period="{{ label|lower }}">
+                            <div class="period-label">{{ label }}</div>
+                            <div class="period-icon" data-f="icon">{{ period.icon if period else "—" }}</div>
+                            <div class="period-temp" data-f="temp"{% if period and period.temp is not none %} style="color: {{ period.color }};"{% endif %}>{% if period and period.temp is not none %}{{ period.temp }}°{% else %}—{% endif %}</div>
+                            <div class="period-feels" data-f="feels">{% if period and period.feels_like is not none %}Feels {{ period.feels_like }}°{% endif %}</div>
+                            <div class="period-rain" data-f="rain">{% if period and period.precip is not none %}{{ period.precip }}% Rain{% else %}—{% endif %}</div>
                         </div>
-
-                        <div class="dial-row">
-                            <div class="dial-card">
-                                <div class="dial dial-temp" style="--start: {{ ((dials.temp.low_progress * 100) if dials and dials.temp else 0)|round(1) }}; --end: {{ ((dials.temp.high_progress * 100) if dials and dials.temp else 50)|round(1) }}; --accent: {{ (dials.temp.high_color if dials and dials.temp else '#ffd166') }};">
-                                    <div class="dial-face">
-                                        <div class="dial-label">Temp</div>
-                                        <div class="dial-value" style="color: {{ today.high_color or '#ffd166' }};">
-                                            {% if today.high is not none %}{{ today.high }}°{% else %}—{% endif %}
-                                        </div>
-                                        <div class="dial-sub" style="color: {{ today.low_color or '#8ab4ff' }};">
-                                            {% if today.low is not none %}L {{ today.low }}°{% else %}&nbsp;{% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="dial-card">
-                                <div class="dial" style="--progress: {{ ((dials.rain.progress * 100) if dials and dials.rain else 0)|round(1) }}; --accent: {{ (dials.rain.color if dials and dials.rain else '#40c4ff') }};">
-                                    <div class="dial-face">
-                                        <div class="dial-label">Rain</div>
-                                        <div class="dial-value" style="color: {{ (dials.rain.color if dials and dials.rain else '#40c4ff') }};">
-                                            {% if today.rain_chance is not none %}{{ today.rain_chance }}%{% else %}—{% endif %}
-                                        </div>
-                                        <div class="dial-sub"{% if today.rain_peak_time %} style="color: {{ (dials.rain.color if dials and dials.rain else '#40c4ff') }};"{% endif %}>
-                                            {% if today.rain_peak_time %}{{ today.rain_peak_time }}{% else %}&nbsp;{% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="dial-card">
-                                <div class="dial" style="--progress: {{ ((dials.wind.progress * 100) if dials and dials.wind else 0)|round(1) }}; --accent: {{ (dials.wind.color if dials and dials.wind else '#c084fc') }};">
-                                    <div class="dial-face">
-                                        <div class="dial-label">Wind</div>
-                                        <div class="dial-value" style="color: {{ (dials.wind.color if dials and dials.wind else '#c084fc') }};">
-                                            {% if today.wind_max is not none %}
-                                            {{ today.wind_max }}{% if today.wind_dir is not none %}<span class="wind-arrow" style="--wind-dir: {{ today.wind_dir }};" aria-hidden="true"><svg viewBox="0 0 26 14" focusable="false"><path d="M1 4.6h12.2V1.6L24.8 7 13.2 12.4V9.4H1z"/></svg></span>{% endif %}
-                                            {% else %}—{% endif %}
-                                        </div>
-                                        <div class="dial-sub">
-                                            {% if today.wind_max is not none %}km/h{% else %}&nbsp;{% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="dial-card">
-                                <div class="dial" style="--progress: {{ ((dials.uv.progress * 100) if dials and dials.uv else 0)|round(1) }}; --accent: {{ (dials.uv.color if dials and dials.uv else '#ff9800') }};">
-                                    <div class="dial-face">
-                                        <div class="dial-label">UV</div>
-                                        <div class="dial-value" style="color: {{ (dials.uv.color if dials and dials.uv else '#ff9800') }};">
-                                            {% if today.uv_max is not none %}{{ "%.1f"|format(today.uv_max) }}{% else %}—{% endif %}
-                                        </div>
-                                        <div class="dial-sub">Index</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {%- endfor %}
                     </div>
-
-                    <div class="period-strip">
-                        <div class="period-grid">
-                            {% for label, period in [("Morning", today.morning), ("Afternoon", today.afternoon), ("Evening", today.evening)] %}
-                            <div class="period-card">
-                                <div class="period-label">{{ label }}</div>
-                                <div class="period-icon">{{ period.icon if period else "—" }}</div>
-                                <div class="period-temp"{% if period and period.temp is not none %} style="color: {{ period.color or '#f2f2f2' }};"{% endif %}>
-                                    {% if period and period.temp is not none %}{{ period.temp }}°{% else %}—{% endif %}
-                                </div>
-                                <div class="period-feels">
-                                    {% if period and period.feels_like is not none %}feels {{ period.feels_like }}°{% else %}&nbsp;{% endif %}
-                                </div>
-                                <div class="period-rain">
-                                    {% if period and period.precip is not none %}{{ period.precip }}% rain{% else %}—{% endif %}
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        {% set rain_tl = today.rain_timeline if today.rain_timeline else None %}
-                        {% if rain_tl and rain_tl.points %}
-                        <div class="rain-timeline" style="--rain-color: {{ rain_tl.color or today.rain_color or '#40c4ff' }};">
-                            <div class="rain-timeline-head">
-                                {% if rain_tl.peak_time %}
-                                <span class="rain-timeline-peak">Peak {{ rain_tl.peak_time }}</span>
-                                {% endif %}
-                            </div>
-                            <div class="rain-timeline-track" aria-hidden="true">
-                                {% for point in rain_tl.points %}
-                                <div class="rain-bar" style="--rain: {{ point.precip if point.precip is not none else 0 }};" title="{{ point.clock or '' }} · {{ point.precip if point.precip is not none else 0 }}%">
-                                    <span class="rain-bar-fill"></span>
-                                </div>
-                                {% endfor %}
-                            </div>
-                            <div class="rain-timeline-labels">
-                                {% for point in rain_tl.points %}
-                                <span class="rain-hour{% if not point.label %} is-empty{% endif %}">{% if point.label %}{{ point.label }}{% endif %}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endif %}
-                    </div>
+                    {%- if today.rain_timeline and today.rain_timeline.points %}
+                    {{ rain_timeline(today.rain_timeline, "today", ("Rain Peak " ~ today.rain_timeline.peak_time) if today.rain_timeline.peak_time else "No Rain Expected") }}
+                    {%- endif %}
                 </div>
 
-                {% if weather.upcoming %}
+                {%- if weather.upcoming %}
                 <div class="forecast-block">
                     <h3 class="block-title">Next 2 Days</h3>
                     <div class="forecast-grid">
-                        {% for day in weather.upcoming %}
-                        <div class="forecast-card">
-                            <div class="forecast-day">{{ day.label }}</div>
+                        {%- for day in weather.upcoming %}
+                        <div class="forecast-card" data-day="{{ loop.index }}">
+                            <div class="forecast-day" data-f="label">{{ day.label }}</div>
                             <div class="forecast-main">
-                                <div class="forecast-icon">{{ day.icon }}</div>
+                                <div class="forecast-icon" data-f="icon">{{ day.icon }}</div>
                                 <div>
-                                    <div class="forecast-condition">{{ day.condition }}</div>
+                                    <div class="forecast-condition" data-f="condition">{{ day.condition }}</div>
                                     <div class="forecast-temps">
-                                        <span class="hi" style="color: {{ day.high_color or '#ffd166' }};">{{ day.high if day.high is not none else "—" }}°</span>
-                                        <span class="lo" style="color: {{ day.low_color or '#8ab4ff' }};">{{ day.low if day.low is not none else "—" }}°</span>
+                                        <span class="hi" data-f="hi" style="color: {{ day.high_color }};">{{ day.high if day.high is not none else "—" }}°</span>
+                                        <span class="lo" data-f="lo" style="color: {{ day.low_color }};">{{ day.low if day.low is not none else "—" }}°</span>
                                     </div>
                                 </div>
                             </div>
-                            {% set day_tl = day.rain_timeline if day.rain_timeline else None %}
-                            {% if day_tl and day_tl.points %}
-                            <div class="rain-timeline compact" style="--rain-color: {{ day_tl.color or day.rain_color or '#40c4ff' }};">
-                                <div class="rain-timeline-head">
-                                    <span class="rain-timeline-peak">
-                                        {% if day.rain_chance is not none %}{{ day.rain_chance }}%{% else %}—{% endif %}
-                                        {% if day_tl.peak_time %} · Peak {{ day_tl.peak_time }}{% endif %}
-                                    </span>
-                                </div>
-                                <div class="rain-timeline-track" aria-hidden="true">
-                                    {% for point in day_tl.points %}
-                                    <div class="rain-bar" style="--rain: {{ point.precip if point.precip is not none else 0 }};" title="{{ point.clock or '' }} · {{ point.precip if point.precip is not none else 0 }}%">
-                                        <span class="rain-bar-fill"></span>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                                <div class="rain-timeline-labels">
-                                    {% for point in day_tl.points %}
-                                    <span class="rain-hour{% if not point.label %} is-empty{% endif %}">{% if point.label %}{{ point.label }}{% endif %}</span>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                            {% else %}
-                            <div class="forecast-rain">{{ day.rain_chance if day.rain_chance is not none else "—" }}% rain</div>
-                            {% endif %}
+                            {%- if day.rain_timeline and day.rain_timeline.points %}
+                            {{ rain_timeline(day.rain_timeline, "day-" ~ loop.index, (day.rain_chance ~ "% Rain") ~ ((" · Peak " ~ day.rain_timeline.peak_time) if day.rain_timeline.peak_time else ""), compact=True) }}
+                            {%- endif %}
                         </div>
-                        {% endfor %}
+                        {%- endfor %}
                     </div>
                 </div>
-                {% endif %}
-
-                {% else %}
-                <div class="empty-state">Weather data unavailable</div>
-                {% endif %}
+                {%- endif %}
+                {%- else %}
+                <div class="empty-state">Weather data unavailable. Try refreshing.</div>
+                {%- endif %}
+                </div>
             </section>
 
-            <section class="panel markets-panel">
-                {% set market_avg = (stocks.average_percent if stocks and stocks.average_percent is defined else 0) %}
-                <div class="panel-head">
-                    <div>
-                        <h2>Markets</h2>
+            <div class="stack">
+            <section class="panel markets-panel" id="markets" data-block="markets" data-mode="snapshot">
+                {{ panel_head("Markets", "Watchlist Close", "markets") }}
+                <div class="panel-body" data-part="markets">
+                    <div class="market-summary">
+                        <span class="market-summary-label">Average Day Move</span>
+                        <span class="avg-pill {{ market_class }}">{{ market_avg_text }}</span>
                     </div>
-                    <div class="avg-pill {{ 'green' if market_avg >= 0 else 'red' }}">
-                        {{ "%+.1f"|format(market_avg) }}%
-                    </div>
-                </div>
-
-                {% set stock_items = stocks.items() if stocks else [] %}
-                {% set ns = namespace(has_stocks=false) %}
-                <div class="stock-list">
-                    <div class="stock-row stock-header">
-                        <div class="stock-identity">Name</div>
-                        <div class="stock-metrics">
-                            <div class="stock-metric">
+                    {%- set ns = namespace(has_stocks=false) %}
+                    <div class="stock-list">
+                        <div class="stock-row stock-header">
+                            <div class="stock-identity">Name</div>
+                            <div class="stock-metrics">
                                 <div class="stock-metric-label">Day</div>
-                            </div>
-                            <div class="stock-metric">
                                 <div class="stock-metric-label">7D</div>
-                            </div>
-                            <div class="stock-metric">
                                 <div class="stock-metric-label">1M</div>
                             </div>
                         </div>
-                    </div>
-                    {% for name, data in stock_items %}
-                    {% if name != 'average_percent' %}
-                    {% set ns.has_stocks = true %}
-                    <div class="stock-row">
-                        <div class="stock-identity">
-                            <div class="stock-name">{{ name }}</div>
-                            {% if data.symbol %}
-                            <div class="stock-symbol">{{ data.symbol }}</div>
-                            {% endif %}
-                            <div class="stock-price">
-                                {% if data.price is not none %}{{ "%.2f"|format(data.price) }}{% else %}—{% endif %}
-                            </div>
-                        </div>
-                        <div class="stock-metrics">
-                            <div class="stock-metric">
-                                <div class="stock-change stock-change-day {{ data.color }}">
-                                    {% if data.percent is not none %}{{ "%+.1f"|format(data.percent) }}%{% else %}—{% endif %}
+                        {%- for name, data in (stocks.items() if stocks else []) %}
+                        {%- if name != 'average_percent' %}
+                        {%- set ns.has_stocks = true %}
+                        <div class="stock-row">
+                            <div class="stock-identity">
+                                <div class="stock-name">{{ name }}</div>
+                                <div class="stock-sub">
+                                    {%- if data.symbol %}<span class="stock-symbol">{{ data.symbol }}</span>{% endif %}
+                                    <span class="stock-price">{% if data.price is not none %}{{ "{:,.2f}".format(data.price) }}{% else %}—{% endif %}</span>
                                 </div>
                             </div>
-                            <div class="stock-metric">
-                                <div class="stock-change {{ data.color_7d or 'grey' }}">
-                                    {% if data.percent_7d is not none %}{{ "%+.1f"|format(data.percent_7d) }}%{% else %}—{% endif %}
-                                </div>
-                            </div>
-                            <div class="stock-metric">
-                                <div class="stock-change {{ data.color_1m or 'grey' }}">
-                                    {% if data.percent_1m is not none %}{{ "%+.1f"|format(data.percent_1m) }}%{% else %}—{% endif %}
-                                </div>
+                            <div class="stock-metrics">
+                                <div class="stock-change stock-change-day {{ data.color }}">{% if data.percent is not none %}{{ "%+.1f"|format(data.percent) }}%{% else %}—{% endif %}</div>
+                                <div class="stock-change {{ data.color_7d or 'grey' }}">{% if data.percent_7d is not none %}{{ "%+.1f"|format(data.percent_7d) }}%{% else %}—{% endif %}</div>
+                                <div class="stock-change {{ data.color_1m or 'grey' }}">{% if data.percent_1m is not none %}{{ "%+.1f"|format(data.percent_1m) }}%{% else %}—{% endif %}</div>
                             </div>
                         </div>
+                        {%- endif %}
+                        {%- endfor %}
                     </div>
-                    {% endif %}
-                    {% endfor %}
-                </div>
-                {% if not ns.has_stocks %}
-                <div class="empty-state">Market data unavailable</div>
-                {% endif %}
-            </section>
-
-            {% if scripture and scripture.text and scripture.link %}
-            <a class="panel reflection-panel" href="{{ scripture.link }}" target="_blank" rel="noopener noreferrer">
-                <div class="panel-head">
-                    <div>
-                        <h2>Scripture</h2>
-                        <p class="panel-sub">English Standard Version</p>
-                    </div>
-                </div>
-                <div class="reflection-card">
-                    <div class="reflection-text">{{ scripture.text }}</div>
-                    {% if scripture.focus %}
-                    <div class="reflection-focus">{{ scripture.focus }}</div>
-                    {% endif %}
-                </div>
-            </a>
-            {% else %}
-            <section class="panel reflection-panel">
-                <div class="panel-head">
-                    <div>
-                        <h2>Scripture</h2>
-                        <p class="panel-sub">English Standard Version</p>
-                    </div>
-                </div>
-                <div class="empty-state">Scripture unavailable</div>
-            </section>
-            {% endif %}
-
-            <div class="news-pair matched-pair watch-pair">
-            <section class="panel x-panel">
-                <div class="panel-head">
-                    <div>
-                        <h2>Personalized</h2>
-                        <p class="panel-sub">Live from X</p>
-                    </div>
-                </div>
-
-                {% set x_groups = x_trending if x_trending else [] %}
-                {% set x_map = dict(x_groups) if x_groups else {} %}
-                {% set personal_trends = x_map.get('Personalized') or x_map.get('Personalized Trends') or [] %}
-                <div class="trend-list">
-                    {% if personal_trends %}
-                    {% for item in personal_trends[:5] %}
-                    <a class="trend-card" href="{{ item.link }}" target="_blank" rel="noopener noreferrer">
-                        <div class="trend-name">{{ item.name }}</div>
-                        <div class="trend-meta">
-                            <span>{{ item.post_count }}</span>
-                            {% if item.trending_since %}
-                            <span>{{ item.trending_since }}</span>
-                            {% endif %}
-                        </div>
-                    </a>
-                    {% endfor %}
-                    {% else %}
-                    <div class="empty-state compact">Nothing trending</div>
-                    {% endif %}
+                    {%- if not ns.has_stocks %}
+                    <div class="empty-state">Market data unavailable</div>
+                    {%- endif %}
                 </div>
             </section>
 
-            <section class="panel sky-panel">
-                <div class="panel-head">
-                    <div>
-                        <h2>Sky Watch</h2>
-                        <p class="panel-sub">Over Copenhagen</p>
-                    </div>
+            <section class="panel scripture-panel" id="scripture" data-block="scripture" data-mode="verse">
+                {{ panel_head("Scripture", scripture.translation_label if scripture else "Proverbs And Ecclesiastes", "scripture", action="New Verse") }}
+                <div class="panel-body" data-part="scripture">
+                    <figure class="verse"{% if not (scripture and scripture.text) %} hidden{% endif %}>
+                        <blockquote class="verse-text" data-f="text">{{ scripture.text if scripture else "" }}</blockquote>
+                        <figcaption class="verse-caption">
+                            <a class="verse-ref" data-f="ref" href="{{ scripture.link if scripture and scripture.link else '#' }}" target="_blank" rel="noopener noreferrer">{{ scripture.ref if scripture else "" }}</a>
+                        </figcaption>
+                    </figure>
+                    {%- if not (scripture and scripture.text) %}
+                    <div class="empty-state" data-f="empty">Scripture unavailable. Tap New Verse.</div>
+                    {%- endif %}
                 </div>
-                {% if sky_watch %}
-                <div class="trend-list">
-                    {% for item in sky_watch[:5] %}
-                    <a class="trend-card" href="{{ item.link }}" target="_blank" rel="noopener noreferrer">
-                        <div class="trend-name">{{ item.name }}</div>
-                        <div class="trend-meta">
-                            <span class="trend-detail">{{ item.post_count }}</span>
-                            {% if item.trending_since %}
-                            <span class="trend-when">{{ item.trending_since }}</span>
-                            {% endif %}
-                        </div>
-                    </a>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <div class="empty-state compact">Sky data unavailable</div>
-                {% endif %}
             </section>
             </div>
 
-            <div class="news-pair matched-pair">
-            <section class="panel news-panel copenhagen-panel">
-                <div class="panel-head">
-                    <div>
-                        <h2>Copenhagen Today</h2>
-                        <p class="panel-sub">Local news</p>
+            <section class="panel x-panel" id="x" data-block="x" data-mode="snapshot">
+                {{ panel_head("For You On X", "What Your Interests Are Talking About", "x") }}
+                <div class="panel-body" data-part="x">
+                    {%- if x_data %}
+                    {%- if x_data.pulse %}
+                    <p class="x-pulse"><span class="x-pulse-label">Today's Pulse</span>{{ x_data.pulse }}</p>
+                    {%- endif %}
+                    <div class="x-list">
+                        {%- for item in x_data.topics[:5] %}
+                        <article class="x-card">
+                            <div class="x-card-top">
+                                <span class="chip" style="{{ item.category_style }}">{{ item.category }}</span>
+                                {%- if item.sentiment %}
+                                <span class="chip sentiment sentiment-{{ item.sentiment|lower }}">{{ item.sentiment }}</span>
+                                {%- endif %}
+                                <span class="x-volume">{{ item.post_count }}</span>
+                            </div>
+                            <h3 class="x-card-title"><a class="stretched-link" href="{{ item.link }}" target="_blank" rel="noopener noreferrer">{{ item.headline or item.name }}</a></h3>
+                            {%- if item.summary %}
+                            <p class="x-card-summary">{{ item.summary }}</p>
+                            {%- endif %}
+                            {%- if item.why %}
+                            <p class="x-card-why"><span>Why It Matters</span>{{ item.why }}</p>
+                            {%- endif %}
+                            <div class="x-card-foot">
+                                <span class="x-query">Search: {{ item.search_term }}</span>
+                                {%- if item.accounts %}
+                                <span class="x-accounts">
+                                    {%- for account in item.accounts %}
+                                    <a href="{{ account.link }}" target="_blank" rel="noopener noreferrer">@{{ account.handle }}</a>
+                                    {%- endfor %}
+                                </span>
+                                {%- endif %}
+                            </div>
+                        </article>
+                        {%- endfor %}
                     </div>
+                    <p class="panel-note">Via {{ x_data.source }}</p>
+                    {%- else %}
+                    <div class="empty-state">Nothing trending for you right now</div>
+                    {%- endif %}
                 </div>
-                {% if copenhagen %}
-                <div class="news-list">
-                    {% for item in copenhagen %}
-                    <article class="news-item">
-                        <a href="{{ item.link }}" target="_blank" rel="noopener noreferrer">{{ item.headline }}</a>
-                    </article>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <div class="empty-state">No Copenhagen stories available</div>
-                {% endif %}
             </section>
 
-            <section class="panel news-panel south-africa-panel">
-                <div class="panel-head">
-                    <div>
-                        <h2>South Africa</h2>
-                        <p class="panel-sub">Government, Finance, Diplomacy</p>
+            <section class="panel sky-panel" id="sky" data-block="sky" data-mode="live-sky">
+                {{ panel_head("Sky Watch", "Over Copenhagen", "sky") }}
+                <div class="panel-body" data-part="sky">
+                    <div class="trend-list" data-f="list">
+                        {%- for item in (sky_watch or [])[:5] %}
+                        <a class="trend-card" href="{{ item.link }}" target="_blank" rel="noopener noreferrer">
+                            <div class="trend-name">{{ item.name }}</div>
+                            <div class="trend-meta">
+                                <span class="trend-detail">{{ item.post_count }}</span>
+                                {%- if item.trending_since %}
+                                <span class="trend-when">{{ item.trending_since }}</span>
+                                {%- endif %}
+                            </div>
+                        </a>
+                        {%- else %}
+                        <div class="empty-state">Sky data unavailable</div>
+                        {%- endfor %}
                     </div>
                 </div>
-                {% if south_africa %}
-                <div class="news-list">
-                    {% for item in south_africa %}
-                    <article class="news-item">
-                        <a href="{{ item.link }}" target="_blank" rel="noopener noreferrer">{{ item.headline }}</a>
-                    </article>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <div class="empty-state">No South Africa stories available</div>
-                {% endif %}
             </section>
-            </div>
 
-            <div class="news-pair news-pair-wide">
-            <section class="panel news-panel space-panel">
-                <div class="panel-head">
-                    <div>
-                        <h2>Space News</h2>
-                        <p class="panel-sub">Orbit, launch, industry</p>
-                    </div>
-                </div>
-                {% if space_news %}
-                <div class="news-list">
-                    {% for item in space_news %}
-                    <article class="news-item">
-                        <a href="{{ item.link }}" target="_blank" rel="noopener noreferrer">{{ item.headline }}</a>
-                    </article>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <div class="empty-state">No space stories available</div>
-                {% endif %}
-            </section>
-            </div>
+            {{ news_panel("copenhagen", "Copenhagen Today", "Local News", "pin", copenhagen, "No Copenhagen stories available", "copenhagen-panel") }}
+            {{ news_panel("south-africa", "South Africa", "Government, Finance, Diplomacy", "globe", south_africa, "No South Africa stories available", "south-africa-panel") }}
+            {{ news_panel("space", "Space News", "Orbit, Launch, Industry", "rocket", space_news, "No space stories available", "space-panel") }}
         </main>
 
         <footer class="site-footer">
-            Built daily from open feeds, market data, Open-Meteo, and xAI summaries.
+            <p>Built daily from open feeds, market data, Open-Meteo, NOAA, and xAI summaries.</p>
+            <p>Weather and Sky Watch refresh live. Other blocks load the latest published brief.</p>
         </footer>
     </div>
 </body>
