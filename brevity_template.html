@@ -370,45 +370,30 @@
             </div>
 
             <section class="panel x-panel" id="x">
-                {{ panel_head("For You On X", "What Your Interests Are Talking About", "x") }}
+                {{ panel_head("For You On X", "Personalized Trends", "x") }}
                 <div class="panel-body">
                     {%- if x_data %}
-                    {%- if x_data.pulse %}
-                    <p class="x-pulse"><span class="x-pulse-label">Today's Pulse</span>{{ x_data.pulse }}</p>
-                    {%- endif %}
                     <div class="x-list">
                         {%- for item in x_data.topics[:5] %}
                         <article class="x-card">
                             <div class="x-card-top">
                                 <span class="chip" style="{{ item.category_style }}">{{ item.category }}</span>
-                                {%- if item.sentiment %}
-                                <span class="chip sentiment sentiment-{{ item.sentiment|lower }}">{{ item.sentiment }}</span>
-                                {%- endif %}
+                                {%- if item.post_count != "Live" %}
                                 <span class="x-volume">{{ item.post_count }}</span>
-                            </div>
-                            <h3 class="x-card-title"><a class="stretched-link" href="{{ item.link }}" target="_blank" rel="noopener noreferrer">{{ item.headline or item.name }}</a></h3>
-                            {%- if item.summary %}
-                            <p class="x-card-summary">{{ item.summary }}</p>
-                            {%- endif %}
-                            {%- if item.why %}
-                            <p class="x-card-why"><span>Why It Matters</span>{{ item.why }}</p>
-                            {%- endif %}
-                            <div class="x-card-foot">
-                                <span class="x-query">Search: {{ item.search_term }}</span>
-                                {%- if item.accounts %}
-                                <span class="x-accounts">
-                                    {%- for account in item.accounts %}
-                                    <a href="{{ account.link }}" target="_blank" rel="noopener noreferrer">@{{ account.handle }}</a>
-                                    {%- endfor %}
-                                </span>
                                 {%- endif %}
                             </div>
+                            <h3 class="x-card-title"><a class="stretched-link" href="{{ item.link }}" target="_blank" rel="noopener noreferrer">{{ item.name }}</a></h3>
+                            {%- if item.trending_since %}
+                            <div class="x-card-foot">
+                                <span class="trend-when">{{ item.trending_since }}</span>
+                            </div>
+                            {%- endif %}
                         </article>
                         {%- endfor %}
                     </div>
                     <p class="panel-note">Via {{ x_data.source }}</p>
                     {%- else %}
-                    <div class="empty-state">Nothing trending for you right now</div>
+                    <div class="empty-state">No X Trends Available</div>
                     {%- endif %}
                 </div>
             </section>

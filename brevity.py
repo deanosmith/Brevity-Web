@@ -1878,8 +1878,8 @@ def _fetch_x_personalized_official(limit):
     """
     Official X personalized_trends. Requires X Premium on the user token.
 
-    Returns a list of cards, or None when the endpoint is unavailable so a
-    fallback can run. Empty list means a successful but blank payload.
+    Returns a list of cards, or None when the endpoint is unavailable.
+    Empty list means a successful but blank payload.
     """
     consumer_key = os.getenv("CONSUMER_KEY")
     consumer_secret = os.getenv("CONSUMER_SECRET")
@@ -1916,7 +1916,7 @@ def _fetch_x_personalized_official(limit):
     body = (response.text or "")[:400]
     if response.status_code == 401 and "premium" in body.lower():
         logger.warning(
-            "X personalized trends require Premium; falling back to Grok X search."
+            "X personalized trends require Premium; leaving trends unavailable."
         )
         return None
     if response.status_code != 200:
@@ -2031,24 +2031,13 @@ def _fetch_x_personalized_grok(limit):
 
 
 def fetch_x_trending(limit=5):
-    """
-    Personalized X topics with context.
-
-    Tries the official personalized_trends endpoint first. That route now
-    requires X Premium, so Grok X search is the reliable fallback, tuned to
-    this brief (Copenhagen, space, AI, energy).
-    """
+    """Personalized X trends from the official API, without AI generation."""
     logger.info("Fetching personalized X topics...")
-    pulse = None
-    source = "X Personalized Trends"
     topics = _fetch_x_personalized_official(limit)
-    if not topics:
-        topics, pulse = _fetch_x_personalized_grok(limit)
-        source = "Grok X Search"
     if not topics:
         logger.warning("Personalized X topics unavailable.")
         return None
-    return {"pulse": pulse, "topics": topics, "source": source}
+    return {"topics": topics, "source": "X Personalized Trends"}
 
 
 def _moon_watch(now_utc):
