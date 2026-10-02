@@ -2,20 +2,21 @@
   "used_refs": [
     "Proverbs 19:15",
     "Proverbs 1:3",
-    "Ecclesiastes 7:29"
+    "Ecclesiastes 7:29",
+    "Proverbs 12:13"
   ],
   "current": {
-    "date": "2026-10-01",
-    "text": "Lo, this only have I found, that God hath made man upright; but they have sought out many inventions.",
-    "focus": "Ecclesiastes 7:29",
-    "ref": "Ecclesiastes 7:29",
-    "book": "Ecclesiastes",
+    "date": "2026-10-02",
+    "text": "The wicked is snared by the transgression of his lips: but the just shall come out of trouble.",
+    "focus": "Proverbs 12:13",
+    "ref": "Proverbs 12:13",
+    "book": "Proverbs",
     "translation": "Kjv",
     "translation_label": "King James Version",
     "source": {
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%207%3A29&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2012%3A13&version=KJV"
   }
 }
