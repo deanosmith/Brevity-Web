@@ -3,13 +3,14 @@
     "Proverbs 19:15",
     "Proverbs 1:3",
     "Ecclesiastes 7:29",
-    "Proverbs 12:13"
+    "Proverbs 12:13",
+    "Proverbs 2:10"
   ],
   "current": {
-    "date": "2026-10-02",
-    "text": "The wicked is snared by the transgression of his lips: but the just shall come out of trouble.",
-    "focus": "Proverbs 12:13",
-    "ref": "Proverbs 12:13",
+    "date": "2026-10-03",
+    "text": "When wisdom entereth into thine heart, and knowledge is pleasant unto thy soul;",
+    "focus": "Proverbs 2:10",
+    "ref": "Proverbs 2:10",
     "book": "Proverbs",
     "translation": "Kjv",
     "translation_label": "King James Version",
@@ -17,6 +18,6 @@
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2012%3A13&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%202%3A10&version=KJV"
   }
 }
