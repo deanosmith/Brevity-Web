@@ -5,13 +5,14 @@
     "Ecclesiastes 7:29",
     "Proverbs 12:13",
     "Proverbs 2:10",
-    "Proverbs 13:10"
+    "Proverbs 13:10",
+    "Proverbs 30:28"
   ],
   "current": {
-    "date": "2026-10-04",
-    "text": "Only by pride cometh contention: but with the well advised is wisdom.",
-    "focus": "Proverbs 13:10",
-    "ref": "Proverbs 13:10",
+    "date": "2026-10-05",
+    "text": "The spider taketh hold with her hands, and is in kings’ palaces.",
+    "focus": "Proverbs 30:28",
+    "ref": "Proverbs 30:28",
     "book": "Proverbs",
     "translation": "Kjv",
     "translation_label": "King James Version",
@@ -19,6 +20,6 @@
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2013%3A10&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2030%3A28&version=KJV"
   }
 }
