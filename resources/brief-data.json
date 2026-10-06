@@ -1,11 +1,11 @@
 {
- "date": "Monday, October 5",
- "iso_date": "2026-10-05",
- "generated_at": "2026-10-05 05:01 CEST",
- "generated_iso": "2026-10-05T05:01:57+02:00",
+ "date": "Tuesday, October 6",
+ "iso_date": "2026-10-06",
+ "generated_at": "2026-10-06 05:01 CEST",
+ "generated_iso": "2026-10-06T05:01:24+02:00",
  "generated_clock": "5:01 am",
- "year_percent": 76.16438356164383,
- "day_of_year": 278,
+ "year_percent": 76.43835616438356,
+ "day_of_year": 279,
  "days_in_year": 365,
  "weather": {
   "location": "Copenhagen",
@@ -16,42 +16,42 @@
    "location": "Copenhagen"
   },
   "today": {
-   "date": "2026-10-05",
+   "date": "2026-10-06",
    "label": "Today",
-   "high": 19,
-   "low": 12,
-   "rain_chance": 0,
+   "high": 17,
+   "low": 13,
+   "rain_chance": 20,
    "rain_sum_mm": 0.0,
-   "rain_peak_time": null,
+   "rain_peak_time": "8:00 am",
    "rain_timeline": {
     "points": [
      {
       "hour": 6,
-      "precip": 0,
+      "precip": 7,
       "label": "6 am",
       "clock": "6:00 am"
      },
      {
       "hour": 7,
-      "precip": 0,
+      "precip": 16,
       "label": null,
       "clock": "7:00 am"
      },
      {
       "hour": 8,
-      "precip": 0,
+      "precip": 20,
       "label": null,
       "clock": "8:00 am"
      },
      {
       "hour": 9,
-      "precip": 0,
+      "precip": 16,
       "label": "9 am",
       "clock": "9:00 am"
      },
      {
       "hour": 10,
-      "precip": 0,
+      "precip": 7,
       "label": null,
       "clock": "10:00 am"
      },
@@ -134,78 +134,78 @@
       "clock": "11:00 pm"
      }
     ],
-    "max_precip": 0,
-    "peak_time": null,
-    "color": "#374e6e"
+    "max_precip": 20,
+    "peak_time": "8:00 am",
+    "color": "#39668b"
    },
-   "wind_max": 23,
-   "wind_dir": 243,
-   "wind_color": "#be3a84",
-   "uv_max": 2.7,
-   "sunrise": "7:20 am",
-   "sunset": "6:34 pm",
+   "wind_max": 21,
+   "wind_dir": 278,
+   "wind_color": "#b52f8c",
+   "uv_max": 2.95,
+   "sunrise": "7:22 am",
+   "sunset": "6:32 pm",
    "code": 3,
    "condition": "Overcast",
    "icon": "☁️",
    "color": "#87CEEB",
    "current": {
-    "temp": 13,
-    "feels_like": 10,
+    "temp": 16,
+    "feels_like": 14,
     "code": 3,
     "condition": "Overcast",
     "icon": "☁️",
     "color": "#87CEEB",
-    "wind": 18,
-    "wind_dir": 232,
+    "wind": 16,
+    "wind_dir": 267,
     "precip": 0
    },
    "morning": {
+    "temp": 15,
+    "feels_like": 14,
+    "precip": 20,
+    "wind": 16,
+    "wind_dir": 291,
+    "wind_color": "#961a99",
+    "color": "#87CEEB",
+    "condition": "Overcast",
+    "icon": "☁️",
+    "code": 3
+   },
+   "afternoon": {
+    "temp": 17,
+    "feels_like": 14,
+    "precip": 0,
+    "wind": 16,
+    "wind_dir": 295,
+    "wind_color": "#961a99",
+    "color": "#FFD700",
+    "condition": "Clear Sky",
+    "icon": "☀️",
+    "code": 0
+   },
+   "evening": {
     "temp": 14,
     "feels_like": 12,
     "precip": 0,
-    "wind": 19,
-    "wind_dir": 237,
-    "wind_color": "#ad2791",
+    "wind": 12,
+    "wind_dir": 274,
+    "wind_color": "#7a09a3",
     "color": "#87CEEB",
     "condition": "Partly Cloudy",
     "icon": "⛅️",
-    "code": 2
-   },
-   "afternoon": {
-    "temp": 19,
-    "feels_like": 16,
-    "precip": 0,
-    "wind": 22,
-    "wind_dir": 244,
-    "wind_color": "#bb3687",
-    "color": "#87CEEB",
-    "condition": "Overcast",
-    "icon": "☁️",
-    "code": 3
-   },
-   "evening": {
-    "temp": 17,
-    "feels_like": 15,
-    "precip": 0,
-    "wind": 23,
-    "wind_dir": 250,
-    "wind_color": "#be3a84",
-    "color": "#87CEEB",
-    "condition": "Overcast",
-    "icon": "☁️",
-    "code": 3
+    "code": 1
    },
    "sun_path": {
-    "sunrise": "7:20 am",
-    "sunset": "6:34 pm",
+    "sunrise": "7:22 am",
+    "sunset": "6:32 pm",
     "sun_x": 20.0,
     "sun_y": 66.0,
     "is_day": false,
-    "daylight": "11h 14m",
-    "rain_peak": null,
-    "rain_on_arc": false,
-    "rain_x": null,
-    "rain_y": null,
+    "daylight": "11h 10m",
+    "rain_peak": "8:00 am",
+    "rain_on_arc": true,
+    "rain_x": 21.6,
+    "rain_y": 50.2,
     "cy": 58,
     "start_x": 20.0,
     "end_x": 220.0,
@@ -221,244 +221,244 @@
    },
    "dials": {
     "rain": {
-     "progress": 0.0,
-     "color": "#374e6e",
-     "value": "0%",
+     "progress": 0.2,
+     "color": "#39668b",
+     "value": "20%",
      "label": "Rain"
     },
     "wind": {
-     "progress": 0.46,
-     "color": "#bf3b82",
-     "value": "23 km/h",
+     "progress": 0.42,
+     "color": "#b6308b",
+     "value": "21 km/h",
      "label": "Wind"
     },
     "uv": {
-     "progress": 0.24545454545454548,
-     "color": "#cad941",
-     "value": "2.7",
+     "progress": 0.2681818181818182,
+     "color": "#d5dd40",
+     "value": "3.0",
      "label": "UV"
     },
     "temp": {
-     "high": 19,
-     "low": 12,
-     "high_color": "#ff9f4b",
-     "low_color": "#f4d570",
-     "high_progress": 0.6857142857142857,
-     "low_progress": 0.4857142857142857,
+     "high": 17,
+     "low": 13,
+     "high_color": "#ffb053",
+     "low_color": "#ffd264",
+     "high_progress": 0.6285714285714286,
+     "low_progress": 0.5142857142857142,
      "label": "Temp"
     }
    },
-   "high_color": "#ff9f4b",
-   "low_color": "#f4d570",
-   "rain_color": "#374e6e"
+   "high_color": "#ffb053",
+   "low_color": "#ffd264",
+   "rain_color": "#39668b"
   },
   "upcoming": [
    {
-    "date": "2026-10-06",
+    "date": "2026-10-07",
     "label": "Tomorrow",
-    "high": 17,
-    "low": 14,
-    "rain_chance": 45,
-    "wind_max": 21,
-    "code": 3,
-    "condition": "Overcast",
-    "icon": "☁️",
-    "color": "#87CEEB",
-    "high_color": "#ffb053",
-    "low_color": "#ffcc61",
-    "rain_color": "#3b83af",
-    "rain_progress": 0.45,
+    "high": 15,
+    "low": 12,
+    "rain_chance": 22,
+    "wind_max": 22,
+    "code": 51,
+    "condition": "Light Drizzle",
+    "icon": "🌦️",
+    "color": "#4682B4",
+    "high_color": "#ffc45d",
+    "low_color": "#f2d572",
+    "rain_color": "#39688e",
+    "rain_progress": 0.22,
     "rain_timeline": {
      "points": [
       {
        "hour": 0,
-       "precip": 0,
+       "precip": 1,
        "label": "12 am",
        "clock": "12:00 am"
       },
       {
        "hour": 1,
-       "precip": 0,
+       "precip": 3,
        "label": null,
        "clock": "1:00 am"
       },
       {
        "hour": 2,
-       "precip": 0,
+       "precip": 4,
        "label": null,
        "clock": "2:00 am"
       },
       {
        "hour": 3,
-       "precip": 3,
+       "precip": 6,
        "label": null,
        "clock": "3:00 am"
       },
       {
        "hour": 4,
-       "precip": 8,
+       "precip": 7,
        "label": null,
        "clock": "4:00 am"
       },
       {
        "hour": 5,
-       "precip": 14,
+       "precip": 8,
        "label": null,
        "clock": "5:00 am"
       },
       {
        "hour": 6,
-       "precip": 26,
+       "precip": 7,
        "label": null,
        "clock": "6:00 am"
       },
       {
        "hour": 7,
-       "precip": 39,
+       "precip": 6,
        "label": null,
        "clock": "7:00 am"
       },
       {
        "hour": 8,
-       "precip": 45,
+       "precip": 6,
        "label": null,
        "clock": "8:00 am"
       },
       {
        "hour": 9,
-       "precip": 37,
+       "precip": 10,
        "label": "9 am",
        "clock": "9:00 am"
       },
       {
        "hour": 10,
-       "precip": 21,
+       "precip": 15,
        "label": null,
        "clock": "10:00 am"
       },
       {
        "hour": 11,
-       "precip": 8,
+       "precip": 18,
        "label": null,
        "clock": "11:00 am"
       },
       {
        "hour": 12,
-       "precip": 3,
+       "precip": 17,
        "label": "12 pm",
        "clock": "12:00 pm"
       },
       {
        "hour": 13,
-       "precip": 1,
+       "precip": 13,
        "label": null,
        "clock": "1:00 pm"
       },
       {
        "hour": 14,
-       "precip": 0,
+       "precip": 12,
        "label": null,
        "clock": "2:00 pm"
       },
       {
        "hour": 15,
-       "precip": 0,
+       "precip": 15,
        "label": "3 pm",
        "clock": "3:00 pm"
       },
       {
        "hour": 16,
-       "precip": 0,
+       "precip": 19,
        "label": null,
        "clock": "4:00 pm"
       },
       {
        "hour": 17,
-       "precip": 0,
+       "precip": 22,
        "label": null,
        "clock": "5:00 pm"
       },
       {
        "hour": 18,
-       "precip": 0,
+       "precip": 21,
        "label": "6 pm",
        "clock": "6:00 pm"
       },
       {
        "hour": 19,
-       "precip": 0,
+       "precip": 18,
        "label": null,
        "clock": "7:00 pm"
       },
       {
        "hour": 20,
-       "precip": 0,
+       "precip": 16,
        "label": null,
        "clock": "8:00 pm"
       },
       {
        "hour": 21,
-       "precip": 0,
+       "precip": 18,
        "label": "9 pm",
        "clock": "9:00 pm"
       },
       {
        "hour": 22,
-       "precip": 1,
+       "precip": 21,
        "label": null,
        "clock": "10:00 pm"
       },
       {
        "hour": 23,
-       "precip": 2,
+       "precip": 22,
        "label": "11 pm",
        "clock": "11:00 pm"
       }
      ],
-     "max_precip": 45,
-     "peak_time": "8:00 am",
-     "color": "#3b83af"
+     "max_precip": 22,
+     "peak_time": "5:00 pm",
+     "color": "#39688e"
     },
-    "rain_peak_time": "8:00 am"
+    "rain_peak_time": "5:00 pm"
    },
    {
-    "date": "2026-10-07",
+    "date": "2026-10-08",
     "label": "In 2 Days",
-    "high": 15,
-    "low": 13,
-    "rain_chance": 35,
-    "wind_max": 21,
-    "code": 51,
-    "condition": "Light Drizzle",
-    "icon": "🌦️",
+    "high": 14,
+    "low": 10,
+    "rain_chance": 96,
+    "wind_max": 30,
+    "code": 63,
+    "condition": "Rain",
+    "icon": "🌧️",
     "color": "#4682B4",
-    "high_color": "#ffc35d",
-    "low_color": "#ffd063",
-    "rain_color": "#3a77a1",
-    "rain_progress": 0.35,
+    "high_color": "#ffc65e",
+    "low_color": "#ccd296",
+    "rain_color": "#40bff9",
+    "rain_progress": 0.96,
     "rain_timeline": {
      "points": [
       {
        "hour": 0,
-       "precip": 5,
+       "precip": 20,
        "label": "12 am",
        "clock": "12:00 am"
       },
       {
        "hour": 1,
-       "precip": 8,
+       "precip": 17,
        "label": null,
        "clock": "1:00 am"
       },
       {
        "hour": 2,
-       "precip": 10,
+       "precip": 14,
        "label": null,
        "clock": "2:00 am"
       },
       {
        "hour": 3,
-       "precip": 10,
+       "precip": 11,
        "label": null,
        "clock": "3:00 am"
       },
@@ -482,251 +482,251 @@
       },
       {
        "hour": 7,
-       "precip": 20,
+       "precip": 22,
        "label": null,
        "clock": "7:00 am"
       },
       {
        "hour": 8,
-       "precip": 24,
+       "precip": 31,
        "label": null,
        "clock": "8:00 am"
       },
       {
        "hour": 9,
-       "precip": 25,
+       "precip": 44,
        "label": "9 am",
        "clock": "9:00 am"
       },
       {
        "hour": 10,
-       "precip": 24,
+       "precip": 60,
        "label": null,
        "clock": "10:00 am"
       },
       {
        "hour": 11,
-       "precip": 25,
+       "precip": 73,
        "label": null,
        "clock": "11:00 am"
       },
       {
        "hour": 12,
-       "precip": 28,
+       "precip": 83,
        "label": "12 pm",
        "clock": "12:00 pm"
       },
       {
        "hour": 13,
-       "precip": 33,
+       "precip": 92,
        "label": null,
        "clock": "1:00 pm"
       },
       {
        "hour": 14,
-       "precip": 35,
+       "precip": 96,
        "label": null,
        "clock": "2:00 pm"
       },
       {
        "hour": 15,
-       "precip": 33,
+       "precip": 95,
        "label": "3 pm",
        "clock": "3:00 pm"
       },
       {
        "hour": 16,
-       "precip": 29,
+       "precip": 90,
        "label": null,
        "clock": "4:00 pm"
       },
       {
        "hour": 17,
-       "precip": 25,
+       "precip": 82,
        "label": null,
        "clock": "5:00 pm"
       },
       {
        "hour": 18,
-       "precip": 21,
+       "precip": 68,
        "label": "6 pm",
        "clock": "6:00 pm"
       },
       {
        "hour": 19,
-       "precip": 16,
+       "precip": 52,
        "label": null,
        "clock": "7:00 pm"
       },
       {
        "hour": 20,
-       "precip": 14,
+       "precip": 41,
        "label": null,
        "clock": "8:00 pm"
       },
       {
        "hour": 21,
-       "precip": 17,
+       "precip": 42,
        "label": "9 pm",
        "clock": "9:00 pm"
       },
       {
        "hour": 22,
-       "precip": 23,
+       "precip": 50,
        "label": null,
        "clock": "10:00 pm"
       },
       {
        "hour": 23,
-       "precip": 27,
+       "precip": 55,
        "label": "11 pm",
        "clock": "11:00 pm"
       }
      ],
-     "max_precip": 35,
+     "max_precip": 96,
      "peak_time": "2:00 pm",
-     "color": "#3a77a1"
+     "color": "#40bff9"
     },
     "rain_peak_time": "2:00 pm"
    }
   ],
   "morning": {
+   "temp": 15,
+   "feels_like": 14,
+   "precip": 20,
+   "wind": 16,
+   "wind_dir": 291,
+   "wind_color": "#961a99",
+   "color": "#87CEEB",
+   "condition": "Overcast",
+   "icon": "☁️",
+   "code": 3
+  },
+  "afternoon": {
+   "temp": 17,
+   "feels_like": 14,
+   "precip": 0,
+   "wind": 16,
+   "wind_dir": 295,
+   "wind_color": "#961a99",
+   "color": "#FFD700",
+   "condition": "Clear Sky",
+   "icon": "☀️",
+   "code": 0
+  },
+  "evening": {
    "temp": 14,
    "feels_like": 12,
    "precip": 0,
-   "wind": 19,
-   "wind_dir": 237,
-   "wind_color": "#ad2791",
+   "wind": 12,
+   "wind_dir": 274,
+   "wind_color": "#7a09a3",
    "color": "#87CEEB",
    "condition": "Partly Cloudy",
    "icon": "⛅️",
-   "code": 2
+   "code": 1
   },
-  "afternoon": {
-   "temp": 19,
-   "feels_like": 16,
-   "precip": 0,
-   "wind": 22,
-   "wind_dir": 244,
-   "wind_color": "#bb3687",
-   "color": "#87CEEB",
-   "condition": "Overcast",
-   "icon": "☁️",
-   "code": 3
-  },
-  "evening": {
-   "temp": 17,
-   "feels_like": 15,
-   "precip": 0,
-   "wind": 23,
-   "wind_dir": 250,
-   "wind_color": "#be3a84",
-   "color": "#87CEEB",
-   "condition": "Overcast",
-   "icon": "☁️",
-   "code": 3
-  },
-  "sunrise": "7:20 am",
-  "sunset": "6:34 pm",
-  "daily_precip": 0,
-  "rain_peak_time": null
+  "sunrise": "7:22 am",
+  "sunset": "6:32 pm",
+  "daily_precip": 20,
+  "rain_peak_time": "8:00 am"
  },
  "stocks": {
   "Tesla": {
    "symbol": "TSLA",
-   "price": 370.5899963378906,
-   "change": 16.480010986328125,
-   "percent": 4.653924393000856,
+   "price": 378.7300109863281,
+   "change": 8.1400146484375,
+   "percent": 2.196501451435761,
    "color": "green",
    "arrow": "↑",
-   "percent_7d": -0.40847842667694556,
-   "color_7d": "red",
-   "arrow_7d": "↓",
-   "percent_1m": 3.803811153973192,
+   "percent_7d": 5.953279634236444,
+   "color_7d": "green",
+   "arrow_7d": "↑",
+   "percent_1m": 0.6270467624300935,
    "color_1m": "green",
    "arrow_1m": "↑"
   },
   "SPCX": {
    "symbol": "SPCX",
-   "price": 158.9600067138672,
-   "change": 10.889999389648438,
-   "percent": 7.3546287910983565,
+   "price": 171.08999633789062,
+   "change": 12.129989624023438,
+   "percent": 7.630843678723406,
    "color": "green",
    "arrow": "↑",
-   "percent_7d": 6.914187883034828,
+   "percent_7d": 17.611875233518106,
    "color_7d": "green",
    "arrow_7d": "↑",
-   "percent_1m": 12.969937551855319,
+   "percent_1m": 14.2580406447903,
    "color_1m": "green",
    "arrow_1m": "↑"
   },
   "Nvidia": {
    "symbol": "NVDA",
-   "price": 233.9499969482422,
-   "change": 3.089996337890625,
-   "percent": 1.3384719439145978,
+   "price": 238.89999389648438,
+   "change": 4.9499969482421875,
+   "percent": 2.11583544039853,
    "color": "green",
    "arrow": "↑",
-   "percent_7d": 3.9454344581913126,
+   "percent_7d": 4.386958515842411,
    "color_7d": "green",
    "arrow_7d": "↑",
-   "percent_1m": 4.367796703392452,
+   "percent_1m": 4.691318234445885,
    "color_1m": "green",
    "arrow_1m": "↑"
   },
   "Oklo": {
    "symbol": "OKLO",
-   "price": 35.869998931884766,
-   "change": -0.2700004577636719,
-   "percent": -0.7470959112440051,
-   "color": "red",
-   "arrow": "↓",
-   "percent_7d": -5.7045266335859015,
+   "price": 35.970001220703125,
+   "change": 0.10000228881835938,
+   "percent": 0.2787908887542998,
+   "color": "green",
+   "arrow": "↑",
+   "percent_7d": -3.071946566690282,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": -9.235833713564308,
+   "percent_1m": -9.713852703470389,
    "color_1m": "red",
    "arrow_1m": "↓"
   },
   "Micron": {
    "symbol": "MU",
-   "price": 1074.8900146484375,
-   "change": -22.5,
-   "percent": -2.0503193668304114,
+   "price": 1063.9599609375,
+   "change": -10.9300537109375,
+   "percent": -1.01685321865348,
    "color": "red",
    "arrow": "↓",
-   "percent_7d": -0.6828190901054112,
-   "color_7d": "red",
-   "arrow_7d": "↓",
-   "percent_1m": 12.426783892025332,
+   "percent_7d": 0.9468852021564466,
+   "color_7d": "green",
+   "arrow_7d": "↑",
+   "percent_1m": 11.041996196704996,
    "color_1m": "green",
    "arrow_1m": "↑"
   },
   "Palantir": {
    "symbol": "PLTR",
-   "price": 188.75,
-   "change": -1.2899932861328125,
-   "percent": -0.6788009533290923,
-   "color": "red",
-   "arrow": "↓",
-   "percent_7d": -0.48505202605940867,
-   "color_7d": "red",
-   "arrow_7d": "↓",
-   "percent_1m": 11.383212865501605,
+   "price": 189.39999389648438,
+   "change": 0.649993896484375,
+   "percent": 0.34436762727649006,
+   "color": "green",
+   "arrow": "↑",
+   "percent_7d": 1.0241082849903664,
+   "color_7d": "green",
+   "arrow_7d": "↑",
+   "percent_1m": 3.76376221066776,
    "color_1m": "green",
    "arrow_1m": "↑"
   },
   "Bitcoin": {
    "symbol": "BTC-USD",
-   "price": 86505.03125,
-   "change": 1741.453125,
-   "percent": 2.054482790275673,
-   "color": "green",
-   "arrow": "↑",
-   "percent_7d": 3.4471631274914936,
+   "price": 85519.546875,
+   "change": -960.7578125,
+   "percent": -1.1109556285350015,
+   "color": "red",
+   "arrow": "↓",
+   "percent_7d": 2.3526088573303165,
    "color_7d": "green",
    "arrow_7d": "↑",
-   "percent_1m": 12.580826339127574,
+   "percent_1m": 9.411266244893882,
    "color_1m": "green",
    "arrow_1m": "↑"
   },
@@ -744,9 +744,21 @@
    "color_1m": "green",
    "arrow_1m": "↑"
   },
-  "average_percent": 1.6121594071420435
+  "average_percent": 1.4263142262062973
  },
  "space_news": [
+  {
+   "headline": "Resource competition intensifies with surge in megaconstellations",
+   "ai_summary": null,
+   "link": "https://spacenews.com/resource-competition-intensifies-with-surge-in-megaconstellations/",
+   "source": "SpaceNews"
+  },
+  {
+   "headline": "Agile Space Industries Strengthens Board and Corporate Development to Support Continued Growth",
+   "ai_summary": null,
+   "link": "https://spacenews.com/agile-space-industries-strengthens-board-and-corporate-development-to-support-continued-growth/",
+   "source": "SpaceNews"
+  },
   {
    "headline": "World Space Week 2026 Celebrates the “Rocket Revolution”",
    "ai_summary": null,
@@ -770,100 +782,88 @@
    "ai_summary": null,
    "link": "https://spacenews.com/china-launches-guowang-yaogan-40-satellites-sets-up-busy-q4-manifest/",
    "source": "SpaceNews"
-  },
-  {
-   "headline": "Galileo Space Is Building Satellites That Turn Signals Into Answers in Orbit",
-   "ai_summary": null,
-   "link": "https://spacenews.com/galileo-space-is-building-satellites-that-turn-signals-into-answers-in-orbit/",
-   "source": "SpaceNews"
-  },
-  {
-   "headline": "NaviGate successfully demonstrates onboard precise orbit determination aboard D-Orbit’s ION Satellite Carrier",
-   "ai_summary": null,
-   "link": "https://spacenews.com/navigate-successfully-demonstrates-onboard-precise-orbit-determination-aboard-d-orbits-ion-satellite-carrier/",
-   "source": "SpaceNews"
   }
  ],
  "copenhagen": [
   {
-   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;\">Copenhagen</span><span class=\"keyword-badge\" style=\"--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;\">Denmark</span><span class=\"keyword-badge\" style=\"--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;\">Museums</span></span><span class=\"keyword-text\">Denmark&#x27;s top museums launch new autumn exhibitions amid grey season.</span>",
-   "ai_summary": "[Copenhagen, Denmark, Museums] Denmark's top museums launch new autumn exhibitions amid grey season.",
-   "link": "https://www.thelocal.dk/20261002/this-autumns-latest-exhibition-openings-in-denmark",
+   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;\">Danish</span><span class=\"keyword-badge\" style=\"--kw-bg: #4a375f; --kw-border: #5f4c78; --kw-text: #f0e3ff;\">Language</span><span class=\"keyword-badge\" style=\"--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;\">Seasons</span></span><span class=\"keyword-text\">Danish word of the day &quot;Fyringssæson&quot; refers to the heating season when colder months require lighting stoves.</span>",
+   "ai_summary": "[Danish, Language, Seasons] Danish word of the day \"Fyringssæson\" refers to the heating season when colder months require lighting stoves.",
+   "link": "https://www.thelocal.dk/20220922/danish-word-of-the-day-fyringssaeson",
    "source": "The Local Denmark"
   },
   {
-   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;\">Mellemskat</span><span class=\"keyword-badge\" style=\"--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;\">Denmark</span><span class=\"keyword-badge\" style=\"--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;\">TaxCut</span></span><span class=\"keyword-text\">Danish government plans to abolish mellemskat on high earners from 2027, benefiting over 500,000 people.</span>",
-   "ai_summary": "[Mellemskat, Denmark, Tax Cut] Danish government plans to abolish mellemskat on high earners from 2027, benefiting over 500,000 people.",
-   "link": "https://www.thelocal.dk/20260928/mellemskat-who-could-benefit-from-denmarks-plans-to-cut-tax-on-high-earners",
+   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;\">Denmark</span><span class=\"keyword-badge\" style=\"--kw-bg: #4a375f; --kw-border: #5f4c78; --kw-text: #f0e3ff;\">Pumpkin</span><span class=\"keyword-badge\" style=\"--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;\">Record</span></span><span class=\"keyword-text\">A 1.2-tonne (1,198 kg) pumpkin sets new Nordic record by winning Tivoli Gardens&#x27; annual giant pumpkin contest in Copenhagen.</span>",
+   "ai_summary": "[Denmark, Pumpkin, Record] A 1.2-tonne (1,198 kg) pumpkin sets new Nordic record by winning Tivoli Gardens' annual giant pumpkin contest in Copenhagen.",
+   "link": "https://www.thelocal.dk/20261005/1-2-tonne-pumpkin-breaks-danish-record-at-tivoli-gardens",
    "source": "The Local Denmark"
   },
   {
-   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;\">Denmark</span><span class=\"keyword-badge\" style=\"--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;\">Winter</span><span class=\"keyword-badge\" style=\"--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;\">Seasons</span></span><span class=\"keyword-text\">Editor Becky Waterton reveals why she secretly looks forward to Denmark&#x27;s dark winter months in this week&#x27;s Inside Denmark column.</span>",
-   "ai_summary": "[Denmark, Winter, Seasons] Editor Becky Waterton reveals why she secretly looks forward to Denmark's dark winter months in this week's Inside Denmark column.",
-   "link": "https://www.thelocal.dk/20261003/inside-denmark-why-im-secretly-looking-forward-to-the-winter-months-in-denmark",
+   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;\">Denmark</span><span class=\"keyword-badge\" style=\"--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;\">Hack</span><span class=\"keyword-badge\" style=\"--kw-bg: #4a375f; --kw-border: #5f4c78; --kw-text: #f0e3ff;\">Registry</span></span><span class=\"keyword-text\">Hackers breached Denmark&#x27;s national registry, accessing personal data of millions, as announced by the digital affairs ministry.</span>",
+   "ai_summary": "[Denmark, Hack, Registry] Hackers breached Denmark's national registry, accessing personal data of millions, as announced by the digital affairs ministry.",
+   "link": "https://www.thelocal.dk/20261005/explained-what-you-need-to-know-about-the-danish-cpr-hack",
    "source": "The Local Denmark"
   },
   {
-   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;\">Copenhagen</span><span class=\"keyword-badge\" style=\"--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;\">Denmark</span><span class=\"keyword-badge\" style=\"--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;\">Events</span></span><span class=\"keyword-text\">New Danish parliamentary year begins alongside Culture Night, multiple exhibition openings, and international performances in Copenhagen.</span>",
-   "ai_summary": "[Copenhagen, Denmark, Events] New Danish parliamentary year begins alongside Culture Night, multiple exhibition openings, and international performances in Copenhagen.",
-   "link": "https://www.thelocal.dk/20261003/on-the-agenda-whats-happening-in-denmark-this-week-11",
+   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;\">Citizenship</span><span class=\"keyword-badge\" style=\"--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;\">Denmark</span><span class=\"keyword-badge\" style=\"--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;\">Parliament</span></span><span class=\"keyword-text\">Denmark ends citizenship freeze by resubmitting stalled bill to parliament before summer.</span>",
+   "ai_summary": "[Citizenship, Denmark, Parliament] Denmark ends citizenship freeze by resubmitting stalled bill to parliament before summer.",
+   "link": "https://www.thelocal.dk/20261005/key-points-what-we-know-about-denmarks-decision-to-end-citizenship-freeze",
    "source": "The Local Denmark"
   },
   {
-   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;\">Denmark</span><span class=\"keyword-badge\" style=\"--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;\">Budget</span><span class=\"keyword-badge\" style=\"--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;\">Policies</span></span><span class=\"keyword-text\">Danish government announces key policies for 2027 budget ahead of its official presentation later this month.</span>",
-   "ai_summary": "[Denmark, Budget, Policies] Danish government announces key policies for 2027 budget ahead of its official presentation later this month.",
-   "link": "https://www.thelocal.dk/20260929/what-do-we-know-so-far-about-the-danish-governments-new-budget",
+   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;\">Hackers</span><span class=\"keyword-badge\" style=\"--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;\">Denmark</span><span class=\"keyword-badge\" style=\"--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;\">DataBreach</span></span><span class=\"keyword-text\">Hackers accessed personal data of 8.8 million people by breaking into Denmark&#x27;s national registry.</span>",
+   "ai_summary": "[Hackers, Denmark, Data Breach] Hackers accessed personal data of 8.8 million people by breaking into Denmark's national registry.",
+   "link": "https://www.thelocal.dk/20261005/hackers-get-personal-info-on-8-8-million-people-in-denmark-govt-data-leak",
    "source": "The Local Denmark"
   },
   {
-   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;\">Danish</span><span class=\"keyword-badge\" style=\"--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;\">Dancefloor</span><span class=\"keyword-badge\" style=\"--kw-bg: #4a375f; --kw-border: #5f4c78; --kw-text: #f0e3ff;\">Weddings</span></span><span class=\"keyword-text\">14 essential songs to know to blend in on a Danish dance floor at weddings, parties or work events.</span>",
-   "ai_summary": "[Danish, Dancefloor, Weddings] 14 essential songs to know to blend in on a Danish dance floor at weddings, parties or work events.",
-   "link": "https://www.thelocal.dk/20261002/14-songs-you-need-to-know-to-fit-in-on-a-danish-dance-floor",
+   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;\">Denmark</span><span class=\"keyword-badge\" style=\"--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;\">Citizenship</span><span class=\"keyword-badge\" style=\"--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;\">Politics</span></span><span class=\"keyword-text\">Danish government to resubmit stalled bill granting citizenship to 2,055 people and children in first half of 2027 amid political pressure over freeze.</span>",
+   "ai_summary": "[Denmark, Citizenship, Politics] Danish government to resubmit stalled bill granting citizenship to 2,055 people and children in first half of 2027 amid political pressure over freeze.",
+   "link": "https://www.thelocal.dk/20261005/danish-government-to-resubmit-stalled-citizenship-bill-in-first-half-of-2027",
    "source": "The Local Denmark"
   }
  ],
  "south_africa": [
   {
-   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;\">SouthAfrica</span><span class=\"keyword-badge\" style=\"--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;\">Au</span><span class=\"keyword-badge\" style=\"--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;\">Egypt</span></span><span class=\"keyword-text\">President Ramaphosa attended the AU Mid-Year Coordination Meeting in Egypt as SADC Chairperson to advance African Continental Free Trade Area implementation, regional integration, infrastructure, peace, security and Agenda 2063 financial architecture.</span>",
-   "ai_summary": "[South Africa, AU, Egypt] President Ramaphosa attended the AU Mid-Year Coordination Meeting in Egypt as SADC Chairperson to advance African Continental Free Trade Area implementation, regional integration, infrastructure, peace, security and Agenda 2063 financial architecture.",
-   "link": "https://www.sanews.gov.za/south-africa/president-ramaphosa-participates-au-mid-year-coordination-meeting-egypt",
-   "source": "https://www.sanews.gov.za/rss.xml"
-  },
-  {
-   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;\">Energy</span><span class=\"keyword-badge\" style=\"--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;\">Eskom</span><span class=\"keyword-badge\" style=\"--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;\">LoadShedding</span></span><span class=\"keyword-text\">South Africa has gone 504 days without load shedding since May 2025, driven by Eskom&#x27;s improved Energy Availability Factor of 68.11%, reduced outages, 6,492MW added capacity, and 80.49% lower diesel costs.</span>",
-   "ai_summary": "[Energy, Eskom, Load Shedding] South Africa has gone 504 days without load shedding since May 2025, driven by Eskom's improved Energy Availability Factor of 68.11%, reduced outages, 6,492MW added capacity, and 80.49% lower diesel costs.",
-   "link": "https://www.sanews.gov.za/south-africa/no-load-shedding-over-500-days-says-eskom",
-   "source": "https://www.sanews.gov.za/rss.xml"
-  },
-  {
-   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;\">SouthAfrica</span><span class=\"keyword-badge\" style=\"--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;\">Cabinet</span><span class=\"keyword-badge\" style=\"--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;\">Meeting</span></span><span class=\"keyword-text\">Cabinet held its regular meeting on 23 September 2026 and issued an official statement detailing outcomes and decisions.</span>",
-   "ai_summary": "[South Africa, Cabinet, Meeting] Cabinet held its regular meeting on 23 September 2026 and issued an official statement detailing outcomes and decisions.",
+   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;\">SouthAfrica</span><span class=\"keyword-badge\" style=\"--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;\">Cabinet</span><span class=\"keyword-badge\" style=\"--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;\">Meeting</span></span><span class=\"keyword-text\">Cabinet held its regular meeting on 23 September 2026 and issued an official statement detailing key national decisions.</span>",
+   "ai_summary": "[South Africa, Cabinet, Meeting] Cabinet held its regular meeting on 23 September 2026 and issued an official statement detailing key national decisions.",
    "link": "https://www.gcis.gov.za/full-statement-on-the-cabinet-meeting-23-september-2026",
    "source": "Government Communication and Information System (GCIS) - The pulse of communication excellence in government"
   },
   {
-   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;\">Cabinet</span><span class=\"keyword-badge\" style=\"--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;\">SouthAfrica</span><span class=\"keyword-badge\" style=\"--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;\">Briefing</span></span><span class=\"keyword-text\">Minister Khumbudzo Ntshavheni updated the media on key decisions from the South African Cabinet meeting held on 29 September.</span>",
-   "ai_summary": "[Cabinet, South Africa, Briefing] Minister Khumbudzo Ntshavheni updated the media on key decisions from the South African Cabinet meeting held on 29 September.",
+   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;\">SouthAfrica</span><span class=\"keyword-badge\" style=\"--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;\">Cabinet</span><span class=\"keyword-badge\" style=\"--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;\">Government</span></span><span class=\"keyword-text\">Minister Khumbudzo Ntshavheni briefed the media on key outcomes from the South African Cabinet meeting held on 29 September.</span>",
+   "ai_summary": "[South Africa, Cabinet, Government] Minister Khumbudzo Ntshavheni briefed the media on key outcomes from the South African Cabinet meeting held on 29 September.",
    "link": "https://www.gcis.gov.za/minister-khumbudzo-ntshavheni-briefs-media-on-outcomes-of-the-cabinet-meeting-29-sept",
    "source": "Government Communication and Information System (GCIS) - The pulse of communication excellence in government"
   },
   {
-   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;\">SouthAfrica</span><span class=\"keyword-badge\" style=\"--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;\">Gbvf</span><span class=\"keyword-badge\" style=\"--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;\">Government</span></span><span class=\"keyword-text\">Gauteng municipalities will implement President Ramaphosa’s directives on gender-based violence and femicide, according to Premier Lesufi.</span>",
-   "ai_summary": "[South Africa, GBVF, Government] Gauteng municipalities will implement President Ramaphosa’s directives on gender-based violence and femicide, according to Premier Lesufi.",
-   "link": "https://www.sabcnews.com/sabcnews/municipalities-to-implement-ramaphosas-gbvf-directives-lesufi/",
-   "source": "SABC News – Breaking news, special reports, world, business, sport coverage of all South African current events. Africa's news leader."
+   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;\">SouthAfrica</span><span class=\"keyword-badge\" style=\"--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;\">BBbee</span><span class=\"keyword-badge\" style=\"--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;\">Redress</span></span><span class=\"keyword-text\">South Africa’s government reaffirms Broad-Based Black Economic Empowerment (B-BBEE) as a constitutional tool for apartheid redress, enabling 3.4 million black middle class with R400bn spending power while offering multinationals Equity Equivalent Investment Programmes as flexible compliance alternative.</span>",
+   "ai_summary": "[South Africa, B-BBEE, redress] South Africa’s government reaffirms Broad-Based Black Economic Empowerment (B-BBEE) as a constitutional tool for apartheid redress, enabling 3.4 million black middle class with R400bn spending power while offering multinationals Equity Equivalent Investment Programmes as flexible compliance alternative.",
+   "link": "https://www.sanews.gov.za/south-africa/ntshavheni-reaffirms-b-bbee-key-instrument-economic-redress",
+   "source": "https://www.sanews.gov.za/rss.xml"
   },
   {
-   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;\">Bbbee</span><span class=\"keyword-badge\" style=\"--kw-bg: #5a5a2e; --kw-border: #78783e; --kw-text: #fff6c9;\">SouthAfrica</span><span class=\"keyword-badge\" style=\"--kw-bg: #2f3f5c; --kw-border: #3f567a; --kw-text: #d9e6ff;\">Redress</span></span><span class=\"keyword-text\">South Africa’s government reaffirms Broad-Based Black Economic Empowerment as a constitutional tool for apartheid redress, enabling 3.4 million black middle-class citizens with R400bn annual spending power while offering multinationals Equity Equivalent Investment Programmes.</span>",
-   "ai_summary": "[BBBEE, South Africa, Redress] South Africa’s government reaffirms Broad-Based Black Economic Empowerment as a constitutional tool for apartheid redress, enabling 3.4 million black middle-class citizens with R400bn annual spending power while offering multinationals Equity Equivalent Investment Programmes.",
-   "link": "https://www.sanews.gov.za/south-africa/ntshavheni-reaffirms-b-bbee-key-instrument-economic-redress",
+   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #4a375f; --kw-border: #5f4c78; --kw-text: #f0e3ff;\">Kzn</span><span class=\"keyword-badge\" style=\"--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;\">Transport</span><span class=\"keyword-badge\" style=\"--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;\">Logistics</span></span><span class=\"keyword-text\">KwaZulu-Natal&#x27;s Transport Indaba advanced the provincial 10-point plan with national Minister Barbara Creecy emphasising Durban and Richards Bay ports as South Africa&#x27;s primary gateway to sub-Saharan Africa while prioritising rail reform, freight shift from road to rail, and multimodal infrastructure to boost economic growth.</span>",
+   "ai_summary": "[KZN, Transport, Logistics] KwaZulu-Natal's Transport Indaba advanced the provincial 10-point plan with national Minister Barbara Creecy emphasising Durban and Richards Bay ports as South Africa's primary gateway to sub-Saharan Africa while prioritising rail reform, freight shift from road to rail, and multimodal infrastructure to boost economic growth.",
+   "link": "https://www.sanews.gov.za/south-africa/kzn-transport-and-logistics-future-takes-centre-stage-indaba",
+   "source": "https://www.sanews.gov.za/rss.xml"
+  },
+  {
+   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;\">Economy</span><span class=\"keyword-badge\" style=\"--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;\">Reforms</span><span class=\"keyword-badge\" style=\"--kw-bg: #4a375f; --kw-border: #5f4c78; --kw-text: #f0e3ff;\">Infrastructure</span></span><span class=\"keyword-text\">South Africa shifts from economic stabilisation to expansion through government reforms improving energy reliability, logistics, and infrastructure delivery, with a new business partnership targeting over one million jobs by 2030.</span>",
+   "ai_summary": "[Economy, Reforms, Infrastructure] South Africa shifts from economic stabilisation to expansion through government reforms improving energy reliability, logistics, and infrastructure delivery, with a new business partnership targeting over one million jobs by 2030.",
+   "link": "https://www.gcis.gov.za/content/newsroom/blogs/2026-09/south-africas-economy-from-stabilisation-to-expansion",
+   "source": "Government Communication and Information System (GCIS) - The pulse of communication excellence in government"
+  },
+  {
+   "headline": "<span class=\"keyword-badges\"><span class=\"keyword-badge\" style=\"--kw-bg: #4a375f; --kw-border: #5f4c78; --kw-text: #f0e3ff;\">Kzn</span><span class=\"keyword-badge\" style=\"--kw-bg: #4a375f; --kw-border: #5f4c78; --kw-text: #f0e3ff;\">Freight</span><span class=\"keyword-badge\" style=\"--kw-bg: #5a3a2e; --kw-border: #7a4f3e; --kw-text: #ffe1d3;\">Logistics</span></span><span class=\"keyword-text\">KwaZulu-Natal Premier calls for stronger government-private sector collaboration to resolve Port of Durban congestion and improve provincial freight network efficiency.</span>",
+   "ai_summary": "[KZN, Freight, Logistics] KwaZulu-Natal Premier calls for stronger government-private sector collaboration to resolve Port of Durban congestion and improve provincial freight network efficiency.",
+   "link": "https://www.sanews.gov.za/south-africa/kzn-steps-drive-unblock-freight-and-logistics-bottlenecks",
    "source": "https://www.sanews.gov.za/rss.xml"
   }
  ],
  "scripture": {
-  "text": "The spider taketh hold with her hands, and is in kings’ palaces.",
-  "focus": "Proverbs 30:28",
-  "ref": "Proverbs 30:28",
+  "text": "I was almost in all evil in the midst of the congregation and assembly.",
+  "focus": "Proverbs 5:14",
+  "ref": "Proverbs 5:14",
   "book": "Proverbs",
   "translation": "Kjv",
   "translation_label": "King James Version",
@@ -871,41 +871,41 @@
    "name": "King James Version",
    "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
   },
-  "link": "https://www.biblegateway.com/passage/?search=Proverbs%2030%3A28&version=KJV"
+  "link": "https://www.biblegateway.com/passage/?search=Proverbs%205%3A14&version=KJV"
  },
  "x_trending": null,
  "sky_watch": [
   {
-   "name": "Unsettled Aurora",
-   "post_count": "Geomagnetic Index Kp 4",
-   "trending_since": "Possible On The North Horizon",
+   "name": "Quiet Aurora",
+   "post_count": "Geomagnetic Index Kp 2.3",
+   "trending_since": "Visible Aurora Unlikely Tonight",
    "link": "https://www.swpc.noaa.gov/",
    "category": "Sky Watch",
-   "sort_at": "2026-10-05T02:54:00+00:00"
+   "sort_at": "2026-10-06T02:58:00+00:00"
   },
   {
-   "name": "Solar Class B1.8",
+   "name": "Solar Class C1.6",
    "post_count": "Goes Satellite X-Ray Reading",
-   "trending_since": "Quiet Sun, No Major Flares",
+   "trending_since": "Modest C-Class Activity",
    "link": "https://www.swpc.noaa.gov/products/goes-x-ray-flux",
    "category": "Sky Watch",
-   "sort_at": "2026-10-05T02:56:00+00:00"
-  },
-  {
-   "name": "Falcon 9 Block 5",
-   "post_count": "Mission SDA Tranche 1 Transport Layer A",
-   "trending_since": "Launch Today At 10:17 am",
-   "link": "https://spacelaunchnow.me/launch/da43dc2c-00af-4cc1-8ef1-90a60b2eb9e5/",
-   "category": "Sky Watch",
-   "sort_at": "2026-10-05T08:17:21+00:00"
+   "sort_at": "2026-10-06T02:58:00+00:00"
   },
   {
    "name": "Waning Crescent",
-   "post_count": "Moon 38% Illuminated",
+   "post_count": "Moon 28% Illuminated",
    "trending_since": "Visible Tonight Over Copenhagen",
    "link": "https://moon.nasa.gov/moon-in-motion/moon-phases/",
    "category": "Sky Watch",
-   "sort_at": "2026-10-05T21:00:00+02:00"
+   "sort_at": "2026-10-06T21:00:00+02:00"
+  },
+  {
+   "name": "Nuri",
+   "post_count": "Mission NeonSat-2 to 6",
+   "trending_since": "Launch Tomorrow At 5:23 am",
+   "link": "https://spacelaunchnow.me/launch/e0741415-6c63-4236-9736-24a6c04485bc/",
+   "category": "Sky Watch",
+   "sort_at": "2026-10-07T03:23:00+00:00"
   },
   {
    "name": "Annular Solar Eclipse",
