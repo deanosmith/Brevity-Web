@@ -8,13 +8,14 @@
     "Proverbs 13:10",
     "Proverbs 30:28",
     "Proverbs 5:14",
-    "Proverbs 30:7"
+    "Proverbs 30:7",
+    "Proverbs 23:27"
   ],
   "current": {
-    "date": "2026-10-07",
-    "text": "Two things have I required of thee; deny me them not before I die:",
-    "focus": "Proverbs 30:7",
-    "ref": "Proverbs 30:7",
+    "date": "2026-10-08",
+    "text": "For a whore is a deep ditch; and a strange woman is a narrow pit.",
+    "focus": "Proverbs 23:27",
+    "ref": "Proverbs 23:27",
     "book": "Proverbs",
     "translation": "Kjv",
     "translation_label": "King James Version",
@@ -22,6 +23,6 @@
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2030%3A7&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2023%3A27&version=KJV"
   }
 }
