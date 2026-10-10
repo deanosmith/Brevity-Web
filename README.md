@@ -4,39 +4,29 @@ A daily automated morning brief published as a GitHub Pages website.
 
 Live site: [https://deanosmith.github.io/Brevity-Web/](https://deanosmith.github.io/Brevity-Web/)
 
-The generator pulls weather, markets, X topics, sky data, and news feeds, summarises stories with xAI, then writes:
-
-- `index.html` for the public website
-- `brevity.css` / `brevity-web.css` for styling
-- `brevity.js` for the Refresh All button
-
-PDF generation is kept only for optional Slack delivery and is not part of the public site.
+The generator pulls weather, markets, X topics, sky data, and news feeds, summarises stories with xAI, then writes `index.html`, `brevity.css`, `brevity-web.css`, and `brevity.js`. PDF generation is only for optional Slack delivery.
 
 ## Refresh All
 
-The **Refresh All** button in the top bar reruns the full daily workflow, the same one the 05:00 schedule runs, with force on. It uses the same xAI tokens as a normal morning run.
+The **Refresh All** button reruns the full daily workflow (same as the 05:00 schedule) with force on. Opening or reloading the page never starts a run.
 
-1. A confirmation dialog must be accepted first.
-2. The first time, it asks for a fine-grained GitHub token with **Actions: Read and write** on this repository (the same kind cron-job.org uses). The token is stored only in that browser's local storage. **Forget Token** in the dialog removes it.
-3. After starting the run, the page checks every 20 seconds and reloads itself once the new brief is published (usually 2–3 minutes).
-
-Opening or reloading the page never triggers a run or uses AI tokens.
+1. Accept the confirmation dialog.
+2. The first time, paste a fine-grained GitHub token with **Actions: Read and write** on this repository. It is stored only in that browser. **Forget Token** removes it.
+3. The page checks every 20 seconds and reloads once the new brief is published (usually 2–3 minutes).
 
 ## Sections
 
 - Date and year progress
-- Copenhagen weather (Open-Meteo), including next 2 days and peak rain time
+- Copenhagen weather (Open-Meteo), next 2 days, and peak rain time
 - General stock watchlist
 - Daily Proverbs or Ecclesiastes verse (no repeats until the full bank has been shown)
-- For You On X: topics with a summary, why it matters, sentiment, volume, key accounts, and an overall pulse
+- For You On X: personalized trend names, category, volume, and time
 - Sky Watch (moon, aurora, solar weather, next launch, next eclipse)
-- Copenhagen news
-- South Africa news
-- Space news
+- Copenhagen, South Africa, and space news
 
 ## Automation
 
-A daily request at 05:00 Copenhagen starts this workflow (cron-job.org). GitHub's own 05:17 / 06:17 schedule is only a backup; it is often hours late or skipped.
+A daily request at 05:00 Copenhagen starts this workflow (cron-job.org). GitHub's 05:17 / 06:17 schedule is only a backup.
 
 The job skips if today's brief is already on `main`. To regenerate, use **Run Workflow** and enable **Regenerate Even If Today Is Already Published**.
 
@@ -47,11 +37,9 @@ Create a fine-grained GitHub token for this repo with **Actions: Read and write*
 - Headers: `Accept: application/vnd.github+json`, `Authorization: Bearer <token>`, `X-GitHub-Api-Version: 2022-11-28`, `Content-Type: application/json`
 - Body: `{"ref":"main"}`
 
-Published artifacts are committed back to `main`, which GitHub Pages serves from the repository root.
+Published artifacts are committed back to `main`. Shown verse references are stored in `resources/scripture-history.json`.
 
-The daily verse is chosen from Proverbs and Ecclesiastes. Text comes from Crossway's [ESV API](https://api.esv.org/) when `ESV_API_KEY` is set, both locally and as the GitHub Actions secret of the same name. Without the key, or if the API fails, the bundled King James text in `resources/scripture-verses.json` is used. Shown references are stored in `resources/scripture-history.json` so the same verse is not reused until every verse has appeared. That history file is committed with each publish.
-
-Slack delivery is disabled by default. To re-enable it temporarily, set `SEND_TO_SLACK=true` in the workflow environment and provide Slack secrets.
+Slack delivery is off by default. Set `SEND_TO_SLACK=true` and provide Slack secrets to re-enable it.
 
 ## Local run
 
@@ -60,9 +48,7 @@ uv sync
 uv run python brevity.py
 ```
 
-### Testing Locally With Real Data
-
-Every run saves its full data to `resources/brief-data.json`, which is committed with each publish. To test template or styling changes against the latest real brief, with no API calls or tokens:
+To restyle against the latest published data, with no API calls:
 
 ```bash
 git pull
@@ -70,21 +56,11 @@ uv run python brevity.py --render-only
 python3 -m http.server 8000
 ```
 
-A full local run needs a valid `XAI_API_KEY` in `.env` (or `~/.env`); otherwise X is empty and news isn't summarised.
+A full local run needs `XAI_API_KEY` in `.env` (or `~/.env`); otherwise X is empty and news is not summarised.
 
-Useful environment variables:
-
-- `XAI_API_KEY` required for summarisation and personalized X topics
-- `ESV_API_KEY` optional; enables English Standard Version scripture (free key at [api.esv.org](https://api.esv.org/)), otherwise King James is used
-- `XAI_MODEL` optional model override (default: `grok-4.20-non-reasoning`)
-- `CONSUMER_KEY`, `CONSUMER_SECRET`, `ACCESS_TOKEN`, `ACCESS_TOKEN_SECRET` optional; used if the X account has Premium personalized trends
-- `SEND_TO_SLACK=true` only if you explicitly want Slack upload again (generates a PDF for Slack only)
-- `GENERATE_PDF=false` to force-skip PDF even when Slack is enabled
-
-Open `index.html` locally, or serve the folder:
-
-```bash
-python3 -m http.server 8000
-```
-
-Then visit `http://localhost:8000`.
+- `XAI_API_KEY` required for summarisation
+- `ESV_API_KEY` optional; English Standard Version scripture (key at [api.esv.org](https://api.esv.org/)), otherwise King James
+- `XAI_MODEL` optional (default: `grok-4.20-non-reasoning`)
+- `CONSUMER_KEY`, `CONSUMER_SECRET`, `ACCESS_TOKEN`, `ACCESS_TOKEN_SECRET` optional X Premium personalized trends
+- `SEND_TO_SLACK=true` to upload a PDF to Slack
+- `GENERATE_PDF=false` to skip PDF even when Slack is enabled

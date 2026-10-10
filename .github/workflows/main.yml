@@ -8,11 +8,9 @@ on:
         type: boolean
         default: false
   schedule:
-    # Backup only. GitHub cron is often hours late or dropped. The 07:00
-    # Copenhagen page is triggered at 05:00 Europe/Copenhagen by an external
-    # dispatch (see README). Minutes are off :00 to avoid the hourly pile-up.
-    - cron: '17 3 * * *'   # 03:17 UTC = 05:17 CEST / 04:17 CET
-    - cron: '17 4 * * *'   # 04:17 UTC = 06:17 CEST / 05:17 CET (catch-up, +1h)
+    # Backup; primary 05:00 Copenhagen trigger is an external dispatch (see README).
+    - cron: '17 3 * * *'
+    - cron: '17 4 * * *'
 
 permissions:
   contents: write
@@ -96,7 +94,6 @@ jobs:
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
-          # Primary product is GitHub Pages. Slack is opt-in only.
           SEND_TO_SLACK: "false"
           GENERATE_PDF: "false"
         run: |
@@ -119,9 +116,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Publish only the files the GitHub Pages site actually serves.
           git add index.html brevity.css brevity-web.css brevity.js resources/favicon.png resources/favicon-16.png resources/favicon-32.png resources/favicon-512.png resources/apple-touch-icon.png resources/scripture-history.json resources/brief-data.json
-          # Drop previously published artifacts that the site no longer uses.
           git rm -f --ignore-unmatch resources/brevity.json brevity.pdf || true
 
           if git diff --staged --quiet; then

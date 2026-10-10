@@ -25,120 +25,54 @@ from jinja2 import Environment, FileSystemLoader
 from markupsafe import Markup
 from slack_sdk import WebClient
 
-# ==============================================================================
-# CONFIGURATION
-# ==============================================================================
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 load_dotenv()
 
 XAI_API_KEY = os.getenv("XAI_API_KEY")
-# Ignore blank overrides from empty GitHub Actions variables.
 XAI_MODEL = (os.getenv("XAI_MODEL") or "grok-4.20-non-reasoning").strip() or "grok-4.20-non-reasoning"
 ESV_API_KEY = (os.getenv("ESV_API_KEY") or "").strip()
 SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN")
 SLACK_CHANNEL_ID = os.getenv("SLACK_CHANNEL_ID")
-# Slack delivery is optional; the primary product is the GitHub Pages site.
 SEND_TO_SLACK = os.getenv("SEND_TO_SLACK", "").strip().lower() in {"1", "true", "yes", "on"}
 GENERATE_PDF = os.getenv("GENERATE_PDF", "1").strip().lower() not in {"0", "false", "no", "off"}
 
-# Ensure WeasyPrint can locate system libraries on macOS.
 if sys.platform == "darwin":
     os.environ["DYLD_FALLBACK_LIBRARY_PATH"] = (
         "/opt/homebrew/lib:" + os.environ.get("DYLD_FALLBACK_LIBRARY_PATH", "")
     )
 
-# Allow HTTPS requests in environments with legacy SSL setups.
 if hasattr(ssl, "_create_unverified_context"):
     ssl._create_default_https_context = ssl._create_unverified_context
 
-
-# ==============================================================================
-# CONSTANTS & MAPPINGS
-# ==============================================================================
-
-WEATHER_COLORS = {
-    0: "#FFD700",  # Sun / Clear (Gold)
-    1: "#87CEEB",
-    2: "#87CEEB",
-    3: "#87CEEB",  # Partly Cloudy (Sky Blue)
-    45: "#708090",
-    48: "#708090",  # Fog (Slate Gray)
-    51: "#4682B4",
-    53: "#4682B4",
-    55: "#4682B4",  # Drizzle (Steel Blue)
-    61: "#4682B4",
-    63: "#4682B4",
-    65: "#4682B4",  # Rain
-    80: "#4682B4",
-    81: "#4682B4",
-    82: "#4682B4",  # Showers
-    71: "#E0FFFF",
-    73: "#E0FFFF",
-    75: "#E0FFFF",
-    77: "#E0FFFF",  # Snow (Light Cyan)
-    95: "#9370DB",
-    96: "#9370DB",
-    99: "#9370DB",  # Thunderstorm (Medium Purple)
+# WMO code -> (color, label, icon)
+WEATHER = {
+    0: ("#FFD700", "Clear Sky", "☀️"),
+    1: ("#87CEEB", "Partly Cloudy", "⛅️"),
+    2: ("#87CEEB", "Partly Cloudy", "⛅️"),
+    3: ("#87CEEB", "Overcast", "☁️"),
+    45: ("#708090", "Foggy", "🌫️"),
+    48: ("#708090", "Rime Fog", "🌫️"),
+    51: ("#4682B4", "Light Drizzle", "🌦️"),
+    53: ("#4682B4", "Drizzle", "🌦️"),
+    55: ("#4682B4", "Heavy Drizzle", "🌧️"),
+    61: ("#4682B4", "Light Rain", "🌧️"),
+    63: ("#4682B4", "Rain", "🌧️"),
+    65: ("#4682B4", "Heavy Rain", "🌧️"),
+    80: ("#4682B4", "Showers", "🌦️"),
+    81: ("#4682B4", "Showers", "🌦️"),
+    82: ("#4682B4", "Showers", "🌦️"),
+    71: ("#E0FFFF", "Light Snow", "🌨️"),
+    73: ("#E0FFFF", "Snow", "🌨️"),
+    75: ("#E0FFFF", "Heavy Snow", "🌨️"),
+    77: ("#E0FFFF", "Snow Grains", "🌨️"),
+    95: ("#9370DB", "Thunderstorm", "⛈️"),
+    96: ("#9370DB", "Thunderstorm", "⛈️"),
+    99: ("#9370DB", "Thunderstorm", "⛈️"),
 }
+_WEATHER_FALLBACK = ("#AAAAAA", "Unknown", "?")
 
-WEATHER_TEXT = {
-    0: "Clear Sky",
-    1: "Partly Cloudy",
-    2: "Partly Cloudy",
-    3: "Overcast",
-    45: "Foggy",
-    48: "Rime Fog",
-    51: "Light Drizzle",
-    53: "Drizzle",
-    55: "Heavy Drizzle",
-    61: "Light Rain",
-    63: "Rain",
-    65: "Heavy Rain",
-    80: "Showers",
-    81: "Showers",
-    82: "Showers",
-    71: "Light Snow",
-    73: "Snow",
-    75: "Heavy Snow",
-    77: "Snow Grains",
-    95: "Thunderstorm",
-    96: "Thunderstorm",
-    99: "Thunderstorm",
-}
-
-WEATHER_ICONS = {
-    0: "☀️",  # Clear
-    1: "⛅️",
-    2: "⛅️",
-    3: "☁️",  # Cloudy
-    45: "🌫️",
-    48: "🌫️",  # Fog
-    51: "🌦️",
-    53: "🌦️",
-    55: "🌧️",  # Drizzle
-    61: "🌧️",
-    63: "🌧️",
-    65: "🌧️",  # Rain
-    80: "🌦️",
-    81: "🌦️",
-    82: "🌦️",  # Showers
-    71: "🌨️",
-    73: "🌨️",
-    75: "🌨️",
-    77: "🌨️",  # Snow
-    95: "⛈️",
-    96: "⛈️",
-    99: "⛈️",  # Thunderstorm
-}
-
-# General market watchlist. Prices only — no anchored portfolio baselines.
-# Display name -> Yahoo ticker.
 STOCK_TICKERS = {
     "Tesla": "TSLA",
     "SPCX": "SPCX",
@@ -150,7 +84,6 @@ STOCK_TICKERS = {
     "Vanguard S&P 500": "VUSA.AS",
 }
 
-# Copenhagen local sources with fallbacks. World news intentionally removed.
 COPENHAGEN_FEEDS = [
     "https://cphpost.dk/feed/",
     "https://www.cphpost.dk/feed/",
@@ -162,7 +95,6 @@ SPACE_FEEDS = [
     "https://spaceflightnow.com/feed/",
     "https://www.nasaspaceflight.com/feed/",
 ]
-# National government, finance, and diplomacy. Crime and sport are filtered later.
 SOUTH_AFRICA_FEEDS = [
     "https://www.sanews.gov.za/rss.xml",
     "https://www.gov.za/rss.xml",
@@ -205,7 +137,6 @@ SOUTH_AFRICA_KEEP_RE = re.compile(
 SOUTH_AFRICA_WEAK_TERMS = frozenset({"minister", "policy", "election"})
 
 COPENHAGEN_TZ = ZoneInfo("Europe/Copenhagen")
-# Next notable eclipses after the Aug 2026 events. Used by Sky Watch.
 UPCOMING_ECLIPSES = [
     {
         "when": datetime(2026, 8, 28, 4, 13, tzinfo=timezone.utc),
@@ -251,19 +182,9 @@ KEYWORD_COLOR_PALETTE = [
     ("#5a5a2e", "#78783e", "#fff6c9"),
 ]
 
-PLASMA_STOPS = (
-    (0.0, "#0d0887"),
-    (0.25, "#6a00a8"),
-    (0.5, "#b12a90"),
-    (0.75, "#e16462"),
-    (1.0, "#f0f921"),
-)
-
 SITE_HTML_PATH = "index.html"
-# Snapshot of each run's data; `--render-only` rebuilds index.html from it with no API calls.
 BRIEF_DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "resources", "brief-data.json")
 NEWS_KEYS = ("copenhagen", "south_africa", "space_news")
-# Refresh All in the browser dispatches this workflow (same as the 05:00 run).
 GITHUB_REPO = (os.getenv("GITHUB_REPOSITORY") or "deanosmith/Brevity-Web").strip()
 GITHUB_WORKFLOW = "main.yml"
 PDF_PATH = "brevity.pdf"
@@ -293,7 +214,6 @@ SCRIPTURE_FALLBACK = [
     },
 ]
 ESV_API_URL = "https://api.esv.org/v3/passage/text/"
-# ESV comes from Crossway's API; KJV is the bundled public-domain verse bank.
 SCRIPTURE_TRANSLATIONS = {
     "Esv": {"name": "English Standard Version", "url": "https://www.esv.org/", "gateway": "ESV"},
     "Kjv": {"name": "King James Version", "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/", "gateway": "KJV"},
@@ -307,11 +227,9 @@ RETRY_STATUS_CODES = (429, 500, 502, 503, 504)
 HTML_TAG_RE = re.compile(r"<[^>]+>")
 WHITESPACE_RE = re.compile(r"\s+")
 
-# Open-Meteo source, matching Brevity-Wallpaper's weather provider.
 WEATHER_LAT = 55.6761
 WEATHER_LON = 12.5683
 WEATHER_TIMEZONE = "Europe/Copenhagen"
-# Wind dial full-scale in km/h. 24 km/h should read as very strong.
 WIND_DIAL_MAX_KMH = 50
 WEATHER_SOURCE = {
     "name": "Open-Meteo",
@@ -320,67 +238,46 @@ WEATHER_SOURCE = {
 }
 
 
-# ==============================================================================
-# HELPERS
-# ==============================================================================
-
-
 def get_weather_color(code):
-    """Return a hex color for WMO weather codes."""
-    return WEATHER_COLORS.get(code, "#AAAAAA")
+    return WEATHER.get(code, _WEATHER_FALLBACK)[0]
 
 
 def get_weather_text(code):
-    """Return description text for WMO weather codes."""
-    return WEATHER_TEXT.get(code, "Unknown")
+    return WEATHER.get(code, _WEATHER_FALLBACK)[1]
 
 
 def get_weather_icon(code):
-    """Return an icon for WMO weather codes."""
-    return WEATHER_ICONS.get(code, "?")
-
-
-def _hex_to_rgb(value):
-    value = value.lstrip("#")
-    if len(value) != 6:
-        return (0, 0, 0)
-    return tuple(int(value[i : i + 2], 16) for i in (0, 2, 4))
+    return WEATHER.get(code, _WEATHER_FALLBACK)[2]
 
 
 def _rgb_to_hex(rgb):
     return "#{:02x}{:02x}{:02x}".format(*rgb)
 
 
+def _mix_rgb(stops, t):
+    t = max(0.0, min(1.0, t))
+    for index in range(len(stops) - 1):
+        left_t, left_rgb = stops[index]
+        right_t, right_rgb = stops[index + 1]
+        if t <= right_t:
+            local = 0 if right_t == left_t else (t - left_t) / (right_t - left_t)
+            return tuple(int(round(a + (b - a) * local)) for a, b in zip(left_rgb, right_rgb))
+    return stops[-1][1]
+
+
 def plasma_color(value, vmin=0.0, vmax=40.0):
-    """Map a numeric value onto the Plasma colormap."""
     try:
         numeric = float(value)
     except (TypeError, ValueError):
         numeric = vmin
-    if vmax == vmin:
-        return PLASMA_STOPS[-1][1]
-    t = (numeric - vmin) / (vmax - vmin)
-    t = max(0.0, min(1.0, t))
-    for idx in range(len(PLASMA_STOPS) - 1):
-        left_t, left_color = PLASMA_STOPS[idx]
-        right_t, right_color = PLASMA_STOPS[idx + 1]
-        if t <= right_t:
-            if right_t == left_t:
-                return right_color
-            local = (t - left_t) / (right_t - left_t)
-            r0, g0, b0 = _hex_to_rgb(left_color)
-            r1, g1, b1 = _hex_to_rgb(right_color)
-            r = int(round(r0 + (r1 - r0) * local))
-            g = int(round(g0 + (g1 - g0) * local))
-            b = int(round(b0 + (b1 - b0) * local))
-            return _rgb_to_hex((r, g, b))
-    return PLASMA_STOPS[-1][1]
-
-
+    t = 0.0 if vmax == vmin else (numeric - vmin) / (vmax - vmin)
+    return _rgb_to_hex(_mix_rgb(
+        ((0.0, (13, 8, 135)), (0.25, (106, 0, 168)), (0.5, (177, 42, 144)), (0.75, (225, 100, 98)), (1.0, (240, 249, 33))),
+        t,
+    ))
 
 
 def clamp01(value):
-    """Clamp a numeric value into the 0..1 range."""
     try:
         number = float(value)
     except (TypeError, ValueError):
@@ -389,30 +286,14 @@ def clamp01(value):
 
 
 def temperature_color(celsius):
-    """Map temperature onto a cool-blue to hot-red palette over -5C..30C."""
-    # -5C (cool blue) through mild to 30C (hot red).
-    progress = clamp01(((safe_number(celsius, 10) or 10) + 5) / 35.0)
-    stops = [
-        (0.0, (64, 148, 255)),   # cool blue
-        (0.28, (90, 200, 255)),  # light blue
-        (0.5, (255, 214, 102)),  # mild gold
-        (0.75, (255, 140, 66)),  # warm orange
-        (1.0, (255, 69, 58)),    # hot red
-    ]
-    for index in range(len(stops) - 1):
-        left_t, left_rgb = stops[index]
-        right_t, right_rgb = stops[index + 1]
-        if progress <= right_t:
-            local = 0 if right_t == left_t else (progress - left_t) / (right_t - left_t)
-            rgb = tuple(int(round(a + (b - a) * local)) for a, b in zip(left_rgb, right_rgb))
-            return _rgb_to_hex(rgb)
-    return _rgb_to_hex(stops[-1][1])
+    return _rgb_to_hex(_mix_rgb(
+        ((0.0, (64, 148, 255)), (0.28, (90, 200, 255)), (0.5, (255, 214, 102)), (0.75, (255, 140, 66)), (1.0, (255, 69, 58))),
+        clamp01(((safe_number(celsius, 10) or 10) + 5) / 35.0),
+    ))
 
 
 def rain_color(percent):
-    """Blue intensity scale for rain probability."""
     progress = clamp01((safe_number(percent, 0) or 0) / 100.0)
-    # Deep slate -> vivid rain blue
     return _rgb_to_hex(tuple(
         int(round(a + (b - a) * progress))
         for a, b in zip((55, 78, 110), (64, 196, 255))
@@ -420,31 +301,17 @@ def rain_color(percent):
 
 
 def uv_color(uv_index):
-    """UV risk colour scale."""
-    progress = clamp01((safe_number(uv_index, 0) or 0) / 11.0)
-    stops = [
-        (0.0, (76, 175, 80)),
-        (0.35, (255, 235, 59)),
-        (0.6, (255, 152, 0)),
-        (1.0, (244, 67, 54)),
-    ]
-    for index in range(len(stops) - 1):
-        left_t, left_rgb = stops[index]
-        right_t, right_rgb = stops[index + 1]
-        if progress <= right_t:
-            local = 0 if right_t == left_t else (progress - left_t) / (right_t - left_t)
-            rgb = tuple(int(round(a + (b - a) * local)) for a, b in zip(left_rgb, right_rgb))
-            return _rgb_to_hex(rgb)
-    return _rgb_to_hex(stops[-1][1])
+    return _rgb_to_hex(_mix_rgb(
+        ((0.0, (76, 175, 80)), (0.35, (255, 235, 59)), (0.6, (255, 152, 0)), (1.0, (244, 67, 54))),
+        clamp01((safe_number(uv_index, 0) or 0) / 11.0),
+    ))
 
 
 def _temp_dial_range(high_v, low_v):
-    """Map low/high temps onto a fixed -5C..30C arc for the temp speedo."""
     low_progress = clamp01(((low_v if low_v is not None else 5) + 5) / 35.0)
     high_progress = clamp01(((high_v if high_v is not None else 10) + 5) / 35.0)
     if high_progress < low_progress:
         high_progress = low_progress
-    # Keep a tiny visible sliver when the day range is extremely narrow.
     min_width = 0.015
     if high_progress - low_progress < min_width:
         high_progress = min(1.0, low_progress + min_width)
@@ -462,7 +329,6 @@ def _temp_dial_range(high_v, low_v):
 
 
 def dial_metrics(rain_chance=None, wind_max=None, uv_max=None, high=None, low=None):
-    """Build glanceable dial payloads inspired by Brevity-Wallpaper."""
     rain = safe_number(rain_chance, 0) or 0
     wind = safe_number(wind_max, 0) or 0
     uv = safe_number(uv_max, 0) or 0
@@ -491,7 +357,6 @@ def dial_metrics(rain_chance=None, wind_max=None, uv_max=None, high=None, low=No
     }
 
 def keyword_style(keyword):
-    """Create a deterministic CSS custom-property string for a keyword badge."""
     digest = hashlib.md5(keyword.lower().encode("utf-8")).hexdigest()
     index = int(digest[:8], 16) % len(KEYWORD_COLOR_PALETTE)
     bg, border, text = KEYWORD_COLOR_PALETTE[index]
@@ -499,7 +364,6 @@ def keyword_style(keyword):
 
 
 def to_pascal_case(value):
-    """Convert a keyword into PascalCase for display."""
     if not value:
         return value
     parts = re.findall(r"[A-Za-z0-9]+", value)
@@ -516,7 +380,6 @@ def to_pascal_case(value):
 
 
 def stylize_keywords(text):
-    """Wrap leading [keywords] in styled span badges."""
     if not text:
         return text
     match = KEYWORDS_RE.match(text)
@@ -536,7 +399,6 @@ def stylize_keywords(text):
 
 
 def format_trending_since(raw_since):
-    """Normalize trending_since to 12-hour clock text, or return None if invalid."""
     if raw_since is None:
         return None
     if isinstance(raw_since, (int, float)):
@@ -584,7 +446,6 @@ def format_trending_since(raw_since):
 
 
 def safe_number(value, default=None):
-    """Return a finite number, else default."""
     try:
         number = float(value)
     except (TypeError, ValueError):
@@ -595,7 +456,6 @@ def safe_number(value, default=None):
 
 
 def format_clock(value):
-    """Extract HH:MM from an ISO timestamp (24-hour intermediate form)."""
     if not value or not isinstance(value, str):
         return None
     if "T" in value:
@@ -606,7 +466,6 @@ def format_clock(value):
 
 
 def clock_to_minutes(value):
-    """Convert 24-hour or 12-hour clock text to minutes from midnight."""
     if value is None:
         return None
     text = str(value).strip()
@@ -627,7 +486,6 @@ def clock_to_minutes(value):
     return hours * 60 + minutes
 
 
-# Compact elliptical daylight arc for the weather now-column.
 _SUN_PATH_CX = 120.0
 _SUN_PATH_CY = 58.0
 _SUN_PATH_RX = 100.0
@@ -636,7 +494,6 @@ _SUN_PATH_NIGHT_Y = _SUN_PATH_CY + 8.0
 
 
 def _sun_arc_point(progress, cx=_SUN_PATH_CX, cy=_SUN_PATH_CY, rx=_SUN_PATH_RX, ry=_SUN_PATH_RY):
-    """Map 0..1 along the sunrise-to-sunset ellipse to SVG coordinates."""
     t = max(0.0, min(1.0, float(progress)))
     angle = math.pi * t
     return (
@@ -646,7 +503,6 @@ def _sun_arc_point(progress, cx=_SUN_PATH_CX, cy=_SUN_PATH_CY, rx=_SUN_PATH_RX, 
 
 
 def build_sun_path(sunrise, sunset, rain_peak=None, now=None):
-    """Build coordinates for the daylight arc under today's conditions."""
     rise = clock_to_minutes(sunrise)
     set_at = clock_to_minutes(sunset)
     if rise is None or set_at is None or set_at <= rise:
@@ -714,7 +570,6 @@ def build_sun_path(sunrise, sunset, rain_peak=None, now=None):
 
 
 def format_hour_12(hour, with_minutes=False, with_period=True):
-    """Format an hour as 12-hour clock text with lowercase am/pm."""
     try:
         hour_i = int(hour) % 24
     except (TypeError, ValueError):
@@ -730,7 +585,6 @@ def format_hour_12(hour, with_minutes=False, with_period=True):
 
 
 def format_clock_12(value, with_period=True):
-    """Convert HH:MM, 12-hour clock text, or an ISO timestamp to 12-hour time."""
     if value is None:
         return None
     if isinstance(value, (int, float)) and not isinstance(value, bool):
@@ -761,7 +615,6 @@ def format_clock_12(value, with_period=True):
 
 
 def weekday_label(iso_day, today_iso=None):
-    """Human day label for forecast cards."""
     if not iso_day:
         return "Day"
     if today_iso and iso_day == today_iso:
@@ -793,10 +646,7 @@ def build_retry_session():
         "raise_on_status": False,
         "respect_retry_after_header": True,
     }
-    try:
-        retries = Retry(**retry_kwargs, allowed_methods=frozenset(["GET", "POST"]))
-    except TypeError:
-        retries = Retry(**retry_kwargs, method_whitelist=frozenset(["GET", "POST"]))
+    retries = Retry(**retry_kwargs, allowed_methods=frozenset(["GET", "POST"]))
     adapter = HTTPAdapter(max_retries=retries)
     session = requests.Session()
     session.mount("https://", adapter)
@@ -808,11 +658,10 @@ HTTP_SESSION = build_retry_session()
 
 
 class NoRetry(Exception):
-    """Permanent failure (e.g. bad API key); retrying cannot help."""
+    pass
 
 
 def retry_call(label, func, attempts=RETRY_ATTEMPTS, base_delay=1.0, max_delay=8.0):
-    """Retry a callable with exponential backoff and logging."""
     for attempt in range(1, attempts + 1):
         try:
             return func()
@@ -837,7 +686,6 @@ def retry_call(label, func, attempts=RETRY_ATTEMPTS, base_delay=1.0, max_delay=8
 
 
 def strip_html(value):
-    """Remove simple HTML tags and collapse whitespace from feed text."""
     if not value:
         return ""
     text = HTML_TAG_RE.sub(" ", str(value))
@@ -846,7 +694,6 @@ def strip_html(value):
 
 
 def json_safe(value):
-    """Convert values so they can be written to JSON."""
     if isinstance(value, Markup):
         return str(value)
     if isinstance(value, float):
@@ -861,12 +708,6 @@ def json_safe(value):
 
 
 def extract_search_term(trend_name):
-    """
-    Build a tighter X search query from a personalized trend title.
-
-    Personalized trends often return long summaries. Prefer hashtags, cashtags,
-    tickers, and compact proper-noun phrases for useful search links.
-    """
     if not trend_name:
         return ""
     name = strip_html(str(trend_name)).strip()
@@ -876,31 +717,26 @@ def extract_search_term(trend_name):
     hashtags = re.findall(r"#[\w']+", name)
     if hashtags:
         return hashtags[0]
-
     cashtags = re.findall(r"\$[A-Za-z]{1,6}\b", name)
     if cashtags:
         return cashtags[0]
 
-    # Exact short trend names are already searchable.
     words = re.findall(r"[A-Za-z0-9][\w'#.-]*", name)
     if 1 <= len(words) <= 3 and len(name) <= 40:
         return name
 
-    # Quoted key phrases often carry the actual topic.
     quoted = re.findall(r"['\"]([^'\"]{2,48})['\"]", name)
     if quoted:
         candidate = quoted[0].strip()
         if candidate:
             return candidate
 
-    # Leading proper-noun / product phrase: "DeepSeek V4", "Jon Bernthal", etc.
     leading = re.match(
         r"^((?:[A-Z][\w'&.-]+)(?:\s+(?:[A-Z0-9][\w'&.-]*)){0,3})",
         name,
     )
     if leading:
         phrase = leading.group(1).strip(" -,:;")
-        # Avoid ultra-generic one-word openers from full sentences.
         weak_starters = {
             "call", "calls", "new", "why", "how", "what", "when", "after",
             "before", "this", "that", "with", "from", "into", "over",
@@ -908,21 +744,16 @@ def extract_search_term(trend_name):
         if phrase and phrase.lower() not in weak_starters and len(phrase) <= 48:
             return phrase
 
-    # Tickers / dense acronyms, but only if they look topic-like.
-    caps = re.findall(r"\b[A-Z]{3,}(?:\d+)?\b", name)
     stop = {"THE", "AND", "FOR", "WITH", "FROM", "THIS", "THAT", "INTO", "OVER", "AFTER", "ARE", "WAS"}
-    caps = [token for token in caps if token not in stop]
+    caps = [token for token in re.findall(r"\b[A-Z]{3,}(?:\d+)?\b", name) if token not in stop]
     if caps:
         return caps[0]
-
-    # Fallback: first few content words.
     if not words:
         return name
-    short = " ".join(words[:4]).strip(" -,:;")
-    return short or name
+    return " ".join(words[:4]).strip(" -,:;") or name
+
 
 def x_search_link(term):
-    """Create an X search URL for a term or hashtag."""
     query = (term or "").strip()
     if not query:
         return "https://x.com/explore"
@@ -930,7 +761,6 @@ def x_search_link(term):
 
 
 def fetch_json(url, params=None, extra_headers=None, label="JSON fetch"):
-    """GET JSON with the shared retry session."""
     headers = dict(DEFAULT_HEADERS)
     if extra_headers:
         headers.update(extra_headers)
@@ -946,12 +776,10 @@ def fetch_json(url, params=None, extra_headers=None, label="JSON fetch"):
 
 
 def copenhagen_now():
-    """Current time in Copenhagen."""
     return datetime.now(COPENHAGEN_TZ)
 
 
 def as_utc(moment):
-    """Normalize a datetime or ISO stamp to timezone-aware UTC."""
     if moment is None:
         return None
     if isinstance(moment, str):
@@ -970,7 +798,6 @@ def as_utc(moment):
 
 
 def tonight_copenhagen(hour=21):
-    """This evening in Copenhagen, used as the moon-viewing sort time."""
     now = copenhagen_now()
     evening = now.replace(hour=hour, minute=0, second=0, microsecond=0)
     if evening < now:
@@ -979,7 +806,6 @@ def tonight_copenhagen(hour=21):
 
 
 def sky_when_label(moment, prefix="Launch"):
-    """Longer Copenhagen-local schedule line for Sky Watch cards."""
     raw = relative_local_label(moment)
     if not raw:
         return None
@@ -994,7 +820,6 @@ def sky_when_label(moment, prefix="Launch"):
 
 
 def relative_local_label(moment):
-    """Compact Copenhagen-local label, matching the brief's 12-hour clocks."""
     if moment is None:
         return None
     if moment.tzinfo is None:
@@ -1009,53 +834,7 @@ def relative_local_label(moment):
     return f"{local.strftime('%a')} {clock}"
 
 
-def extract_json_object(text):
-    """Parse a JSON object from model output, ignoring markdown fences."""
-    if not text or not isinstance(text, str):
-        return None
-    cleaned = text.strip()
-    if cleaned.startswith("```"):
-        cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned)
-        cleaned = re.sub(r"\s*```$", "", cleaned)
-    try:
-        parsed = json.loads(cleaned)
-        return parsed if isinstance(parsed, dict) else None
-    except json.JSONDecodeError:
-        match = re.search(r"\{.*\}", cleaned, re.S)
-        if not match:
-            return None
-        try:
-            parsed = json.loads(match.group(0))
-            return parsed if isinstance(parsed, dict) else None
-        except json.JSONDecodeError:
-            return None
-
-
-def responses_output_text(payload):
-    """Flatten xAI Responses API output into a single string."""
-    if not isinstance(payload, dict):
-        return ""
-    chunks = []
-    for item in payload.get("output") or []:
-        if not isinstance(item, dict):
-            continue
-        if item.get("type") and item.get("type") != "message":
-            continue
-        for part in item.get("content") or []:
-            if isinstance(part, dict) and part.get("text"):
-                chunks.append(str(part["text"]))
-            elif isinstance(part, str):
-                chunks.append(part)
-    return "\n".join(chunks).strip()
-
-
-# ==============================================================================
-# DATA FETCHING
-# ==============================================================================
-
-
 def _peak_rain_time(times, values, day_iso):
-    """Return HH:MM for the highest precip probability on a given day."""
     if not times or not values or not day_iso:
         return None
     peak_index = -1
@@ -1075,7 +854,6 @@ def _peak_rain_time(times, values, day_iso):
 
 
 def _hourly_rain_points(times, values, day_iso, start_h=0, end_h=24):
-    """Hourly precip probability points for a day window, used by rain timelines."""
     if not times or not values or not day_iso:
         return []
 
@@ -1095,7 +873,6 @@ def _hourly_rain_points(times, values, day_iso, start_h=0, end_h=24):
         by_hour[hour] = round(number)
 
     points = []
-    # Sparse 12-hour labels keep the timeline readable.
     label_hours = {start_h, 9, 12, 15, 18, 21, end_h - 1}
     for hour in range(start_h, end_h):
         precip = by_hour.get(hour, 0)
@@ -1112,7 +889,6 @@ def _hourly_rain_points(times, values, day_iso, start_h=0, end_h=24):
 
 
 def _rain_timeline(times, values, day_iso, start_h=0, end_h=24, rain_color_value=None):
-    """Build a compact rain-peak timeline payload for template rendering."""
     points = _hourly_rain_points(times, values, day_iso, start_h=start_h, end_h=end_h)
     if not points:
         return {
@@ -1138,7 +914,6 @@ def _rain_timeline(times, values, day_iso, start_h=0, end_h=24, rain_color_value
 
 
 def _segment_stats(hourly, start_h, end_h):
-    """Average/max stats for a same-day hour window."""
 
     def slice_list(values):
         return values[start_h:end_h] if isinstance(values, list) else []
@@ -1176,7 +951,6 @@ def _segment_stats(hourly, start_h, end_h):
 
 
 def _percent_from_closes(closes, sessions_back):
-    """Percent change from N trading sessions ago to the latest close."""
     if not closes:
         return None
     current = closes[-1]
@@ -1192,7 +966,6 @@ def _percent_from_closes(closes, sessions_back):
 
 
 def _change_style(percent):
-    """Map a percent change to the stock colour/arrow pair used by the template."""
     if percent is None:
         return "grey", "-"
     if percent >= 0:
@@ -1201,12 +974,6 @@ def _change_style(percent):
 
 
 def fetch_weather():
-    """
-    Fetch Copenhagen weather from Open-Meteo.
-
-    Source strategy matches Brevity-Wallpaper: Open-Meteo daily + hourly
-    precipitation probabilities, including expected peak rain time.
-    """
     logger.info("Fetching weather from Open-Meteo...")
     url = "https://api.open-meteo.com/v1/forecast"
     params = {
@@ -1274,7 +1041,6 @@ def fetch_weather():
         hourly_times = hourly.get("time") or []
         hourly_precip = hourly.get("precipitation_probability") or []
         today_rain_chance = round(safe_number((daily.get("precipitation_probability_max") or [0])[0], 0) or 0)
-        # Daytime window used by the continuous morning/afternoon/evening strip.
         today_rain_timeline = _rain_timeline(
             hourly_times,
             hourly_precip,
@@ -1317,7 +1083,6 @@ def fetch_weather():
                 "wind_dir": None if safe_number(current.get("wind_direction_10m")) is None else round(safe_number(current.get("wind_direction_10m"))),
                 "precip": round(safe_number(current.get("precipitation_probability"), 0) or 0),
             },
-            # Keep period breakdown for richer "today" detail.
             "morning": _segment_stats(hourly, 6, 12),
             "afternoon": _segment_stats(hourly, 12, 18),
             "evening": _segment_stats(hourly, 18, 24),
@@ -1335,7 +1100,6 @@ def fetch_weather():
             high=today.get("high"),
             low=today.get("low"),
         )
-        # Colour accents used by glanceable cards.
         today["high_color"] = today["dials"]["temp"]["high_color"]
         today["low_color"] = today["dials"]["temp"]["low_color"]
         today["rain_color"] = today["dials"]["rain"]["color"]
@@ -1383,14 +1147,6 @@ def fetch_weather():
             "source": WEATHER_SOURCE,
             "today": today,
             "upcoming": upcoming,
-            # Backward-compatible aliases used by older templates/PDF styles.
-            "morning": today["morning"],
-            "afternoon": today["afternoon"],
-            "evening": today["evening"],
-            "sunrise": format_clock_12((daily.get("sunrise") or [""])[0]),
-            "sunset": format_clock_12((daily.get("sunset") or [""])[0]),
-            "daily_precip": today["rain_chance"],
-            "rain_peak_time": today["rain_peak_time"],
         }
     except Exception as exc:
         logger.error("Error parsing weather data: %s", exc)
@@ -1398,7 +1154,6 @@ def fetch_weather():
 
 
 def fetch_stocks():
-    """Fetch general stock watchlist prices with day, 7-day, and 1-month change."""
     logger.info("Fetching stocks...")
     stock_data = {}
 
@@ -1408,7 +1163,6 @@ def fetch_stocks():
             hist = ticker.history(period=period, auto_adjust=True)
             if hist is None or hist.empty:
                 raise ValueError("No price history returned")
-            # yfinance can return NaN rows around market close / holidays.
             closes = [safe_number(value) for value in hist["Close"].tolist()]
             closes = [value for value in closes if value is not None]
             if len(closes) < 1:
@@ -1442,7 +1196,6 @@ def fetch_stocks():
             prev_close = closes[-2] if len(closes) > 1 else None
             change = current_close - prev_close if prev_close else None
             percent_change = (change / prev_close) * 100 if prev_close else None
-            # Approximate calendar windows with trading sessions.
             percent_7d = _percent_from_closes(closes, 5)
             percent_1m = _percent_from_closes(closes, 21)
             color_day, arrow_day = _change_style(percent_change)
@@ -1475,12 +1228,10 @@ def fetch_stocks():
     return stock_data
 
 
-# Shared xAI availability flag so one bad key does not thrash every item.
 XAI_AVAILABLE = bool(XAI_API_KEY)
 
 
 def mark_xai_unavailable(reason):
-    """Disable further xAI calls after a hard auth/config failure."""
     global XAI_AVAILABLE
     if XAI_AVAILABLE:
         logger.error("Disabling xAI for this run: %s", reason)
@@ -1488,7 +1239,6 @@ def mark_xai_unavailable(reason):
 
 
 def raise_for_xai(response, label="xAI"):
-    """Raise on xAI errors; auth failures disable xAI and are not retried."""
     if response.status_code < 400:
         return
     body = (response.text or "")[:300]
@@ -1504,7 +1254,6 @@ XAI_USAGE = {"calls": 0, "input_tokens": 0, "output_tokens": 0, "x_posts_fetched
 
 
 def record_xai_usage(label, payload):
-    """Log and total token and X search usage from an xAI response body."""
     usage = (payload or {}).get("usage") or {}
     details = usage.get("server_side_tool_usage_details") or {}
     counts = {
@@ -1523,7 +1272,6 @@ def record_xai_usage(label, payload):
 
 
 def summarize_with_ai(text, prompt_prefix="Summarize this news item:"):
-    """Summarize text using the xAI API. Returns None when unavailable."""
     clean_text = strip_html(text)
     if not clean_text or not XAI_AVAILABLE:
         return None
@@ -1574,7 +1322,6 @@ CAPS_RUN_RE = re.compile(r"\b[A-Z][A-Z'’]{3,}(?:[\s-]+[A-Z][A-Z'’]{3,})+\b")
 
 
 def tidy_headline(text):
-    """Convert shouted feed titles (runs of capitalised words) to Title Case."""
     text = strip_html(text)
     letters = [ch for ch in text if ch.isalpha()]
     if letters and all(ch.isupper() for ch in letters):
@@ -1583,7 +1330,6 @@ def tidy_headline(text):
 
 
 def _news_item(entry, prompt, summarize=True):
-    """AI summary with keyword badges, or the tidied feed title."""
     summary = summarize_with_ai(entry["content_text"], prompt) if summarize and XAI_AVAILABLE else None
     if summary:
         headline = stylize_keywords(summary)
@@ -1591,7 +1337,6 @@ def _news_item(entry, prompt, summarize=True):
         headline = tidy_headline(entry["title"] or entry["content_text"][:220])
     return {
         "headline": headline,
-        # Raw text so --render-only can rebuild the badges without trusting stored HTML.
         "ai_summary": summary,
         "link": entry["link"],
         "source": entry["source"],
@@ -1615,7 +1360,6 @@ def fetch_feed(url):
 
 
 def _rss_entries(url, limit=5):
-    """Parse RSS entries into title, text, and link dicts."""
     feed = fetch_feed(url)
     if not feed or not getattr(feed, "entries", None):
         return []
@@ -1641,7 +1385,6 @@ def _rss_entries(url, limit=5):
 
 
 def fetch_news(urls, limit=6, prompt="Summarize this content:", label="feed", summarize=True):
-    """Collect up to `limit` unique stories across feeds in order, optionally summarised."""
     chosen = []
     seen = set()
     for url in urls:
@@ -1665,7 +1408,6 @@ def fetch_news(urls, limit=6, prompt="Summarize this content:", label="feed", su
 
 
 def fetch_space_news():
-    """Fetch space news. Headlines only, no AI summaries."""
     logger.info("Fetching space news...")
     return fetch_news(
         SPACE_FEEDS,
@@ -1676,7 +1418,6 @@ def fetch_space_news():
 
 
 def fetch_copenhagen_events():
-    """Fetch and summarize Copenhagen events/news with source fallbacks."""
     logger.info("Fetching Copenhagen events...")
     return fetch_news(
         COPENHAGEN_FEEDS,
@@ -1696,7 +1437,6 @@ def _is_sa_trusted_feed(url):
 
 
 def _sa_brief_score(entry):
-    """Score national government, finance, and diplomacy; reject petty local stories."""
     title = entry.get("title") or ""
     text = entry.get("content_text") or ""
     if not _is_sa_trusted_feed(entry.get("feed_url")):
@@ -1722,7 +1462,6 @@ def _sa_brief_score(entry):
 
 
 def _pick_diverse_stories(scored_items, limit=6, per_source=2):
-    """Take the strongest items while mixing sources."""
     selected = []
     counts = {}
     for score, item in scored_items:
@@ -1747,7 +1486,6 @@ def _pick_diverse_stories(scored_items, limit=6, per_source=2):
 
 
 def fetch_south_africa_news():
-    """Fetch national South Africa stories: government, finance, diplomacy."""
     logger.info("Fetching South Africa news...")
     seen = set()
     scored = []
@@ -1786,59 +1524,17 @@ def _format_post_count(value):
     return text or None
 
 
-X_SENTIMENTS = {"bullish", "bearish", "mixed", "neutral"}
-X_HANDLE_RE = re.compile(r"^@?([A-Za-z0-9_]{1,15})$")
-
-
-def _clip_text(value, limit):
-    """Plain text trimmed to a sentence end, else a word boundary."""
-    text = strip_html(str(value or "")).strip()
-    if len(text) <= limit:
-        return text
-    head = text[:limit]
-    sentence_end = max(head.rfind(". "), head.rfind("! "), head.rfind("? "))
-    if sentence_end >= limit * 0.5:
-        return head[: sentence_end + 1]
-    return head.rsplit(" ", 1)[0].rstrip(",;:-") + "…"
-
-
-def _x_accounts(raw):
-    """Validated @handles with profile links."""
-    if isinstance(raw, str):
-        raw = re.split(r"[,\s]+", raw)
-    accounts = []
-    for value in raw or []:
-        match = X_HANDLE_RE.match(str(value).strip())
-        if not match:
-            continue
-        handle = match.group(1)
-        if any(item["handle"].lower() == handle.lower() for item in accounts):
-            continue
-        accounts.append({"handle": handle, "link": f"https://x.com/{handle}"})
-        if len(accounts) >= 3:
-            break
-    return accounts
-
-
-def _trend_card(name, post_count=None, category="Personalized", trending_since=None, link=None, details=None):
-    """One card in the Personalized / Sky Watch lists."""
+def _trend_card(name, post_count=None, category="Personalized", trending_since=None, link=None):
     raw_name = strip_html(str(name or "")).strip()
     if not raw_name:
         return None
-    details = details or {}
     search_term = extract_search_term(raw_name) or raw_name
     since = format_trending_since(trending_since) if trending_since else None
     if since and since[:1].isdigit():
         since = f"Since {since}"
-    sentiment = strip_html(str(details.get("sentiment") or "")).strip().lower()
-    category = _clip_text(category, 24) or "Personalized"
+    category = (strip_html(str(category or "")).strip()[:24] or "Personalized")
     return {
         "name": raw_name,
-        "headline": _clip_text(details.get("headline"), 90) or raw_name,
-        "summary": _clip_text(details.get("summary"), 480),
-        "why": _clip_text(details.get("why_it_matters"), 180),
-        "sentiment": sentiment.title() if sentiment in X_SENTIMENTS else None,
-        "accounts": _x_accounts(details.get("accounts")),
         "search_term": search_term,
         "post_count": _format_post_count(post_count) or "Live",
         "category": category,
@@ -1860,7 +1556,6 @@ def _collect_trend_cards(raw_items, category, max_items):
             post_count=trend.get("post_count", trend.get("tweet_count", trend.get("tweet_volume"))),
             category=trend.get("category") or category,
             trending_since=trend.get("trending_since"),
-            details=trend,
         )
         if not item:
             continue
@@ -1875,12 +1570,6 @@ def _collect_trend_cards(raw_items, category, max_items):
 
 
 def _fetch_x_personalized_official(limit):
-    """
-    Official X personalized_trends. Requires X Premium on the user token.
-
-    Returns a list of cards, or None when the endpoint is unavailable.
-    Empty list means a successful but blank payload.
-    """
     consumer_key = os.getenv("CONSUMER_KEY")
     consumer_secret = os.getenv("CONSUMER_SECRET")
     access_token = os.getenv("ACCESS_TOKEN")
@@ -1929,109 +1618,7 @@ def _fetch_x_personalized_official(limit):
     return _collect_trend_cards(raw_items, "Personalized", limit)
 
 
-def _fetch_x_personalized_grok(limit):
-    """Live For-You topics from Grok's X search. Returns (cards, pulse)."""
-    if not XAI_AVAILABLE:
-        return [], None
-
-    today = date.today().isoformat()
-    yesterday = (date.today() - timedelta(days=1)).isoformat()
-    prompt = (
-        f"Using X search, list {limit} topics that are actually moving on X today ({today}). "
-        "Choose what would matter to someone in Copenhagen who follows spaceflight and SpaceX, "
-        "AI and semiconductors, nuclear energy, Tesla, Palantir, and Denmark or Europe. "
-        "Skip celebrity gossip, sports scores, and meme coins unless they are market-moving. "
-        "For each topic give: name (a short search query or hashtag, not a sentence); "
-        "headline (Title Case, max 8 words); "
-        "summary (two factual sentences, max 45 words, on what happened and what people on X are saying, "
-        "with specific names, numbers, and dates); "
-        "why_it_matters (one short sentence, max 16 words, on why this reader should care); "
-        "category (one of Space, AI, Chips, Energy, Tesla, Palantir, Markets, Denmark, Europe); "
-        "sentiment (Bullish, Bearish, Mixed, or Neutral); "
-        "post_count (short volume hint like ~12k posts or Rising); "
-        "accounts (up to 2 real X handles driving the conversation). "
-        "Also give pulse: one sentence, max 25 words, reading today's overall X mood across these interests. "
-        'Return JSON only: {"pulse":"...","trends":[{"name":"","headline":"","summary":"",'
-        '"why_it_matters":"","category":"","sentiment":"","post_count":"","accounts":["@handle"]}]}.'
-    )
-    headers = {
-        "Authorization": f"Bearer {XAI_API_KEY}",
-        "Content-Type": "application/json",
-    }
-    payload = {
-        "model": XAI_MODEL,
-        "input": [
-            {
-                "role": "system",
-                "content": (
-                    "You curate a tight morning X briefing. Output JSON only. "
-                    "Use X search. No markdown."
-                ),
-            },
-            {"role": "user", "content": prompt},
-        ],
-        "tools": [{"type": "x_search", "from_date": yesterday}],
-        "store": False,
-    }
-
-    def _request():
-        if not XAI_AVAILABLE:
-            raise NoRetry("xAI disabled for this run")
-        response = HTTP_SESSION.post(
-            "https://api.x.ai/v1/responses",
-            headers=headers,
-            json=payload,
-            timeout=90,
-        )
-        raise_for_xai(response, "xAI responses")
-        body = response.json()
-        record_xai_usage("Grok X search", body)
-        text = responses_output_text(body)
-        if not extract_json_object(text):
-            raise ValueError("Grok X search returned no JSON")
-        return text
-
-    def _chat():
-        if not XAI_AVAILABLE:
-            raise NoRetry("xAI disabled for this run")
-        response = HTTP_SESSION.post(
-            "https://api.x.ai/v1/chat/completions",
-            headers=headers,
-            json={
-                "model": XAI_MODEL,
-                "messages": [
-                    {"role": "system", "content": "You curate a tight morning X briefing. Output JSON only."},
-                    {"role": "user", "content": prompt},
-                ],
-                "response_format": {"type": "json_object"},
-            },
-            timeout=AI_TIMEOUT,
-        )
-        raise_for_xai(response)
-        body = response.json()
-        record_xai_usage("Grok X briefing", body)
-        return body["choices"][0]["message"]["content"].strip()
-
-    cards = []
-    pulse = None
-    # Live X search first; the chat model (no live search) only tops up a short list.
-    for label, call in (("Grok X search", _request), ("Grok X briefing", _chat)):
-        if len(cards) >= limit or not XAI_AVAILABLE:
-            break
-        parsed = extract_json_object(retry_call(label, call, attempts=2) or "")
-        if not parsed:
-            continue
-        raw_trends = parsed.get("trends") or parsed.get("topics") or parsed.get("items") or []
-        known = {card["name"].lower() for card in cards}
-        extra = [card for card in _collect_trend_cards(raw_trends, "Personalized", limit) if card["name"].lower() not in known]
-        cards.extend(extra[: limit - len(cards)])
-        pulse = pulse or _clip_text(parsed.get("pulse"), 400) or None
-        logger.info("%s gave %s topics (%s total).", label, len(extra), len(cards))
-    return cards, pulse
-
-
 def fetch_x_trending(limit=5):
-    """Personalized X trends from the official API, without AI generation."""
     logger.info("Fetching personalized X topics...")
     topics = _fetch_x_personalized_official(limit)
     if not topics:
@@ -2041,7 +1628,6 @@ def fetch_x_trending(limit=5):
 
 
 def _moon_watch(now_utc):
-    """Moon phase from a known new moon. No network."""
     known_new = datetime(2000, 1, 6, 18, 14, tzinfo=timezone.utc)
     synodic = 29.530588853
     age_days = (now_utc - known_new).total_seconds() / 86400.0
@@ -2075,7 +1661,6 @@ def _moon_watch(now_utc):
 
 
 def _solar_flare_class(flux):
-    """Map GOES long-band X-ray flux to A/B/C/M/X class."""
     flux = safe_number(flux)
     if flux is None or flux <= 0:
         return None
@@ -2251,7 +1836,6 @@ def _sky_eclipse_card(now_utc):
 
 
 def _moon_milestone_cards(now_utc):
-    """Next full and new moon. Local backup cards when a live source fails."""
     known_new = datetime(2000, 1, 6, 18, 14, tzinfo=timezone.utc)
     synodic = 29.530588853
     phase = (((now_utc - known_new).total_seconds() / 86400.0) / synodic) % 1.0
@@ -2277,11 +1861,6 @@ def _moon_milestone_cards(now_utc):
 
 
 def fetch_sky_watch(limit=5):
-    """
-    Copenhagen-facing sky briefing: moon, aurora, solar weather, next launch, next eclipse.
-
-    Fills the column that used to be United States X trends.
-    """
     logger.info("Fetching Sky Watch...")
     now_utc = datetime.now(timezone.utc)
     cards = []
@@ -2329,7 +1908,6 @@ def fetch_sky_watch(limit=5):
 
 
 def scripture_gateway_url(ref, version="ESV"):
-    """Bible Gateway passage URL for a Proverbs or Ecclesiastes reference."""
     query = quote((ref or "").strip(), safe="")
     if not query:
         return ""
@@ -2337,7 +1915,6 @@ def scripture_gateway_url(ref, version="ESV"):
 
 
 def _is_esv_scripture(verse):
-    """True when a stored verse is already English Standard Version text."""
     if not isinstance(verse, dict):
         return False
     translation = str(verse.get("translation") or "").strip().lower()
@@ -2346,7 +1923,6 @@ def _is_esv_scripture(verse):
 
 
 def _scripture_payload(ref, book="", text="", translation="Esv"):
-    """Shape a verse for the template."""
     ref = str(ref or "").strip()
     source = SCRIPTURE_TRANSLATIONS.get(translation) or SCRIPTURE_TRANSLATIONS["Esv"]
     payload = {
@@ -2365,7 +1941,6 @@ def _scripture_payload(ref, book="", text="", translation="Esv"):
 
 
 def _clean_esv_passage(text):
-    """Collapse API passage text into a single display sentence."""
     cleaned = str(text or "")
     cleaned = re.sub(r"\[[0-9]+\]", "", cleaned)
     cleaned = cleaned.replace("(ESV)", "")
@@ -2373,7 +1948,6 @@ def _clean_esv_passage(text):
 
 
 def _fetch_esv_text(ref):
-    """Fetch one verse from Crossway's ESV API. Returns None if unavailable."""
     if not ESV_API_KEY or not ref:
         return None
     payload = fetch_json(
@@ -2404,7 +1978,6 @@ def _fetch_esv_text(ref):
 
 
 def _resolve_scripture_text(verse):
-    """Prefer ESV from Crossway; fall back to the bundled King James text."""
     ref = str((verse or {}).get("ref") or "").strip()
     book = str((verse or {}).get("book") or "").strip()
     esv_text = _fetch_esv_text(ref)
@@ -2417,7 +1990,6 @@ def _resolve_scripture_text(verse):
 
 
 def _load_scripture_verses():
-    """Load the local Proverbs and Ecclesiastes verse bank."""
     try:
         with open(SCRIPTURE_VERSES_PATH, encoding="utf-8") as file:
             verses = json.load(file)
@@ -2427,21 +1999,21 @@ def _load_scripture_verses():
 
     cleaned = []
     for item in verses:
-        if not isinstance(item, dict):
+        if isinstance(item, (list, tuple)) and len(item) >= 2:
+            ref, text = str(item[0] or "").strip(), str(item[1] or "").strip()
+            book = ref.split()[0] if ref else ""
+        elif isinstance(item, dict):
+            ref = str(item.get("ref") or "").strip()
+            text = str(item.get("text") or "").strip()
+            book = str(item.get("book") or "").strip() or (ref.split()[0] if ref else "")
+        else:
             continue
-        ref = str(item.get("ref") or "").strip()
-        if not ref:
-            continue
-        cleaned.append({
-            "ref": ref,
-            "book": str(item.get("book") or "").strip(),
-            "text": str(item.get("text") or "").strip(),
-        })
+        if ref:
+            cleaned.append({"ref": ref, "book": book, "text": text})
     return cleaned or list(SCRIPTURE_FALLBACK)
 
 
 def _load_scripture_history():
-    """Load used-verse history so daily picks do not repeat."""
     try:
         with open(SCRIPTURE_HISTORY_PATH, encoding="utf-8") as file:
             data = json.load(file)
@@ -2455,7 +2027,6 @@ def _load_scripture_history():
 
 
 def _save_scripture_history(history):
-    """Persist used-verse history next to the published site files."""
     os.makedirs(os.path.dirname(SCRIPTURE_HISTORY_PATH), exist_ok=True)
     with open(SCRIPTURE_HISTORY_PATH, "w", encoding="utf-8") as file:
         json.dump(history, file, ensure_ascii=False, indent=2)
@@ -2463,13 +2034,6 @@ def _save_scripture_history(history):
 
 
 def pick_scripture(seed_date=None):
-    """
-    Choose a random Proverbs or Ecclesiastes verse.
-
-    Verses are not reused until every verse in the bank has been shown.
-    Re-running on the same date keeps the same reference. ESV text is used when
-    ESV_API_KEY works, otherwise the bundled King James text.
-    """
     today = seed_date or date.today()
     today_iso = today.isoformat() if hasattr(today, "isoformat") else str(today)
     verses = _load_scripture_verses()
@@ -2536,13 +2100,7 @@ def pick_scripture(seed_date=None):
     return payload
 
 
-# ==============================================================================
-# SITE / PDF GENERATION
-# ==============================================================================
-
-
 def render_html(data):
-    """Render the Jinja2 template for the website (and Slack PDF when enabled)."""
     env = Environment(
         loader=FileSystemLoader(os.path.dirname(__file__) or "."),
         autoescape=True,
@@ -2552,7 +2110,6 @@ def render_html(data):
 
 
 def write_site_html(data, path=SITE_HTML_PATH):
-    """Write the static GitHub Pages homepage."""
     logger.info("Writing site HTML to %s...", path)
     try:
         html_out = render_html(data)
@@ -2566,7 +2123,6 @@ def write_site_html(data, path=SITE_HTML_PATH):
 
 
 def generate_pdf(data, path=PDF_PATH):
-    """Generate PDF from the HTML template using WeasyPrint."""
     logger.info("Generating PDF...")
     try:
         from weasyprint import HTML
@@ -2585,7 +2141,6 @@ def generate_pdf(data, path=PDF_PATH):
 
 
 def send_to_slack(pdf_path):
-    """Upload PDF to Slack using the v2 API (optional)."""
     logger.info("Sending to Slack...")
 
     if not os.path.exists(pdf_path):
@@ -2615,7 +2170,6 @@ def send_to_slack(pdf_path):
 
 
 def build_brief_data(today=None):
-    """Fetch all sources and assemble the daily brief payload."""
     today = today or copenhagen_now().date()
     weather = fetch_weather()
     stocks = fetch_stocks()
@@ -2654,7 +2208,6 @@ def build_brief_data(today=None):
 
 
 def write_brief_data(data, path=BRIEF_DATA_PATH):
-    """Save the run's data so the page can be re-rendered locally without API calls."""
     with open(path, "w", encoding="utf-8") as file:
         json.dump(json_safe(data), file, ensure_ascii=False, indent=1)
         file.write("\n")
@@ -2662,7 +2215,6 @@ def write_brief_data(data, path=BRIEF_DATA_PATH):
 
 
 def load_brief_data(path=BRIEF_DATA_PATH):
-    """Load saved run data and rebuild keyword badges from the raw AI summaries."""
     with open(path, encoding="utf-8") as file:
         data = json.load(file)
     for key in NEWS_KEYS:
@@ -2690,14 +2242,12 @@ def main():
 
     data = build_brief_data()
 
-    # Public GitHub Pages only needs the rendered homepage.
     write_site_html(data)
     try:
         write_brief_data(data)
     except Exception as exc:
         logger.warning("Could not save brief data: %s", exc)
 
-    # PDF is retained solely for optional Slack delivery.
     pdf_path = None
     if SEND_TO_SLACK:
         if GENERATE_PDF:
