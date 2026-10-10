@@ -63,7 +63,7 @@ h1, h2, h3, p {
     padding: 16px 24px 40px;
 }
 
-/* ------------------------------------------------------------ Icons & Buttons */
+/* Icons & Buttons */
 
 .icon {
     width: 18px;
@@ -117,7 +117,7 @@ h1, h2, h3, p {
     opacity: 0.7;
 }
 
-/* ------------------------------------------------------------ Dialog */
+/* Dialog */
 
 .modal {
     width: min(92vw, 460px);
@@ -197,7 +197,7 @@ h1, h2, h3, p {
     margin-top: 4px;
 }
 
-/* ------------------------------------------------------------ Top Bar & Hero */
+/* Top Bar & Hero */
 
 .topbar {
     display: flex;
@@ -341,7 +341,7 @@ h1, h2, h3, p {
     background: linear-gradient(90deg, #3d9fd2 0%, #7ee7ff 60%, #d7f7ff 100%);
 }
 
-/* ------------------------------------------------------------ Layout & Panels */
+/* Layout & Panels */
 
 .layout {
     display: grid;
@@ -496,7 +496,7 @@ h2 {
 .red { color: var(--red); }
 .grey { color: var(--grey); }
 
-/* ------------------------------------------------------------ Weather */
+/* Weather */
 
 .weather-top {
     display: grid;
@@ -886,7 +886,7 @@ h2 {
     font-size: 16px;
 }
 
-/* ------------------------------------------------------------ Markets */
+/* Markets */
 
 .market-summary {
     display: flex;
@@ -1004,7 +1004,7 @@ h2 {
     font-size: 15px;
 }
 
-/* ------------------------------------------------------------ Scripture */
+/* Scripture */
 
 .scripture-panel .panel-body {
     justify-content: center;
@@ -1055,26 +1055,7 @@ h2 {
     border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
-/* ------------------------------------------------------------ X */
-
-.x-pulse {
-    margin-bottom: 14px;
-    padding: 14px 16px;
-    border-radius: var(--radius-md);
-    color: var(--text);
-    font-size: 14px;
-    line-height: 1.55;
-    background: rgba(29, 155, 240, 0.1);
-    border: 1px solid rgba(29, 155, 240, 0.25);
-}
-
-.x-pulse-label {
-    display: block;
-    margin-bottom: 2px;
-    color: var(--accent);
-    font-size: 12px;
-    font-weight: 600;
-}
+/* X */
 
 .x-list {
     display: flex;
@@ -1104,11 +1085,6 @@ h2 {
     font-variant-numeric: tabular-nums;
 }
 
-.sentiment-bullish { color: #6ee7b7; background: rgba(52, 211, 153, 0.12); border-color: rgba(52, 211, 153, 0.3); }
-.sentiment-bearish { color: #fca5a5; background: rgba(248, 113, 113, 0.12); border-color: rgba(248, 113, 113, 0.3); }
-.sentiment-mixed { color: #fcd34d; background: rgba(251, 191, 36, 0.12); border-color: rgba(251, 191, 36, 0.3); }
-.sentiment-neutral { color: var(--text-2); }
-
 .x-card-title {
     margin-top: 10px;
     font-size: 16px;
@@ -1124,26 +1100,6 @@ h2 {
     border-radius: inherit;
 }
 
-.x-card-summary {
-    margin-top: 6px;
-    color: var(--text-2);
-    font-size: 14px;
-    line-height: 1.55;
-}
-
-.x-card-why {
-    margin-top: 8px;
-    color: var(--text);
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.x-card-why span {
-    margin-right: 6px;
-    color: var(--accent);
-    font-weight: 600;
-}
-
 .x-card-foot {
     display: flex;
     align-items: center;
@@ -1155,19 +1111,7 @@ h2 {
     font-size: 12px;
 }
 
-.x-accounts {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    gap: 8px;
-}
-
-.x-accounts a {
-    color: var(--accent);
-    font-weight: 500;
-}
-
-/* ------------------------------------------------------------ Sky Watch */
+/* Sky Watch */
 
 .trend-list {
     display: flex;
@@ -1204,7 +1148,7 @@ h2 {
     text-align: right;
 }
 
-/* ------------------------------------------------------------ News */
+/* News */
 
 .news-list {
     display: grid;
@@ -1281,7 +1225,7 @@ h2 {
     display: block;
 }
 
-/* ------------------------------------------------------------ Footer */
+/* Footer */
 
 .site-footer {
     margin-top: 32px;

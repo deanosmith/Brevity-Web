@@ -7,10 +7,6 @@ When user input is required, avoid typing and other sources that can lead to hum
 
 Always use Title Case for headers and labels.
 Never use the left border UI element.
-Never use FULL CAPS anywhere ever. 
+Never use FULL CAPS anywhere ever.
 Prioritise reusability when it comes to styling and design, to enable downstream additions to easily match the current style.
 Do not optimise or tailor for legacy version, the current version is the priority.
-
-
-## Project Specific Principles
-

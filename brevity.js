@@ -1,4 +1,3 @@
-/* Refresh All: confirm, start the daily GitHub workflow, then reload once the new brief is published. */
 (() => {
     "use strict";
 
@@ -30,7 +29,7 @@
         try {
             localStorage.setItem(TOKEN_KEY, token);
         } catch {
-            // Private browsing can block storage; the token is then asked for each time.
+            /* private browsing */
         }
     }
 
@@ -38,7 +37,7 @@
         try {
             localStorage.removeItem(TOKEN_KEY);
         } catch {
-            // Nothing stored.
+            /* ignore */
         }
     }
 
@@ -130,7 +129,7 @@
                     window.location.reload();
                 }
             } catch {
-                // Keep polling; a later check may succeed.
+                /* keep polling */
             }
         }, POLL_MS);
     }
@@ -144,7 +143,6 @@
     });
 
     form.addEventListener("submit", async (event) => {
-        // Cancel uses the native dialog close.
         if (!event.submitter || event.submitter.value !== "confirm") return;
         event.preventDefault();
         const token = storedToken() || tokenInput.value.trim();

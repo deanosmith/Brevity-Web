@@ -17,7 +17,7 @@ body {
     background: transparent;
 }
 
-/* ------------------------------------------------------------ Top Bar */
+/* Top Bar */
 
 .topbar {
     position: sticky;
@@ -76,7 +76,7 @@ a:focus-visible {
     animation: modal-in 0.18s ease-out;
 }
 
-/* ------------------------------------------------------------ Panels */
+/* Panels */
 
 .panel {
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 18px 40px rgba(0, 0, 0, 0.3);
@@ -104,7 +104,7 @@ a:focus-visible {
 .layout > .panel:nth-child(5) { animation-delay: 0.2s; }
 .layout > .panel:nth-child(n + 6) { animation-delay: 0.25s; }
 
-/* ------------------------------------------------------------ Interactive Cards */
+/* Interactive Cards */
 
 .news-item,
 .trend-card,
@@ -126,7 +126,6 @@ a:focus-visible {
     color: var(--accent);
 }
 
-.x-accounts a:hover,
 .verse-ref:hover,
 .source-link:hover {
     color: #ffffff;
@@ -149,7 +148,7 @@ a:focus-visible {
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
 }
 
-/* ------------------------------------------------------------ Responsive */
+/* Responsive */
 
 @media (max-width: 1180px) {
     .weather-panel,
