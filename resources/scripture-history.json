@@ -11,13 +11,14 @@
     "Proverbs 30:7",
     "Proverbs 23:27",
     "Proverbs 24:11",
-    "Proverbs 9:18"
+    "Proverbs 9:18",
+    "Proverbs 13:9"
   ],
   "current": {
-    "date": "2026-10-10",
-    "text": "But he knoweth not that the dead are there; and that her guests are in the depths of hell.",
-    "focus": "Proverbs 9:18",
-    "ref": "Proverbs 9:18",
+    "date": "2026-10-11",
+    "text": "The light of the righteous rejoiceth: but the lamp of the wicked shall be put out.",
+    "focus": "Proverbs 13:9",
+    "ref": "Proverbs 13:9",
     "book": "Proverbs",
     "translation": "Kjv",
     "translation_label": "King James Version",
@@ -25,6 +26,6 @@
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%209%3A18&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2013%3A9&version=KJV"
   }
 }
