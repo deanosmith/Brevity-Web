@@ -301,6 +301,9 @@ SCRIPTURE_TRANSLATIONS = {
 DEFAULT_HEADERS = {"User-Agent": "Brevity/1.0 (+https://deanosmith.github.io/Brevity-Web/)"}
 REQUEST_TIMEOUT = 30
 AI_TIMEOUT = 60
+AI_RETRY_ATTEMPTS = 2
+AI_INPUT_CHARS = 600
+AI_MAX_TOKENS_PER_ITEM = 70
 RETRY_ATTEMPTS = 3
 RETRY_BACKOFF = 1.2
 RETRY_STATUS_CODES = (429, 500, 502, 503, 504)
@@ -1522,34 +1525,36 @@ def record_xai_usage(label, payload):
     )
 
 
-def summarize_with_ai(text, prompt_prefix="Summarize this news item:"):
-    """Summarize text using the xAI API. Returns None when unavailable."""
-    clean_text = strip_html(text)
-    if not clean_text or not XAI_AVAILABLE:
-        return None
+def _clip_ai_text(text, limit=AI_INPUT_CHARS):
+    """Strip markup and cap length so Grok only sees what a 22-word summary needs."""
+    clean = WHITESPACE_RE.sub(" ", strip_html(text)).strip()
+    if len(clean) <= limit:
+        return clean
+    cut = clean[:limit]
+    if " " in cut:
+        cut = cut.rsplit(" ", 1)[0]
+    return cut
 
+
+def _xai_chat(messages, max_tokens, label):
+    """One chat.completions call with a tight retry budget."""
+    if not XAI_AVAILABLE:
+        return None
     headers = {
         "Authorization": f"Bearer {XAI_API_KEY}",
         "Content-Type": "application/json",
     }
-    system_prompt = (
-        "You are a helpful news assistant. "
-        "Merge the news title and description into one concise sentence (max 22 words). "
-        "Start with 2-3 bracketed keywords, e.g. [AI, Nvidia, chips]. "
-        "Do not filter anything out. Be specific."
-    )
     payload = {
         "model": XAI_MODEL,
-        "messages": [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": f"{prompt_prefix}\n\n{clean_text}"},
-        ],
+        "messages": messages,
+        "max_tokens": max_tokens,
     }
 
-    def _summarize():
+    def _call():
         if not XAI_AVAILABLE:
             raise NoRetry("xAI disabled for this run")
-        response = HTTP_SESSION.post(
+        # Skip the shared HTTP retry adapter so a 500 cannot multiply Grok spend.
+        response = requests.post(
             "https://api.x.ai/v1/chat/completions",
             headers=headers,
             json=payload,
@@ -1557,17 +1562,94 @@ def summarize_with_ai(text, prompt_prefix="Summarize this news item:"):
         )
         raise_for_xai(response)
         body = response.json()
-        record_xai_usage("AI summary", body)
-        content = body["choices"][0]["message"]["content"].strip()
+        record_xai_usage(label, body)
+        content = (body.get("choices") or [{}])[0].get("message", {}).get("content", "")
+        content = (content or "").strip()
         if not content:
-            raise ValueError("Empty summary response")
+            raise ValueError("Empty xAI response")
         return content
 
-    summary = retry_call("AI summarization", _summarize)
-    if not summary:
+    return retry_call(label, _call, attempts=AI_RETRY_ATTEMPTS)
+
+
+def _parse_numbered_summaries(text, count):
+    """Map numbered Grok lines back onto the input stories."""
+    if not text or count <= 0:
+        return [None] * count
+    cleaned = re.sub(r"^```(?:json|text)?\s*|\s*```$", "", text.strip(), flags=re.I)
+    by_index = {}
+    unlabeled = []
+    for raw in cleaned.splitlines():
+        line = raw.strip().strip("`").strip()
+        if not line:
+            continue
+        match = re.match(r"^(?:item\s*)?(\d+)\s*[.)\:\-]\s*(.+)$", line, re.I)
+        if match:
+            by_index[int(match.group(1))] = match.group(2).strip()
+            continue
+        if line.startswith("["):
+            unlabeled.append(line)
+    out = []
+    unlabeled_i = 0
+    for index in range(1, count + 1):
+        if by_index.get(index):
+            out.append(by_index[index])
+        elif unlabeled_i < len(unlabeled):
+            out.append(unlabeled[unlabeled_i])
+            unlabeled_i += 1
+        else:
+            out.append(None)
+    return out
+
+
+def summarize_news_batch(entries, hint=""):
+    """Summarize a whole news block in one Grok call. Same story count, far fewer tokens."""
+    if not entries or not XAI_AVAILABLE:
+        return [None] * len(entries)
+    numbered = []
+    for index, entry in enumerate(entries, start=1):
+        snippet = _clip_ai_text(entry.get("content_text") or entry.get("title") or "")
+        if snippet:
+            numbered.append(f"{index}. {snippet}")
+        else:
+            numbered.append(f"{index}.")
+    if not any(item.split(".", 1)[-1].strip() for item in numbered):
+        return [None] * len(entries)
+    hint_line = f"{hint.strip()}\n" if hint and hint.strip() else ""
+    user = (
+        f"{hint_line}"
+        "One numbered line per story: N. [2-3 keywords] one specific sentence, max 22 words.\n"
+        + "\n".join(numbered)
+    )
+    content = _xai_chat(
+        [{"role": "user", "content": user}],
+        max_tokens=min(480, AI_MAX_TOKENS_PER_ITEM * len(entries)),
+        label="AI summary batch",
+    )
+    summaries = _parse_numbered_summaries(content, len(entries))
+    if not any(summaries):
+        logger.warning("AI batch summary failed; using feed titles")
+    return summaries
+
+
+def summarize_with_ai(text, prompt_prefix=""):
+    """Single-item summary used only as a fallback. Prefer summarize_news_batch."""
+    snippet = _clip_ai_text(text)
+    if not snippet or not XAI_AVAILABLE:
+        return None
+    hint = f"{prompt_prefix.strip()}\n" if prompt_prefix and prompt_prefix.strip() else ""
+    content = _xai_chat(
+        [{"role": "user", "content": (
+            f"{hint}[2-3 keywords] then one specific sentence, max 22 words.\n{snippet}"
+        )}],
+        max_tokens=AI_MAX_TOKENS_PER_ITEM,
+        label="AI summary",
+    )
+    if not content:
         logger.warning("AI summarization failed; using the feed title")
         return None
-    return summary
+    match = re.match(r"^(?:1\s*[.)\:\-]\s*)?(.+)$", content.strip(), re.S)
+    return (match.group(1).strip() if match else content.strip()) or None
 
 
 CAPS_RUN_RE = re.compile(r"\b[A-Z][A-Z'’]{3,}(?:[\s-]+[A-Z][A-Z'’]{3,})+\b")
@@ -1582,9 +1664,8 @@ def tidy_headline(text):
     return CAPS_RUN_RE.sub(lambda match: match.group(0).title(), text)
 
 
-def _news_item(entry, prompt, summarize=True):
+def _news_item(entry, summary=None):
     """AI summary with keyword badges, or the tidied feed title."""
-    summary = summarize_with_ai(entry["content_text"], prompt) if summarize and XAI_AVAILABLE else None
     if summary:
         headline = stylize_keywords(summary)
     else:
@@ -1596,6 +1677,11 @@ def _news_item(entry, prompt, summarize=True):
         "link": entry["link"],
         "source": entry["source"],
     }
+
+
+def _build_news_items(entries, summarize=True, hint=""):
+    summaries = summarize_news_batch(entries, hint=hint) if summarize else [None] * len(entries)
+    return [_news_item(entry, summary) for entry, summary in zip(entries, summaries)]
 
 
 def fetch_feed(url):
@@ -1640,7 +1726,7 @@ def _rss_entries(url, limit=5):
     return items
 
 
-def fetch_news(urls, limit=6, prompt="Summarize this content:", label="feed", summarize=True):
+def fetch_news(urls, limit=6, prompt="", label="feed", summarize=True):
     """Collect up to `limit` unique stories across feeds in order, optionally summarised."""
     chosen = []
     seen = set()
@@ -1659,7 +1745,7 @@ def fetch_news(urls, limit=6, prompt="Summarize this content:", label="feed", su
     if not chosen:
         logger.warning("No items found for %s feeds", label)
         return []
-    items = [_news_item(entry, prompt, summarize=summarize) for entry in chosen]
+    items = _build_news_items(chosen, summarize=summarize, hint=prompt)
     logger.info("%s assembled %s items", label, len(items))
     return items
 
@@ -1672,6 +1758,7 @@ def fetch_space_news():
         limit=6,
         label="space",
         summarize=False,
+        prompt="",
     )
 
 
@@ -1681,7 +1768,7 @@ def fetch_copenhagen_events():
     return fetch_news(
         COPENHAGEN_FEEDS,
         limit=6,
-        prompt="Summarize this Copenhagen/Denmark news item.",
+        prompt="Denmark.",
         label="copenhagen",
     )
 
@@ -1767,12 +1854,8 @@ def fetch_south_africa_news():
         logger.warning("No items found for south africa feeds")
         return []
 
-    prompt = (
-        "Summarize this South Africa news item as one concise factual sentence. "
-        "Prefer national government decisions, major financial developments, or international relations. "
-        "Omit petty municipal, crime, celebrity, and sports detail."
-    )
-    news_items = [_news_item(entry, prompt) for entry in chosen]
+    # Scoring already dropped crime/sport/petty local; do not repeat that in the Grok prompt.
+    news_items = _build_news_items(chosen, hint="South Africa.")
     logger.info("South Africa feed assembled %s items", len(news_items))
     return news_items
 
