@@ -12,13 +12,14 @@
     "Proverbs 23:27",
     "Proverbs 24:11",
     "Proverbs 9:18",
-    "Proverbs 13:9"
+    "Proverbs 13:9",
+    "Proverbs 3:13"
   ],
   "current": {
-    "date": "2026-10-11",
-    "text": "The light of the righteous rejoiceth: but the lamp of the wicked shall be put out.",
-    "focus": "Proverbs 13:9",
-    "ref": "Proverbs 13:9",
+    "date": "2026-10-12",
+    "text": "Happy is the man that findeth wisdom, and the man that getteth understanding.",
+    "focus": "Proverbs 3:13",
+    "ref": "Proverbs 3:13",
     "book": "Proverbs",
     "translation": "Kjv",
     "translation_label": "King James Version",
@@ -26,6 +27,6 @@
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2013%3A9&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%203%3A13&version=KJV"
   }
 }
