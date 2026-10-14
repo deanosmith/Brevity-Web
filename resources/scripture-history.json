@@ -14,13 +14,14 @@
     "Proverbs 9:18",
     "Proverbs 13:9",
     "Proverbs 3:13",
-    "Ecclesiastes 7:5"
+    "Ecclesiastes 7:5",
+    "Ecclesiastes 5:3"
   ],
   "current": {
-    "date": "2026-10-13",
-    "text": "It is better to hear the rebuke of the wise, than for a man to hear the song of fools.",
-    "focus": "Ecclesiastes 7:5",
-    "ref": "Ecclesiastes 7:5",
+    "date": "2026-10-14",
+    "text": "For a dream cometh through the multitude of business; and a fool’s voice is known by multitude of words.",
+    "focus": "Ecclesiastes 5:3",
+    "ref": "Ecclesiastes 5:3",
     "book": "Ecclesiastes",
     "translation": "Kjv",
     "translation_label": "King James Version",
@@ -28,6 +29,6 @@
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%207%3A5&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%205%3A3&version=KJV"
   }
 }
