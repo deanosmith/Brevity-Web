@@ -15,20 +15,21 @@
     "Proverbs 13:9",
     "Proverbs 3:13",
     "Ecclesiastes 7:5",
-    "Ecclesiastes 5:3"
+    "Ecclesiastes 5:3",
+    "Proverbs 22:6"
   ],
   "current": {
-    "date": "2026-10-14",
-    "text": "For a dream cometh through the multitude of business; and a fool’s voice is known by multitude of words.",
-    "focus": "Ecclesiastes 5:3",
-    "ref": "Ecclesiastes 5:3",
-    "book": "Ecclesiastes",
+    "date": "2026-10-15",
+    "text": "Train up a child in the way he should go: and when he is old, he will not depart from it.",
+    "focus": "Proverbs 22:6",
+    "ref": "Proverbs 22:6",
+    "book": "Proverbs",
     "translation": "Kjv",
     "translation_label": "King James Version",
     "source": {
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%205%3A3&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2022%3A6&version=KJV"
   }
 }
