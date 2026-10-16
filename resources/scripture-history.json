@@ -16,13 +16,14 @@
     "Proverbs 3:13",
     "Ecclesiastes 7:5",
     "Ecclesiastes 5:3",
-    "Proverbs 22:6"
+    "Proverbs 22:6",
+    "Proverbs 19:3"
   ],
   "current": {
-    "date": "2026-10-15",
-    "text": "Train up a child in the way he should go: and when he is old, he will not depart from it.",
-    "focus": "Proverbs 22:6",
-    "ref": "Proverbs 22:6",
+    "date": "2026-10-16",
+    "text": "The foolishness of man perverteth his way: and his heart fretteth against the Lord.",
+    "focus": "Proverbs 19:3",
+    "ref": "Proverbs 19:3",
     "book": "Proverbs",
     "translation": "Kjv",
     "translation_label": "King James Version",
@@ -30,6 +31,6 @@
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2022%3A6&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2019%3A3&version=KJV"
   }
 }
