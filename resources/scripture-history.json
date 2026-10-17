@@ -17,13 +17,14 @@
     "Ecclesiastes 7:5",
     "Ecclesiastes 5:3",
     "Proverbs 22:6",
-    "Proverbs 19:3"
+    "Proverbs 19:3",
+    "Proverbs 20:2"
   ],
   "current": {
-    "date": "2026-10-16",
-    "text": "The foolishness of man perverteth his way: and his heart fretteth against the Lord.",
-    "focus": "Proverbs 19:3",
-    "ref": "Proverbs 19:3",
+    "date": "2026-10-17",
+    "text": "The fear of a king is as the roaring of a lion: whoso provoketh him to anger sinneth against his own soul.",
+    "focus": "Proverbs 20:2",
+    "ref": "Proverbs 20:2",
     "book": "Proverbs",
     "translation": "Kjv",
     "translation_label": "King James Version",
@@ -31,6 +32,6 @@
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2019%3A3&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2020%3A2&version=KJV"
   }
 }
