@@ -19,20 +19,21 @@
     "Proverbs 22:6",
     "Proverbs 19:3",
     "Proverbs 20:2",
-    "Proverbs 3:7"
+    "Proverbs 3:7",
+    "Ecclesiastes 11:8"
   ],
   "current": {
-    "date": "2026-10-18",
-    "text": "Be not wise in thine own eyes: fear the Lord, and depart from evil.",
-    "focus": "Proverbs 3:7",
-    "ref": "Proverbs 3:7",
-    "book": "Proverbs",
+    "date": "2026-10-19",
+    "text": "But if a man live many years, and rejoice in them all; yet let him remember the days of darkness; for they shall be many. All that cometh is vanity.",
+    "focus": "Ecclesiastes 11:8",
+    "ref": "Ecclesiastes 11:8",
+    "book": "Ecclesiastes",
     "translation": "Kjv",
     "translation_label": "King James Version",
     "source": {
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%203%3A7&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%2011%3A8&version=KJV"
   }
 }
