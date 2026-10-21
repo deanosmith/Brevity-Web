@@ -21,20 +21,21 @@
     "Proverbs 20:2",
     "Proverbs 3:7",
     "Ecclesiastes 11:8",
-    "Ecclesiastes 1:10"
+    "Ecclesiastes 1:10",
+    "Proverbs 15:18"
   ],
   "current": {
-    "date": "2026-10-20",
-    "text": "Is there any thing whereof it may be said, See, this is new? it hath been already of old time, which was before us.",
-    "focus": "Ecclesiastes 1:10",
-    "ref": "Ecclesiastes 1:10",
-    "book": "Ecclesiastes",
+    "date": "2026-10-21",
+    "text": "A wrathful man stirreth up strife: but he that is slow to anger appeaseth strife.",
+    "focus": "Proverbs 15:18",
+    "ref": "Proverbs 15:18",
+    "book": "Proverbs",
     "translation": "Kjv",
     "translation_label": "King James Version",
     "source": {
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%201%3A10&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2015%3A18&version=KJV"
   }
 }

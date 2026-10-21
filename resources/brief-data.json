@@ -1,11 +1,11 @@
 {
- "date": "Tuesday, October 20",
- "iso_date": "2026-10-20",
- "generated_at": "2026-10-20 05:01 CEST",
- "generated_iso": "2026-10-20T05:01:26+02:00",
+ "date": "Wednesday, October 21",
+ "iso_date": "2026-10-21",
+ "generated_at": "2026-10-21 05:01 CEST",
+ "generated_iso": "2026-10-21T05:01:22+02:00",
  "generated_clock": "5:01 am",
- "year_percent": 80.27397260273973,
- "day_of_year": 293,
+ "year_percent": 80.54794520547945,
+ "day_of_year": 294,
  "days_in_year": 365,
  "weather": {
   "location": "Copenhagen",
@@ -16,196 +16,196 @@
    "location": "Copenhagen"
   },
   "today": {
-   "date": "2026-10-20",
+   "date": "2026-10-21",
    "label": "Today",
-   "high": 11,
-   "low": 8,
+   "high": 13,
+   "low": 11,
    "rain_chance": 100,
-   "rain_sum_mm": 4.5,
-   "rain_peak_time": "2:00 pm",
+   "rain_sum_mm": 3.7,
+   "rain_peak_time": "7:00 pm",
    "rain_timeline": {
     "points": [
      {
       "hour": 6,
-      "precip": 0,
+      "precip": 91,
       "label": "6 am",
       "clock": "6:00 am"
      },
      {
       "hour": 7,
-      "precip": 0,
+      "precip": 79,
       "label": null,
       "clock": "7:00 am"
      },
      {
       "hour": 8,
-      "precip": 0,
+      "precip": 63,
       "label": null,
       "clock": "8:00 am"
      },
      {
       "hour": 9,
-      "precip": 4,
+      "precip": 40,
       "label": "9 am",
       "clock": "9:00 am"
      },
      {
       "hour": 10,
-      "precip": 11,
+      "precip": 14,
       "label": null,
       "clock": "10:00 am"
      },
      {
       "hour": 11,
-      "precip": 24,
+      "precip": 0,
       "label": null,
       "clock": "11:00 am"
      },
      {
       "hour": 12,
-      "precip": 48,
+      "precip": 9,
       "label": "12 pm",
       "clock": "12:00 pm"
      },
      {
       "hour": 13,
-      "precip": 78,
+      "precip": 31,
       "label": null,
       "clock": "1:00 pm"
      },
      {
       "hour": 14,
-      "precip": 100,
+      "precip": 51,
       "label": null,
       "clock": "2:00 pm"
      },
      {
       "hour": 15,
-      "precip": 100,
+      "precip": 64,
       "label": "3 pm",
       "clock": "3:00 pm"
      },
      {
       "hour": 16,
-      "precip": 100,
+      "precip": 76,
       "label": null,
       "clock": "4:00 pm"
      },
      {
       "hour": 17,
-      "precip": 100,
+      "precip": 84,
       "label": null,
       "clock": "5:00 pm"
      },
      {
       "hour": 18,
-      "precip": 99,
+      "precip": 90,
       "label": "6 pm",
       "clock": "6:00 pm"
      },
      {
       "hour": 19,
-      "precip": 98,
+      "precip": 94,
       "label": null,
       "clock": "7:00 pm"
      },
      {
       "hour": 20,
-      "precip": 98,
+      "precip": 90,
       "label": null,
       "clock": "8:00 pm"
      },
      {
       "hour": 21,
-      "precip": 98,
+      "precip": 73,
       "label": "9 pm",
       "clock": "9:00 pm"
      },
      {
       "hour": 22,
-      "precip": 99,
+      "precip": 50,
       "label": null,
       "clock": "10:00 pm"
      },
      {
       "hour": 23,
-      "precip": 100,
+      "precip": 33,
       "label": "11 pm",
       "clock": "11:00 pm"
      }
     ],
-    "max_precip": 100,
-    "peak_time": "2:00 pm",
+    "max_precip": 94,
+    "peak_time": "7:00 pm",
     "color": "#40c4ff"
    },
-   "wind_max": 28,
-   "wind_dir": 82,
-   "wind_color": "#d6576d",
-   "uv_max": 0.4,
-   "sunrise": "7:50 am",
-   "sunset": "5:57 pm",
-   "code": 53,
-   "condition": "Drizzle",
-   "icon": "🌦️",
+   "wind_max": 22,
+   "wind_dir": 135,
+   "wind_color": "#bb3687",
+   "uv_max": 1.25,
+   "sunrise": "7:52 am",
+   "sunset": "5:55 pm",
+   "code": 55,
+   "condition": "Heavy Drizzle",
+   "icon": "🌧️",
    "color": "#4682B4",
    "current": {
-    "temp": 8,
-    "feels_like": 4,
-    "code": 1,
-    "condition": "Partly Cloudy",
-    "icon": "⛅️",
-    "color": "#87CEEB",
-    "wind": 18,
-    "wind_dir": 76,
-    "precip": 0
+    "temp": 11,
+    "feels_like": 9,
+    "code": 51,
+    "condition": "Light Drizzle",
+    "icon": "🌦️",
+    "color": "#4682B4",
+    "wind": 16,
+    "wind_dir": 144,
+    "precip": 100
    },
    "morning": {
-    "temp": 8,
-    "feels_like": 4,
-    "precip": 24,
-    "wind": 23,
-    "wind_dir": 64,
-    "wind_color": "#be3a84",
+    "temp": 12,
+    "feels_like": 9,
+    "precip": 91,
+    "wind": 20,
+    "wind_dir": 153,
+    "wind_color": "#b22b8f",
     "color": "#87CEEB",
     "condition": "Overcast",
     "icon": "☁️",
     "code": 3
    },
    "afternoon": {
-    "temp": 10,
-    "feels_like": 6,
-    "precip": 100,
-    "wind": 28,
-    "wind_dir": 83,
-    "wind_color": "#d6576d",
+    "temp": 12,
+    "feels_like": 10,
+    "precip": 84,
+    "wind": 22,
+    "wind_dir": 138,
+    "wind_color": "#b93389",
     "color": "#4682B4",
     "condition": "Light Drizzle",
     "icon": "🌦️",
     "code": 51
    },
    "evening": {
-    "temp": 11,
-    "feels_like": 8,
-    "precip": 100,
-    "wind": 21,
-    "wind_dir": 107,
-    "wind_color": "#b7318a",
-    "color": "#4682B4",
-    "condition": "Light Drizzle",
-    "icon": "🌦️",
-    "code": 51
+    "temp": 12,
+    "feels_like": 10,
+    "precip": 94,
+    "wind": 17,
+    "wind_dir": 117,
+    "wind_color": "#991c98",
+    "color": "#87CEEB",
+    "condition": "Overcast",
+    "icon": "☁️",
+    "code": 3
    },
    "sun_path": {
-    "sunrise": "7:50 am",
-    "sunset": "5:57 pm",
+    "sunrise": "7:52 am",
+    "sunset": "5:55 pm",
     "sun_x": 20.0,
     "sun_y": 66.0,
     "is_day": false,
-    "daylight": "10h 07m",
-    "rain_peak": "2:00 pm",
-    "rain_on_arc": true,
-    "rain_x": 153.7,
-    "rain_y": 16.6,
+    "daylight": "10h 03m",
+    "rain_peak": "7:00 pm",
+    "rain_on_arc": false,
+    "rain_x": 230.0,
+    "rain_y": 58.0,
     "cy": 58,
     "start_x": 20.0,
     "end_x": 220.0,
@@ -227,232 +227,64 @@
      "label": "Rain"
     },
     "wind": {
-     "progress": 0.56,
-     "color": "#d7586b",
-     "value": "28 km/h",
+     "progress": 0.44,
+     "color": "#bb3687",
+     "value": "22 km/h",
      "label": "Wind"
     },
     "uv": {
-     "progress": 0.03636363636363637,
-     "color": "#5fb54e",
-     "value": "0.4",
+     "progress": 0.11363636363636363,
+     "color": "#86c249",
+     "value": "1.2",
      "label": "UV"
     },
     "temp": {
-     "high": 11,
-     "low": 8,
-     "high_color": "#dfd384",
-     "low_color": "#9fcebf",
-     "high_progress": 0.45714285714285713,
-     "low_progress": 0.37142857142857144,
+     "high": 13,
+     "low": 11,
+     "high_color": "#ffd264",
+     "low_color": "#dfd384",
+     "high_progress": 0.5142857142857142,
+     "low_progress": 0.45714285714285713,
      "label": "Temp"
     }
    },
-   "high_color": "#dfd384",
-   "low_color": "#9fcebf",
+   "high_color": "#ffd264",
+   "low_color": "#dfd384",
    "rain_color": "#40c4ff"
   },
   "upcoming": [
    {
-    "date": "2026-10-21",
+    "date": "2026-10-22",
     "label": "Tomorrow",
-    "high": 12,
+    "high": 13,
     "low": 11,
     "rain_chance": 100,
-    "wind_max": 23,
-    "code": 55,
-    "condition": "Heavy Drizzle",
+    "wind_max": 16,
+    "code": 61,
+    "condition": "Light Rain",
     "icon": "🌧️",
     "color": "#4682B4",
-    "high_color": "#fbd66a",
-    "low_color": "#d6d38c",
+    "high_color": "#ffd566",
+    "low_color": "#d8d38a",
     "rain_color": "#40c4ff",
     "rain_progress": 1.0,
     "rain_timeline": {
      "points": [
       {
        "hour": 0,
-       "precip": 100,
+       "precip": 27,
        "label": "12 am",
        "clock": "12:00 am"
       },
       {
        "hour": 1,
-       "precip": 100,
+       "precip": 28,
        "label": null,
        "clock": "1:00 am"
       },
       {
        "hour": 2,
-       "precip": 100,
-       "label": null,
-       "clock": "2:00 am"
-      },
-      {
-       "hour": 3,
-       "precip": 100,
-       "label": null,
-       "clock": "3:00 am"
-      },
-      {
-       "hour": 4,
-       "precip": 100,
-       "label": null,
-       "clock": "4:00 am"
-      },
-      {
-       "hour": 5,
-       "precip": 100,
-       "label": null,
-       "clock": "5:00 am"
-      },
-      {
-       "hour": 6,
-       "precip": 94,
-       "label": null,
-       "clock": "6:00 am"
-      },
-      {
-       "hour": 7,
-       "precip": 85,
-       "label": null,
-       "clock": "7:00 am"
-      },
-      {
-       "hour": 8,
-       "precip": 71,
-       "label": null,
-       "clock": "8:00 am"
-      },
-      {
-       "hour": 9,
-       "precip": 49,
-       "label": "9 am",
-       "clock": "9:00 am"
-      },
-      {
-       "hour": 10,
-       "precip": 22,
-       "label": null,
-       "clock": "10:00 am"
-      },
-      {
-       "hour": 11,
-       "precip": 4,
-       "label": null,
-       "clock": "11:00 am"
-      },
-      {
-       "hour": 12,
-       "precip": 0,
-       "label": "12 pm",
-       "clock": "12:00 pm"
-      },
-      {
-       "hour": 13,
-       "precip": 4,
-       "label": null,
-       "clock": "1:00 pm"
-      },
-      {
-       "hour": 14,
-       "precip": 10,
-       "label": null,
-       "clock": "2:00 pm"
-      },
-      {
-       "hour": 15,
-       "precip": 17,
-       "label": "3 pm",
-       "clock": "3:00 pm"
-      },
-      {
-       "hour": 16,
-       "precip": 26,
-       "label": null,
-       "clock": "4:00 pm"
-      },
-      {
-       "hour": 17,
-       "precip": 33,
-       "label": null,
-       "clock": "5:00 pm"
-      },
-      {
-       "hour": 18,
-       "precip": 38,
-       "label": "6 pm",
-       "clock": "6:00 pm"
-      },
-      {
-       "hour": 19,
-       "precip": 42,
-       "label": null,
-       "clock": "7:00 pm"
-      },
-      {
-       "hour": 20,
-       "precip": 45,
-       "label": null,
-       "clock": "8:00 pm"
-      },
-      {
-       "hour": 21,
-       "precip": 47,
-       "label": "9 pm",
-       "clock": "9:00 pm"
-      },
-      {
-       "hour": 22,
-       "precip": 48,
-       "label": null,
-       "clock": "10:00 pm"
-      },
-      {
-       "hour": 23,
-       "precip": 49,
-       "label": "11 pm",
-       "clock": "11:00 pm"
-      }
-     ],
-     "max_precip": 100,
-     "peak_time": "12:00 am",
-     "color": "#40c4ff"
-    },
-    "rain_peak_time": "12:00 am"
-   },
-   {
-    "date": "2026-10-22",
-    "label": "In 2 Days",
-    "high": 12,
-    "low": 10,
-    "rain_chance": 96,
-    "wind_max": 22,
-    "code": 61,
-    "condition": "Light Rain",
-    "icon": "🌧️",
-    "color": "#4682B4",
-    "high_color": "#fbd66a",
-    "low_color": "#c9d198",
-    "rain_color": "#40bff9",
-    "rain_progress": 0.96,
-    "rain_timeline": {
-     "points": [
-      {
-       "hour": 0,
-       "precip": 50,
-       "label": "12 am",
-       "clock": "12:00 am"
-      },
-      {
-       "hour": 1,
-       "precip": 50,
-       "label": null,
-       "clock": "1:00 am"
-      },
-      {
-       "hour": 2,
-       "precip": 51,
+       "precip": 35,
        "label": null,
        "clock": "2:00 am"
       },
@@ -464,289 +296,463 @@
       },
       {
        "hour": 4,
-       "precip": 54,
+       "precip": 76,
        "label": null,
        "clock": "4:00 am"
       },
       {
        "hour": 5,
-       "precip": 59,
+       "precip": 94,
        "label": null,
        "clock": "5:00 am"
       },
       {
        "hour": 6,
-       "precip": 69,
+       "precip": 100,
        "label": null,
        "clock": "6:00 am"
       },
       {
        "hour": 7,
-       "precip": 82,
+       "precip": 100,
        "label": null,
        "clock": "7:00 am"
       },
       {
        "hour": 8,
-       "precip": 92,
+       "precip": 100,
        "label": null,
        "clock": "8:00 am"
       },
       {
        "hour": 9,
-       "precip": 96,
+       "precip": 98,
        "label": "9 am",
        "clock": "9:00 am"
       },
       {
        "hour": 10,
-       "precip": 96,
+       "precip": 94,
        "label": null,
        "clock": "10:00 am"
       },
       {
        "hour": 11,
-       "precip": 94,
+       "precip": 84,
        "label": null,
        "clock": "11:00 am"
       },
       {
        "hour": 12,
-       "precip": 91,
+       "precip": 62,
        "label": "12 pm",
        "clock": "12:00 pm"
       },
       {
        "hour": 13,
-       "precip": 86,
+       "precip": 34,
        "label": null,
        "clock": "1:00 pm"
       },
       {
        "hour": 14,
-       "precip": 80,
+       "precip": 12,
        "label": null,
        "clock": "2:00 pm"
       },
       {
        "hour": 15,
-       "precip": 73,
+       "precip": 3,
        "label": "3 pm",
        "clock": "3:00 pm"
       },
       {
        "hour": 16,
-       "precip": 66,
+       "precip": 1,
        "label": null,
        "clock": "4:00 pm"
       },
       {
        "hour": 17,
-       "precip": 59,
+       "precip": 0,
        "label": null,
        "clock": "5:00 pm"
       },
       {
        "hour": 18,
-       "precip": 54,
+       "precip": 0,
        "label": "6 pm",
        "clock": "6:00 pm"
       },
       {
        "hour": 19,
-       "precip": 50,
+       "precip": 0,
        "label": null,
        "clock": "7:00 pm"
       },
       {
        "hour": 20,
-       "precip": 45,
+       "precip": 0,
        "label": null,
        "clock": "8:00 pm"
       },
       {
        "hour": 21,
-       "precip": 38,
+       "precip": 0,
        "label": "9 pm",
        "clock": "9:00 pm"
       },
       {
        "hour": 22,
-       "precip": 30,
+       "precip": 1,
        "label": null,
        "clock": "10:00 pm"
       },
       {
        "hour": 23,
-       "precip": 24,
+       "precip": 2,
        "label": "11 pm",
        "clock": "11:00 pm"
       }
      ],
-     "max_precip": 96,
-     "peak_time": "9:00 am",
-     "color": "#40bff9"
+     "max_precip": 100,
+     "peak_time": "6:00 am",
+     "color": "#40c4ff"
     },
-    "rain_peak_time": "9:00 am"
+    "rain_peak_time": "6:00 am"
+   },
+   {
+    "date": "2026-10-23",
+    "label": "In 2 Days",
+    "high": 12,
+    "low": 10,
+    "rain_chance": 51,
+    "wind_max": 26,
+    "code": 51,
+    "condition": "Light Drizzle",
+    "icon": "🌦️",
+    "color": "#4682B4",
+    "high_color": "#f0d574",
+    "low_color": "#c9d198",
+    "rain_color": "#3c8ab8",
+    "rain_progress": 0.51,
+    "rain_timeline": {
+     "points": [
+      {
+       "hour": 0,
+       "precip": 3,
+       "label": "12 am",
+       "clock": "12:00 am"
+      },
+      {
+       "hour": 1,
+       "precip": 5,
+       "label": null,
+       "clock": "1:00 am"
+      },
+      {
+       "hour": 2,
+       "precip": 6,
+       "label": null,
+       "clock": "2:00 am"
+      },
+      {
+       "hour": 3,
+       "precip": 6,
+       "label": null,
+       "clock": "3:00 am"
+      },
+      {
+       "hour": 4,
+       "precip": 6,
+       "label": null,
+       "clock": "4:00 am"
+      },
+      {
+       "hour": 5,
+       "precip": 6,
+       "label": null,
+       "clock": "5:00 am"
+      },
+      {
+       "hour": 6,
+       "precip": 6,
+       "label": null,
+       "clock": "6:00 am"
+      },
+      {
+       "hour": 7,
+       "precip": 5,
+       "label": null,
+       "clock": "7:00 am"
+      },
+      {
+       "hour": 8,
+       "precip": 4,
+       "label": null,
+       "clock": "8:00 am"
+      },
+      {
+       "hour": 9,
+       "precip": 3,
+       "label": "9 am",
+       "clock": "9:00 am"
+      },
+      {
+       "hour": 10,
+       "precip": 1,
+       "label": null,
+       "clock": "10:00 am"
+      },
+      {
+       "hour": 11,
+       "precip": 0,
+       "label": null,
+       "clock": "11:00 am"
+      },
+      {
+       "hour": 12,
+       "precip": 0,
+       "label": "12 pm",
+       "clock": "12:00 pm"
+      },
+      {
+       "hour": 13,
+       "precip": 0,
+       "label": null,
+       "clock": "1:00 pm"
+      },
+      {
+       "hour": 14,
+       "precip": 0,
+       "label": null,
+       "clock": "2:00 pm"
+      },
+      {
+       "hour": 15,
+       "precip": 0,
+       "label": "3 pm",
+       "clock": "3:00 pm"
+      },
+      {
+       "hour": 16,
+       "precip": 0,
+       "label": null,
+       "clock": "4:00 pm"
+      },
+      {
+       "hour": 17,
+       "precip": 0,
+       "label": null,
+       "clock": "5:00 pm"
+      },
+      {
+       "hour": 18,
+       "precip": 6,
+       "label": "6 pm",
+       "clock": "6:00 pm"
+      },
+      {
+       "hour": 19,
+       "precip": 15,
+       "label": null,
+       "clock": "7:00 pm"
+      },
+      {
+       "hour": 20,
+       "precip": 24,
+       "label": null,
+       "clock": "8:00 pm"
+      },
+      {
+       "hour": 21,
+       "precip": 35,
+       "label": "9 pm",
+       "clock": "9:00 pm"
+      },
+      {
+       "hour": 22,
+       "precip": 46,
+       "label": null,
+       "clock": "10:00 pm"
+      },
+      {
+       "hour": 23,
+       "precip": 51,
+       "label": "11 pm",
+       "clock": "11:00 pm"
+      }
+     ],
+     "max_precip": 51,
+     "peak_time": "11:00 pm",
+     "color": "#3c8ab8"
+    },
+    "rain_peak_time": "11:00 pm"
    }
   ],
   "morning": {
-   "temp": 8,
-   "feels_like": 4,
-   "precip": 24,
-   "wind": 23,
-   "wind_dir": 64,
-   "wind_color": "#be3a84",
+   "temp": 12,
+   "feels_like": 9,
+   "precip": 91,
+   "wind": 20,
+   "wind_dir": 153,
+   "wind_color": "#b22b8f",
    "color": "#87CEEB",
    "condition": "Overcast",
    "icon": "☁️",
    "code": 3
   },
   "afternoon": {
-   "temp": 10,
-   "feels_like": 6,
-   "precip": 100,
-   "wind": 28,
-   "wind_dir": 83,
-   "wind_color": "#d6576d",
+   "temp": 12,
+   "feels_like": 10,
+   "precip": 84,
+   "wind": 22,
+   "wind_dir": 138,
+   "wind_color": "#b93389",
    "color": "#4682B4",
    "condition": "Light Drizzle",
    "icon": "🌦️",
    "code": 51
   },
   "evening": {
-   "temp": 11,
-   "feels_like": 8,
-   "precip": 100,
-   "wind": 21,
-   "wind_dir": 107,
-   "wind_color": "#b7318a",
-   "color": "#4682B4",
-   "condition": "Light Drizzle",
-   "icon": "🌦️",
-   "code": 51
+   "temp": 12,
+   "feels_like": 10,
+   "precip": 94,
+   "wind": 17,
+   "wind_dir": 117,
+   "wind_color": "#991c98",
+   "color": "#87CEEB",
+   "condition": "Overcast",
+   "icon": "☁️",
+   "code": 3
   },
-  "sunrise": "7:50 am",
-  "sunset": "5:57 pm",
+  "sunrise": "7:52 am",
+  "sunset": "5:55 pm",
   "daily_precip": 100,
-  "rain_peak_time": "2:00 pm"
+  "rain_peak_time": "7:00 pm"
  },
  "stocks": {
   "Tesla": {
    "symbol": "TSLA",
-   "price": 368.05999755859375,
-   "change": 13.339996337890625,
-   "percent": 3.760711629449566,
+   "price": 373.7099914550781,
+   "change": 5.649993896484375,
+   "percent": 1.53507415474699,
    "color": "green",
    "arrow": "↑",
-   "percent_7d": -2.6373571549605654,
+   "percent_7d": -0.4050900745530675,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": 1.0404394156059964,
-   "color_1m": "green",
-   "arrow_1m": "↑"
+   "percent_1m": -0.4236601091412062,
+   "color_1m": "red",
+   "arrow_1m": "↓"
   },
   "SPCX": {
    "symbol": "SPCX",
-   "price": 147.9600067138672,
-   "change": 1.9300079345703125,
-   "percent": 1.3216516816433308,
-   "color": "green",
-   "arrow": "↑",
-   "percent_7d": -9.46028125584448,
+   "price": 147.7899932861328,
+   "change": -0.170013427734375,
+   "percent": -0.11490498784793642,
+   "color": "red",
+   "arrow": "↓",
+   "percent_7d": -5.589625894519011,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": -3.1104706903065478,
+   "percent_1m": -2.6736994759256816,
    "color_1m": "red",
    "arrow_1m": "↓"
   },
   "Nvidia": {
    "symbol": "NVDA",
-   "price": 217.08999633789062,
-   "change": 2.959991455078125,
-   "percent": 1.382333810106644,
-   "color": "green",
-   "arrow": "↑",
-   "percent_7d": -4.078300940095636,
+   "price": 216.47000122070312,
+   "change": -0.6199951171875,
+   "percent": -0.28559359143500374,
+   "color": "red",
+   "arrow": "↓",
+   "percent_7d": -5.273062675681897,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": -2.3305024677196675,
+   "percent_1m": -4.79813678767937,
    "color_1m": "red",
    "arrow_1m": "↓"
   },
   "Oklo": {
    "symbol": "OKLO",
-   "price": 27.239999771118164,
-   "change": -0.7299995422363281,
-   "percent": -2.6099376480420013,
-   "color": "red",
-   "arrow": "↓",
-   "percent_7d": -15.429988992922262,
+   "price": 27.479999542236328,
+   "change": 0.23999977111816406,
+   "percent": 0.881056435883782,
+   "color": "green",
+   "arrow": "↑",
+   "percent_7d": -13.530525649787393,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": -28.31579007600483,
+   "percent_1m": -31.60776671597861,
    "color_1m": "red",
    "arrow_1m": "↓"
   },
   "Micron": {
    "symbol": "MU",
-   "price": 904.9000244140625,
-   "change": 26.05999755859375,
-   "percent": 2.9652720361221663,
-   "color": "green",
-   "arrow": "↑",
-   "percent_7d": -8.492834875160483,
+   "price": 896.0700073242188,
+   "change": -8.83001708984375,
+   "percent": -0.9758002930280977,
+   "color": "red",
+   "arrow": "↓",
+   "percent_7d": -5.9777165075165515,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": -10.903479323144703,
+   "percent_1m": -14.152736348779655,
    "color_1m": "red",
    "arrow_1m": "↓"
   },
   "Palantir": {
    "symbol": "PLTR",
-   "price": 194.14999389648438,
-   "change": 8.1199951171875,
-   "percent": 4.3648847876524135,
-   "color": "green",
-   "arrow": "↑",
-   "percent_7d": -7.105266078237141,
+   "price": 192.60000610351562,
+   "change": -1.54998779296875,
+   "percent": -0.7983455275281452,
+   "color": "red",
+   "arrow": "↓",
+   "percent_7d": -7.701151198754961,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": 9.294074850012649,
+   "percent_1m": 5.1941722408876885,
    "color_1m": "green",
    "arrow_1m": "↑"
   },
   "Bitcoin": {
    "symbol": "BTC-USD",
-   "price": 81690.8984375,
-   "change": -326.703125,
-   "percent": -0.3983329416808682,
-   "color": "red",
-   "arrow": "↓",
-   "percent_7d": 0.15743296527135683,
+   "price": 82698.3984375,
+   "change": 844.859375,
+   "percent": 1.0321598609864626,
+   "color": "green",
+   "arrow": "↑",
+   "percent_7d": 0.678022394103465,
    "color_7d": "green",
    "arrow_7d": "↑",
-   "percent_1m": -2.169645896170535,
+   "percent_1m": -1.105004068230423,
    "color_1m": "red",
    "arrow_1m": "↓"
   },
   "Vanguard S&P 500": {
    "symbol": "VUSA.AS",
-   "price": 130.08599853515625,
-   "change": -0.5099945068359375,
-   "percent": -0.39051313517096387,
-   "color": "red",
-   "arrow": "↓",
-   "percent_7d": -1.4216266805977895,
+   "price": 130.468994140625,
+   "change": 0.38299560546875,
+   "percent": 0.2944172391967641,
+   "color": "green",
+   "arrow": "↑",
+   "percent_7d": -1.549920339913739,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": 3.3002447549503064,
+   "percent_1m": 3.547642101779231,
    "color_1m": "green",
    "arrow_1m": "↑"
   },
-  "average_percent": 1.2995087775100358
+  "average_percent": 0.19600791137185195
  },
  "space_news": [
+  {
+   "headline": "AnySignal to Deliver Space-to-Earth Communications for Three Reflect Orbital Missions",
+   "ai_summary": null,
+   "link": "https://spacenews.com/anysignal-to-deliver-space-to-earth-communications-for-three-reflect-orbital-missions/",
+   "source": "SpaceNews"
+  },
   {
    "headline": "UARX Space troubleshoots anomalies on maiden OTV Flight",
    "ai_summary": null,
@@ -776,114 +782,123 @@
    "ai_summary": null,
    "link": "https://spacenews.com/how-mini-constellations-could-more-quickly-bring-new-tech-to-europe-and-to-orbit/",
    "source": "SpaceNews"
-  },
-  {
-   "headline": "Jena-Optronik is proud to partner with MDA Space for its first ASTRO HP mission.",
-   "ai_summary": null,
-   "link": "https://spacenews.com/jena-optronik-is-proud-to-partner-with-mda-space-for-its-first-astro-hp-mission/",
-   "source": "SpaceNews"
   }
  ],
  "copenhagen": [
   {
-   "headline": "Chestnut crafts, mushroom foraging, duck dinners. Copenhagen celebrates autumn with five beloved Danish traditions that locals still enjoy every year.",
-   "ai_summary": "Chestnut crafts, mushroom foraging, duck dinners. Copenhagen celebrates autumn with five beloved Danish traditions that locals still enjoy every year.",
-   "link": "https://cphpost.dk/2026-10-19/art-culture/5-danish-autumn-traditions-to-discover-in-copenhagen/",
+   "headline": "Government cuts SU for students living at home. About 14,000 higher education students living with parents will lose their entire SU grant under the 2027 budget.",
+   "ai_summary": "Government cuts SU for students living at home. About 14,000 higher education students living with parents will lose their entire SU grant under the 2027 budget.",
+   "link": "https://cphpost.dk/2026-10-20/news/round-up/government-plan-would-remove-su-from-14000-students-living-with-parents/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "Police baton strikes on photographers. The Independent Police Complaints Authority is investigating two separate baton attacks on Danish press photographers during Copenhagen demonstrations.",
-   "ai_summary": "Police baton strikes on photographers. The Independent Police Complaints Authority is investigating two separate baton attacks on Danish press photographers during Copenhagen demonstrations.",
-   "link": "https://cphpost.dk/2026-10-19/news/round-up/independent-authority-to-investigate-police-strikes-against-photographers/",
+   "headline": "Minister calls talks after stress report shows big losses. Pia Olsen Dyhr will convene unions and employers after a report found severe work-related stress significantly reduces Denmark’s labor supply.",
+   "ai_summary": "Minister calls talks after stress report shows big losses. Pia Olsen Dyhr will convene unions and employers after a report found severe work-related stress significantly reduces Denmark’s labor supply.",
+   "link": "https://cphpost.dk/2026-10-20/news/round-up/minister-calls-for-talks-after-report-finds-major-employment-losses-due-to-stress/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "Delayed UN climate reports warning. A Danish expert warns that missing UN assessment reports before COP33 in 2028 will seriously weaken global climate action.",
-   "ai_summary": "Delayed UN climate reports warning. A Danish expert warns that missing UN assessment reports before COP33 in 2028 will seriously weaken global climate action.",
-   "link": "https://cphpost.dk/2026-10-19/news/round-up/delayed-un-climate-reports-could-weaken-action-before-cop33-danish-expert-warns/",
+   "headline": "EU makes security core of new Arctic strategy. The European Commission has shifted its Arctic strategy to focus primarily on security as Russia and China expand their regional presence and ambitions.",
+   "ai_summary": "EU makes security core of new Arctic strategy. The European Commission has shifted its Arctic strategy to focus primarily on security as Russia and China expand their regional presence and ambitions.",
+   "link": "https://cphpost.dk/2026-10-20/news/round-up/eu-puts-security-at-center-of-new-arctic-strategy/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "Separate diaper recycling begins. Copenhagen has started collecting used diapers separately for recycling at Denmark’s first dedicated diaper treatment facility.",
-   "ai_summary": "Separate diaper recycling begins. Copenhagen has started collecting used diapers separately for recycling at Denmark’s first dedicated diaper treatment facility.",
-   "link": "https://cphpost.dk/2026-10-19/news/round-up/copenhagen-begins-separate-collection-of-used-diapers-for-recycling/",
+   "headline": "Record trout numbers follow Varde River restoration. Anglers caught a record 1,400 large trout in the Varde River in 2025 after successful efforts to remove obstacles for fish migration.",
+   "ai_summary": "Record trout numbers follow Varde River restoration. Anglers caught a record 1,400 large trout in the Varde River in 2025 after successful efforts to remove obstacles for fish migration.",
+   "link": "https://cphpost.dk/2026-10-20/news/round-up/record-trout-catch-in-varde-river-follows-restoration-efforts/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "Misogynistic TikTok content appears fast. A Danish study found young men encounter misogynistic videos on TikTok within minutes without actively searching for them.",
-   "ai_summary": "Misogynistic TikTok content appears fast. A Danish study found young men encounter misogynistic videos on TikTok within minutes without actively searching for them.",
-   "link": "https://cphpost.dk/2026-10-19/news/round-up/study-finds-misogynistic-tiktok-content-can-appear-within-minutes/",
+   "headline": "Denmark’s four wise men deliver economic forecasts. The economic wise men have assessed Denmark’s growth outlook and proposed food taxes in their latest report.",
+   "ai_summary": "Denmark’s four wise men deliver economic forecasts. The economic wise men have assessed Denmark’s growth outlook and proposed food taxes in their latest report.",
+   "link": "https://cphpost.dk/2026-10-20/business-education/business-business-education/what-danes-are-talking-about-who-are-the-economys-wise-men/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "Denmark is getting sunnier. Sunshine hours have increased across the country, with recent years also among the warmest on record.",
-   "ai_summary": "Denmark is getting sunnier. Sunshine hours have increased across the country, with recent years also among the warmest on record.",
-   "link": "https://cphpost.dk/2026-10-19/life-in-denmark/denmark-is-sunnier-than-you-might-think-and-sunnier-than-in-the-past-see-how-your-municipality-and-region-compare/",
+   "headline": "Police stun guns, data breach and fish leaving Denmark. This week: nationwide stun gun rollout for police, massive CPR record breach, and warming seas pushing fish species out of Danish waters.",
+   "ai_summary": "Police stun guns, data breach and fish leaving Denmark. This week: nationwide stun gun rollout for police, massive CPR record breach, and warming seas pushing fish species out of Danish waters.",
+   "link": "https://cphpost.dk/2026-10-20/podcast/the-danish-connection-police-armed-with-stun-guns-cpr-records-exposed-in-a-historic-breach-and-warming-seas-push-fish-species-out-of-denmark/",
    "source": "The Copenhagen Post"
   }
  ],
  "south_africa": [
   {
-   "headline": "THE LOWLY NEWSPAPERMAN: Ramaphosa’s GNU survived ANC rebellion, but Joburg will test everything.",
-   "ai_summary": "THE LOWLY NEWSPAPERMAN: Ramaphosa’s GNU survived ANC rebellion, but Joburg will test everything.",
-   "link": "https://www.dailymaverick.co.za/article/2026-10-19-ramaphosas-gnu-survived-an-anc-rebellion-but-joburg-will-test-everything/",
-   "source": "Daily Maverick - Latest News"
-  },
-  {
-   "headline": "LOCAL ELECTIONS 2026: Ramaphosa acknowledges voter anger, hints at fuel relief, warns of Agoa loss.",
-   "ai_summary": "LOCAL ELECTIONS 2026: Ramaphosa acknowledges voter anger, hints at fuel relief, warns of Agoa loss.",
-   "link": "https://www.dailymaverick.co.za/article/2026-10-19-ramaphosa-signals-fuel-relief-and-warns-of-agoa-losses-as-elections-loom/",
-   "source": "Daily Maverick - Latest News"
-  },
-  {
-   "headline": "NTULI PLEDGES: KZN Premier vows stronger law enforcement to protect investor confidence and stability.",
-   "ai_summary": "NTULI PLEDGES: KZN Premier vows stronger law enforcement to protect investor confidence and stability.",
-   "link": "https://www.sanews.gov.za/south-africa/ntuli-pledges-stronger-law-enforcement-protect-kzn-investment",
+   "headline": "SA, Uganda boost trade ties. South Africa and Uganda are working to remove business barriers and deepen cooperation in key economic sectors.",
+   "ai_summary": "SA, Uganda boost trade ties. South Africa and Uganda are working to remove business barriers and deepen cooperation in key economic sectors.",
+   "link": "https://www.sanews.gov.za/south-africa/sa-uganda-seek-boost-trade-and-investment-ties",
    "source": "https://www.sanews.gov.za/rss.xml"
   },
   {
-   "headline": "KZN INVESTMENT: Province smashes target with R124.5bn pledges set to create 330,000 jobs.",
-   "ai_summary": "KZN INVESTMENT: Province smashes target with R124.5bn pledges set to create 330,000 jobs.",
-   "link": "https://www.sanews.gov.za/south-africa/kzn-secures-r1245bn-investment-pledges",
+   "headline": "SEZs must drive shared prosperity. Special Economic Zones need to translate investment pledges into local jobs, exports and real industrial growth.",
+   "ai_summary": "SEZs must drive shared prosperity. Special Economic Zones need to translate investment pledges into local jobs, exports and real industrial growth.",
+   "link": "https://www.sanews.gov.za/south-africa/special-economic-zones-must-turn-investment-shared-prosperity",
    "source": "https://www.sanews.gov.za/rss.xml"
   },
   {
-   "headline": "SHREE PROPERTY: Company buys two South Durban sites as part of R2bn KZN investment drive.",
-   "ai_summary": "SHREE PROPERTY: Company buys two South Durban sites as part of R2bn KZN investment drive.",
-   "link": "https://www.moneyweb.co.za/investing/property/shree-property-swoops-on-two-south-durban-sites-plans-r1-6bn-investment/",
+   "headline": "Fuel levy relief will cost Treasury. Reintroducing the relief is unaffordable if it becomes permanent, economists warn.",
+   "ai_summary": "Fuel levy relief will cost Treasury. Reintroducing the relief is unaffordable if it becomes permanent, economists warn.",
+   "link": "https://www.moneyweb.co.za/in-depth/budget/reintroducing-fuel-levy-relief-will-come-at-a-cost-for-treasury/",
    "source": "Moneyweb"
   },
   {
-   "headline": "RAMAPHOSA REJECTS: ANC President dismisses claims party plans to use asylum seekers in elections.",
-   "ai_summary": "RAMAPHOSA REJECTS: ANC President dismisses claims party plans to use asylum seekers in elections.",
-   "link": "https://www.sabcnews.com/sabcnews/ramaphosa-rejects-claims-anc-plans-to-use-asylum-seekers-in-elections/",
+   "headline": "Ramaphosa warns newsroom losses weaken democracy. President says job cuts, digital disruption and community media closures threaten democratic accountability.",
+   "ai_summary": "Ramaphosa warns newsroom losses weaken democracy. President says job cuts, digital disruption and community media closures threaten democratic accountability.",
+   "link": "https://mg.co.za/news/south-africa/2026-10-20-ramaphosa-warns-newsroom-losses-weaken-democracy/",
+   "source": "The Mail & Guardian | Africa's Better Future"
+  },
+  {
+   "headline": "Godongwana to address municipal funding concerns. Ramaphosa says government may attach strict conditions to equitable share allocations.",
+   "ai_summary": "Godongwana to address municipal funding concerns. Ramaphosa says government may attach strict conditions to equitable share allocations.",
+   "link": "https://www.sabcnews.com/sabcnews/godongwana-will-address-concerns-around-municipal-funding-ramaphosa/",
+   "source": "SABC News – Breaking news, special reports, world, business, sport coverage of all South African current events. Africa's news leader."
+  },
+  {
+   "headline": "Coalition governments hinder service delivery. Ramaphosa hopes November 4 elections will deliver clear majorities for decisive governance.",
+   "ai_summary": "Coalition governments hinder service delivery. Ramaphosa hopes November 4 elections will deliver clear majorities for decisive governance.",
+   "link": "https://www.sabcnews.com/sabcnews/coalition-govts-constraining-effective-service-delivery-ramaphosa/",
    "source": "SABC News – Breaking news, special reports, world, business, sport coverage of all South African current events. Africa's news leader."
   }
  ],
  "scripture": {
-  "text": "Is there any thing whereof it may be said, See, this is new? it hath been already of old time, which was before us.",
-  "focus": "Ecclesiastes 1:10",
-  "ref": "Ecclesiastes 1:10",
-  "book": "Ecclesiastes",
+  "text": "A wrathful man stirreth up strife: but he that is slow to anger appeaseth strife.",
+  "focus": "Proverbs 15:18",
+  "ref": "Proverbs 15:18",
+  "book": "Proverbs",
   "translation": "Kjv",
   "translation_label": "King James Version",
   "source": {
    "name": "King James Version",
    "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
   },
-  "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%201%3A10&version=KJV"
+  "link": "https://www.biblegateway.com/passage/?search=Proverbs%2015%3A18&version=KJV"
  },
  "x_trending": {
   "topics": [
    {
-    "name": "Elon Musk Pledges SpaceX Shares to Every American Child Next Year",
-    "headline": "Elon Musk Pledges SpaceX Shares to Every American Child Next Year",
+    "name": "SpaceX Posts Record $14.58 Billion Q3 Revenue with AI Surge",
+    "headline": "SpaceX Posts Record $14.58 Billion Q3 Revenue with AI Surge",
+    "summary": "",
+    "why": "",
+    "sentiment": null,
+    "accounts": [],
+    "search_term": "SpaceX Posts Record",
+    "post_count": "17K posts",
+    "category": "News",
+    "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
+    "trending_since": null,
+    "link": "https://x.com/search?q=SpaceX%20Posts%20Record&src=typed_query",
+    "source": "News"
+   },
+   {
+    "name": "Elon Musk Pledges SpaceX Shares to Every U.S. Child Next Year",
+    "headline": "Elon Musk Pledges SpaceX Shares to Every U.S. Child Next Year",
     "summary": "",
     "why": "",
     "sentiment": null,
     "accounts": [],
     "search_term": "Elon Musk Pledges SpaceX",
-    "post_count": "434K posts",
+    "post_count": "609K posts",
     "category": "News",
     "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
     "trending_since": null,
@@ -891,63 +906,48 @@
     "source": "News"
    },
    {
-    "name": "Tesla Roadster Flies with SpaceX Thrusters at Texas Reveal",
-    "headline": "Tesla Roadster Flies with SpaceX Thrusters at Texas Reveal",
+    "name": "Milan Priest and Resident Confront Rioters Amid City Chaos",
+    "headline": "Milan Priest and Resident Confront Rioters Amid City Chaos",
     "summary": "",
     "why": "",
     "sentiment": null,
     "accounts": [],
-    "search_term": "Tesla Roadster Flies",
-    "post_count": "8K posts",
+    "search_term": "Milan Priest",
+    "post_count": "4.1K posts",
     "category": "News",
     "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
     "trending_since": null,
-    "link": "https://x.com/search?q=Tesla%20Roadster%20Flies&src=typed_query",
+    "link": "https://x.com/search?q=Milan%20Priest&src=typed_query",
     "source": "News"
    },
    {
-    "name": "French Riots Video Echoes 1973 Novel's Oak Door Scene",
-    "headline": "French Riots Video Echoes 1973 Novel's Oak Door Scene",
+    "name": "Anthropic Reports $80 Billion Net Loss in Draft IPO Filing",
+    "headline": "Anthropic Reports $80 Billion Net Loss in Draft IPO Filing",
     "summary": "",
     "why": "",
     "sentiment": null,
     "accounts": [],
-    "search_term": "French Riots Video Echoes",
-    "post_count": "3.6K posts",
+    "search_term": "Anthropic Reports",
+    "post_count": "15K posts",
     "category": "News",
     "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
     "trending_since": null,
-    "link": "https://x.com/search?q=French%20Riots%20Video%20Echoes&src=typed_query",
+    "link": "https://x.com/search?q=Anthropic%20Reports&src=typed_query",
     "source": "News"
    },
    {
-    "name": "Guadalajara Water Protesters March, Infiltrators Burn Government Palace Doors",
-    "headline": "Guadalajara Water Protesters March, Infiltrators Burn Government Palace Doors",
+    "name": "Trump and Vance Launch Fraud Whistleblower Rewards Program",
+    "headline": "Trump and Vance Launch Fraud Whistleblower Rewards Program",
     "summary": "",
     "why": "",
     "sentiment": null,
     "accounts": [],
-    "search_term": "Guadalajara Water Protesters March",
-    "post_count": "5.8K posts",
+    "search_term": "Trump",
+    "post_count": "354K posts",
     "category": "News",
     "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
     "trending_since": null,
-    "link": "https://x.com/search?q=Guadalajara%20Water%20Protesters%20March&src=typed_query",
-    "source": "News"
-   },
-   {
-    "name": "Tesla Roadster Flips and Hops with Thrusters at Unveiling",
-    "headline": "Tesla Roadster Flips and Hops with Thrusters at Unveiling",
-    "summary": "",
-    "why": "",
-    "sentiment": null,
-    "accounts": [],
-    "search_term": "Tesla Roadster Flips",
-    "post_count": "70K posts",
-    "category": "News",
-    "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
-    "trending_since": null,
-    "link": "https://x.com/search?q=Tesla%20Roadster%20Flips&src=typed_query",
+    "link": "https://x.com/search?q=Trump&src=typed_query",
     "source": "News"
    }
   ],
@@ -956,35 +956,35 @@
  "sky_watch": [
   {
    "name": "Quiet Aurora",
-   "post_count": "Geomagnetic Index Kp 1",
+   "post_count": "Geomagnetic Index Kp 2.7",
    "trending_since": "Visible Aurora Unlikely Tonight",
    "link": "https://www.swpc.noaa.gov/",
    "category": "Sky Watch",
-   "sort_at": "2026-10-20T02:58:00+00:00"
+   "sort_at": "2026-10-21T02:57:00+00:00"
   },
   {
-   "name": "Solar Class C1.1",
+   "name": "Solar Class B5.5",
    "post_count": "Goes Satellite X-Ray Reading",
-   "trending_since": "Modest C-Class Activity",
+   "trending_since": "Quiet Sun, No Major Flares",
    "link": "https://www.swpc.noaa.gov/products/goes-x-ray-flux",
    "category": "Sky Watch",
-   "sort_at": "2026-10-20T02:58:00+00:00"
+   "sort_at": "2026-10-21T02:58:00+00:00"
   },
   {
-   "name": "Falcon 9 Block 5",
-   "post_count": "Mission Bandwagon 5 (Dedicated Mid-Inclination Rideshare)",
-   "trending_since": "Launch Today At 12:30 pm",
-   "link": "https://spacelaunchnow.me/launch/3b430f81-0ff1-4d85-8a1a-cef0de326198/",
+   "name": "Ceres-1S",
+   "post_count": "Mission Unknown Payload",
+   "trending_since": "Launch Today At 5:35 am",
+   "link": "https://spacelaunchnow.me/launch/c6f8b6b0-6bae-460a-99bb-c12a3d29effd/",
    "category": "Sky Watch",
-   "sort_at": "2026-10-20T10:30:00+00:00"
+   "sort_at": "2026-10-21T03:35:00+00:00"
   },
   {
    "name": "Waxing Gibbous",
-   "post_count": "Moon 64% Illuminated",
+   "post_count": "Moon 74% Illuminated",
    "trending_since": "Visible Tonight Over Copenhagen",
    "link": "https://moon.nasa.gov/moon-in-motion/moon-phases/",
    "category": "Sky Watch",
-   "sort_at": "2026-10-20T21:00:00+02:00"
+   "sort_at": "2026-10-21T21:00:00+02:00"
   },
   {
    "name": "Annular Solar Eclipse",
