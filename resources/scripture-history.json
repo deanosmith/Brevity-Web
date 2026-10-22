@@ -22,13 +22,14 @@
     "Proverbs 3:7",
     "Ecclesiastes 11:8",
     "Ecclesiastes 1:10",
-    "Proverbs 15:18"
+    "Proverbs 15:18",
+    "Proverbs 13:3"
   ],
   "current": {
-    "date": "2026-10-21",
-    "text": "A wrathful man stirreth up strife: but he that is slow to anger appeaseth strife.",
-    "focus": "Proverbs 15:18",
-    "ref": "Proverbs 15:18",
+    "date": "2026-10-22",
+    "text": "He that keepeth his mouth keepeth his life: but he that openeth wide his lips shall have destruction.",
+    "focus": "Proverbs 13:3",
+    "ref": "Proverbs 13:3",
     "book": "Proverbs",
     "translation": "Kjv",
     "translation_label": "King James Version",
@@ -36,6 +37,6 @@
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2015%3A18&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2013%3A3&version=KJV"
   }
 }
