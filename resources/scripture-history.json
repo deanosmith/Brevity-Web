@@ -23,13 +23,14 @@
     "Ecclesiastes 11:8",
     "Ecclesiastes 1:10",
     "Proverbs 15:18",
-    "Proverbs 13:3"
+    "Proverbs 13:3",
+    "Proverbs 31:22"
   ],
   "current": {
-    "date": "2026-10-22",
-    "text": "He that keepeth his mouth keepeth his life: but he that openeth wide his lips shall have destruction.",
-    "focus": "Proverbs 13:3",
-    "ref": "Proverbs 13:3",
+    "date": "2026-10-23",
+    "text": "She maketh herself coverings of tapestry; her clothing is silk and purple.",
+    "focus": "Proverbs 31:22",
+    "ref": "Proverbs 31:22",
     "book": "Proverbs",
     "translation": "Kjv",
     "translation_label": "King James Version",
@@ -37,6 +38,6 @@
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2013%3A3&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2031%3A22&version=KJV"
   }
 }
