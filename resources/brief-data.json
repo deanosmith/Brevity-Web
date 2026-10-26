@@ -1,11 +1,11 @@
 {
- "date": "Sunday, October 25",
- "iso_date": "2026-10-25",
- "generated_at": "2026-10-25 05:01 CET",
- "generated_iso": "2026-10-25T05:01:34+01:00",
- "generated_clock": "5:01 am",
- "year_percent": 81.64383561643835,
- "day_of_year": 298,
+ "date": "Monday, October 26",
+ "iso_date": "2026-10-26",
+ "generated_at": "2026-10-26 05:02 CET",
+ "generated_iso": "2026-10-26T05:02:19+01:00",
+ "generated_clock": "5:02 am",
+ "year_percent": 81.91780821917808,
+ "day_of_year": 299,
  "days_in_year": 365,
  "weather": {
   "location": "Copenhagen",
@@ -16,195 +16,195 @@
    "location": "Copenhagen"
   },
   "today": {
-   "date": "2026-10-25",
+   "date": "2026-10-26",
    "label": "Today",
    "high": 12,
-   "low": 9,
-   "rain_chance": 100,
-   "rain_sum_mm": 11.6,
+   "low": 10,
+   "rain_chance": 37,
+   "rain_sum_mm": 0.3,
    "rain_peak_time": "7:00 am",
    "rain_timeline": {
     "points": [
      {
       "hour": 6,
-      "precip": 95,
+      "precip": 19,
       "label": "6 am",
       "clock": "6:00 am"
      },
      {
       "hour": 7,
-      "precip": 100,
+      "precip": 24,
       "label": null,
       "clock": "7:00 am"
      },
      {
       "hour": 8,
-      "precip": 100,
+      "precip": 23,
       "label": null,
       "clock": "8:00 am"
      },
      {
       "hour": 9,
-      "precip": 100,
+      "precip": 20,
       "label": "9 am",
       "clock": "9:00 am"
      },
      {
       "hour": 10,
-      "precip": 100,
+      "precip": 16,
       "label": null,
       "clock": "10:00 am"
      },
      {
       "hour": 11,
-      "precip": 75,
+      "precip": 13,
       "label": null,
       "clock": "11:00 am"
      },
      {
       "hour": 12,
-      "precip": 42,
+      "precip": 11,
       "label": "12 pm",
       "clock": "12:00 pm"
      },
      {
       "hour": 13,
-      "precip": 18,
+      "precip": 8,
       "label": null,
       "clock": "1:00 pm"
      },
      {
       "hour": 14,
-      "precip": 14,
+      "precip": 5,
       "label": null,
       "clock": "2:00 pm"
      },
      {
       "hour": 15,
-      "precip": 20,
+      "precip": 2,
       "label": "3 pm",
       "clock": "3:00 pm"
      },
      {
       "hour": 16,
-      "precip": 25,
+      "precip": 0,
       "label": null,
       "clock": "4:00 pm"
      },
      {
       "hour": 17,
-      "precip": 26,
+      "precip": 0,
       "label": null,
       "clock": "5:00 pm"
      },
      {
       "hour": 18,
-      "precip": 26,
+      "precip": 0,
       "label": "6 pm",
       "clock": "6:00 pm"
      },
      {
       "hour": 19,
-      "precip": 24,
+      "precip": 0,
       "label": null,
       "clock": "7:00 pm"
      },
      {
       "hour": 20,
-      "precip": 20,
+      "precip": 0,
       "label": null,
       "clock": "8:00 pm"
      },
      {
       "hour": 21,
-      "precip": 14,
+      "precip": 0,
       "label": "9 pm",
       "clock": "9:00 pm"
      },
      {
       "hour": 22,
-      "precip": 10,
+      "precip": 0,
       "label": null,
       "clock": "10:00 pm"
      },
      {
       "hour": 23,
-      "precip": 9,
+      "precip": 0,
       "label": "11 pm",
       "clock": "11:00 pm"
      }
     ],
-    "max_precip": 100,
+    "max_precip": 24,
     "peak_time": "7:00 am",
-    "color": "#40c4ff"
+    "color": "#3a7aa4"
    },
-   "wind_max": 45,
-   "wind_dir": 192,
-   "wind_color": "#f0f921",
-   "uv_max": 1.9,
-   "sunrise": "7:00 am",
-   "sunset": "4:45 pm",
-   "code": 63,
-   "condition": "Rain",
-   "icon": "🌧️",
+   "wind_max": 32,
+   "wind_dir": 236,
+   "wind_color": "#e48255",
+   "uv_max": 1.85,
+   "sunrise": "7:02 am",
+   "sunset": "4:43 pm",
+   "code": 51,
+   "condition": "Light Drizzle",
+   "icon": "🌦️",
    "color": "#4682B4",
    "current": {
-    "temp": 9,
-    "feels_like": 2,
-    "code": 51,
-    "condition": "Light Drizzle",
-    "icon": "🌦️",
-    "color": "#4682B4",
-    "wind": 43,
-    "wind_dir": 160,
-    "precip": 88
+    "temp": 10,
+    "feels_like": 5,
+    "code": 3,
+    "condition": "Overcast",
+    "icon": "☁️",
+    "color": "#87CEEB",
+    "wind": 28,
+    "wind_dir": 232,
+    "precip": 11
    },
    "morning": {
-    "temp": 9,
-    "feels_like": 3,
-    "precip": 100,
-    "wind": 45,
-    "wind_dir": 183,
-    "wind_color": "#f0f921",
-    "color": "#4682B4",
-    "condition": "Heavy Drizzle",
-    "icon": "🌧️",
-    "code": 55
+    "temp": 11,
+    "feels_like": 6,
+    "precip": 24,
+    "wind": 28,
+    "wind_dir": 240,
+    "wind_color": "#d8596b",
+    "color": "#87CEEB",
+    "condition": "Overcast",
+    "icon": "☁️",
+    "code": 3
    },
    "afternoon": {
-    "temp": 11,
-    "feels_like": 7,
-    "precip": 42,
-    "wind": 32,
-    "wind_dir": 210,
-    "wind_color": "#e48255",
-    "color": "#4682B4",
-    "condition": "Light Drizzle",
-    "icon": "🌦️",
-    "code": 51
+    "temp": 12,
+    "feels_like": 8,
+    "precip": 11,
+    "wind": 27,
+    "wind_dir": 251,
+    "wind_color": "#d15072",
+    "color": "#87CEEB",
+    "condition": "Overcast",
+    "icon": "☁️",
+    "code": 3
    },
    "evening": {
     "temp": 11,
-    "feels_like": 7,
-    "precip": 26,
-    "wind": 30,
-    "wind_dir": 220,
-    "wind_color": "#df6164",
-    "color": "#4682B4",
-    "condition": "Light Drizzle",
-    "icon": "🌦️",
-    "code": 51
+    "feels_like": 8,
+    "precip": 0,
+    "wind": 19,
+    "wind_dir": 219,
+    "wind_color": "#ab2692",
+    "color": "#87CEEB",
+    "condition": "Overcast",
+    "icon": "☁️",
+    "code": 3
    },
    "sun_path": {
-    "sunrise": "7:00 am",
-    "sunset": "4:45 pm",
+    "sunrise": "7:02 am",
+    "sunset": "4:43 pm",
     "sun_x": 20.0,
     "sun_y": 66.0,
     "is_day": false,
-    "daylight": "9h 45m",
+    "daylight": "9h 41m",
     "rain_peak": "7:00 am",
-    "rain_on_arc": true,
-    "rain_x": 20.0,
+    "rain_on_arc": false,
+    "rain_x": 10.0,
     "rain_y": 58.0,
     "cy": 58,
     "start_x": 20.0,
@@ -221,142 +221,142 @@
    },
    "dials": {
     "rain": {
-     "progress": 1.0,
-     "color": "#40c4ff",
-     "value": "100%",
+     "progress": 0.37,
+     "color": "#3a7aa4",
+     "value": "37%",
      "label": "Rain"
     },
     "wind": {
-     "progress": 0.9,
-     "color": "#f0f921",
-     "value": "45 km/h",
+     "progress": 0.64,
+     "color": "#e48255",
+     "value": "32 km/h",
      "label": "Wind"
     },
     "uv": {
-     "progress": 0.17272727272727273,
-     "color": "#a4cd46",
+     "progress": 0.16818181818181818,
+     "color": "#a2cc46",
      "value": "1.9",
      "label": "UV"
     },
     "temp": {
      "high": 12,
-     "low": 9,
+     "low": 10,
      "high_color": "#f4d570",
-     "low_color": "#b4d0ac",
+     "low_color": "#c9d198",
      "high_progress": 0.4857142857142857,
-     "low_progress": 0.4,
+     "low_progress": 0.42857142857142855,
      "label": "Temp"
     }
    },
    "high_color": "#f4d570",
-   "low_color": "#b4d0ac",
-   "rain_color": "#40c4ff"
+   "low_color": "#c9d198",
+   "rain_color": "#3a7aa4"
   },
   "upcoming": [
    {
-    "date": "2026-10-26",
+    "date": "2026-10-27",
     "label": "Tomorrow",
     "high": 12,
-    "low": 10,
-    "rain_chance": 21,
-    "wind_max": 29,
+    "low": 11,
+    "rain_chance": 59,
+    "wind_max": 26,
     "code": 51,
     "condition": "Light Drizzle",
     "icon": "🌦️",
     "color": "#4682B4",
-    "high_color": "#ffd666",
-    "low_color": "#ced294",
-    "rain_color": "#39678c",
-    "rain_progress": 0.21,
+    "high_color": "#fbd66a",
+    "low_color": "#d6d38c",
+    "rain_color": "#3c94c4",
+    "rain_progress": 0.59,
     "rain_timeline": {
      "points": [
       {
        "hour": 0,
-       "precip": 10,
+       "precip": 0,
        "label": "12 am",
        "clock": "12:00 am"
       },
       {
        "hour": 1,
-       "precip": 10,
+       "precip": 6,
        "label": null,
        "clock": "1:00 am"
       },
       {
        "hour": 2,
-       "precip": 9,
+       "precip": 23,
        "label": null,
        "clock": "2:00 am"
       },
       {
        "hour": 3,
-       "precip": 8,
+       "precip": 46,
        "label": null,
        "clock": "3:00 am"
       },
       {
        "hour": 4,
-       "precip": 8,
+       "precip": 59,
        "label": null,
        "clock": "4:00 am"
       },
       {
        "hour": 5,
-       "precip": 11,
+       "precip": 54,
        "label": null,
        "clock": "5:00 am"
       },
       {
        "hour": 6,
-       "precip": 15,
+       "precip": 40,
        "label": null,
        "clock": "6:00 am"
       },
       {
        "hour": 7,
-       "precip": 18,
+       "precip": 27,
        "label": null,
        "clock": "7:00 am"
       },
       {
        "hour": 8,
-       "precip": 20,
+       "precip": 19,
        "label": null,
        "clock": "8:00 am"
       },
       {
        "hour": 9,
-       "precip": 21,
+       "precip": 11,
        "label": "9 am",
        "clock": "9:00 am"
       },
       {
        "hour": 10,
-       "precip": 20,
+       "precip": 6,
        "label": null,
        "clock": "10:00 am"
       },
       {
        "hour": 11,
-       "precip": 16,
+       "precip": 3,
        "label": null,
        "clock": "11:00 am"
       },
       {
        "hour": 12,
-       "precip": 9,
+       "precip": 1,
        "label": "12 pm",
        "clock": "12:00 pm"
       },
       {
        "hour": 13,
-       "precip": 4,
+       "precip": 0,
        "label": null,
        "clock": "1:00 pm"
       },
       {
        "hour": 14,
-       "precip": 2,
+       "precip": 0,
        "label": null,
        "clock": "2:00 pm"
       },
@@ -368,13 +368,13 @@
       },
       {
        "hour": 16,
-       "precip": 0,
+       "precip": 2,
        "label": null,
        "clock": "4:00 pm"
       },
       {
        "hour": 17,
-       "precip": 0,
+       "precip": 1,
        "label": null,
        "clock": "5:00 pm"
       },
@@ -392,243 +392,243 @@
       },
       {
        "hour": 20,
-       "precip": 0,
+       "precip": 3,
        "label": null,
        "clock": "8:00 pm"
       },
       {
        "hour": 21,
-       "precip": 0,
+       "precip": 9,
        "label": "9 pm",
        "clock": "9:00 pm"
       },
       {
        "hour": 22,
-       "precip": 0,
+       "precip": 14,
        "label": null,
        "clock": "10:00 pm"
       },
       {
        "hour": 23,
-       "precip": 3,
+       "precip": 20,
        "label": "11 pm",
        "clock": "11:00 pm"
       }
      ],
-     "max_precip": 21,
-     "peak_time": "9:00 am",
-     "color": "#39678c"
+     "max_precip": 59,
+     "peak_time": "4:00 am",
+     "color": "#3c94c4"
     },
-    "rain_peak_time": "9:00 am"
+    "rain_peak_time": "4:00 am"
    },
    {
-    "date": "2026-10-27",
+    "date": "2026-10-28",
     "label": "In 2 Days",
-    "high": 13,
-    "low": 11,
-    "rain_chance": 75,
-    "wind_max": 27,
-    "code": 51,
-    "condition": "Light Drizzle",
+    "high": 14,
+    "low": 10,
+    "rain_chance": 32,
+    "wind_max": 18,
+    "code": 53,
+    "condition": "Drizzle",
     "icon": "🌦️",
     "color": "#4682B4",
-    "high_color": "#ffd465",
-    "low_color": "#ddd386",
-    "rain_color": "#3ea6db",
-    "rain_progress": 0.75,
+    "high_color": "#ffcd61",
+    "low_color": "#d0d292",
+    "rain_color": "#3a749c",
+    "rain_progress": 0.32,
     "rain_timeline": {
      "points": [
       {
        "hour": 0,
-       "precip": 7,
+       "precip": 27,
        "label": "12 am",
        "clock": "12:00 am"
       },
       {
        "hour": 1,
-       "precip": 16,
+       "precip": 31,
        "label": null,
        "clock": "1:00 am"
       },
       {
        "hour": 2,
-       "precip": 36,
+       "precip": 32,
        "label": null,
        "clock": "2:00 am"
       },
       {
        "hour": 3,
-       "precip": 60,
+       "precip": 30,
        "label": null,
        "clock": "3:00 am"
       },
       {
        "hour": 4,
-       "precip": 75,
+       "precip": 27,
        "label": null,
        "clock": "4:00 am"
       },
       {
        "hour": 5,
-       "precip": 74,
+       "precip": 23,
        "label": null,
        "clock": "5:00 am"
       },
       {
        "hour": 6,
-       "precip": 64,
+       "precip": 17,
        "label": null,
        "clock": "6:00 am"
       },
       {
        "hour": 7,
-       "precip": 51,
+       "precip": 12,
        "label": null,
        "clock": "7:00 am"
       },
       {
        "hour": 8,
-       "precip": 36,
+       "precip": 7,
        "label": null,
        "clock": "8:00 am"
       },
       {
        "hour": 9,
-       "precip": 18,
+       "precip": 3,
        "label": "9 am",
        "clock": "9:00 am"
       },
       {
        "hour": 10,
-       "precip": 6,
+       "precip": 0,
        "label": null,
        "clock": "10:00 am"
       },
       {
        "hour": 11,
-       "precip": 4,
+       "precip": 0,
        "label": null,
        "clock": "11:00 am"
       },
       {
        "hour": 12,
-       "precip": 8,
+       "precip": 1,
        "label": "12 pm",
        "clock": "12:00 pm"
       },
       {
        "hour": 13,
-       "precip": 10,
+       "precip": 2,
        "label": null,
        "clock": "1:00 pm"
       },
       {
        "hour": 14,
-       "precip": 8,
+       "precip": 3,
        "label": null,
        "clock": "2:00 pm"
       },
       {
        "hour": 15,
-       "precip": 6,
+       "precip": 5,
        "label": "3 pm",
        "clock": "3:00 pm"
       },
       {
        "hour": 16,
-       "precip": 4,
+       "precip": 6,
        "label": null,
        "clock": "4:00 pm"
       },
       {
        "hour": 17,
-       "precip": 3,
+       "precip": 5,
        "label": null,
        "clock": "5:00 pm"
       },
       {
        "hour": 18,
-       "precip": 4,
+       "precip": 3,
        "label": "6 pm",
        "clock": "6:00 pm"
       },
       {
        "hour": 19,
-       "precip": 6,
+       "precip": 4,
        "label": null,
        "clock": "7:00 pm"
       },
       {
        "hour": 20,
-       "precip": 12,
+       "precip": 11,
        "label": null,
        "clock": "8:00 pm"
       },
       {
        "hour": 21,
-       "precip": 19,
+       "precip": 22,
        "label": "9 pm",
        "clock": "9:00 pm"
       },
       {
        "hour": 22,
-       "precip": 24,
+       "precip": 29,
        "label": null,
        "clock": "10:00 pm"
       },
       {
        "hour": 23,
-       "precip": 24,
+       "precip": 31,
        "label": "11 pm",
        "clock": "11:00 pm"
       }
      ],
-     "max_precip": 75,
-     "peak_time": "4:00 am",
-     "color": "#3ea6db"
+     "max_precip": 32,
+     "peak_time": "2:00 am",
+     "color": "#3a749c"
     },
-    "rain_peak_time": "4:00 am"
+    "rain_peak_time": "2:00 am"
    }
   ],
   "morning": {
-   "temp": 9,
-   "feels_like": 3,
-   "precip": 100,
-   "wind": 45,
-   "wind_dir": 183,
-   "wind_color": "#f0f921",
-   "color": "#4682B4",
-   "condition": "Heavy Drizzle",
-   "icon": "🌧️",
-   "code": 55
+   "temp": 11,
+   "feels_like": 6,
+   "precip": 24,
+   "wind": 28,
+   "wind_dir": 240,
+   "wind_color": "#d8596b",
+   "color": "#87CEEB",
+   "condition": "Overcast",
+   "icon": "☁️",
+   "code": 3
   },
   "afternoon": {
-   "temp": 11,
-   "feels_like": 7,
-   "precip": 42,
-   "wind": 32,
-   "wind_dir": 210,
-   "wind_color": "#e48255",
-   "color": "#4682B4",
-   "condition": "Light Drizzle",
-   "icon": "🌦️",
-   "code": 51
+   "temp": 12,
+   "feels_like": 8,
+   "precip": 11,
+   "wind": 27,
+   "wind_dir": 251,
+   "wind_color": "#d15072",
+   "color": "#87CEEB",
+   "condition": "Overcast",
+   "icon": "☁️",
+   "code": 3
   },
   "evening": {
    "temp": 11,
-   "feels_like": 7,
-   "precip": 26,
-   "wind": 30,
-   "wind_dir": 220,
-   "wind_color": "#df6164",
-   "color": "#4682B4",
-   "condition": "Light Drizzle",
-   "icon": "🌦️",
-   "code": 51
+   "feels_like": 8,
+   "precip": 0,
+   "wind": 19,
+   "wind_dir": 219,
+   "wind_color": "#ab2692",
+   "color": "#87CEEB",
+   "condition": "Overcast",
+   "icon": "☁️",
+   "code": 3
   },
-  "sunrise": "7:00 am",
-  "sunset": "4:45 pm",
-  "daily_precip": 100,
+  "sunrise": "7:02 am",
+  "sunset": "4:43 pm",
+  "daily_precip": 37,
   "rain_peak_time": "7:00 am"
  },
  "stocks": {
@@ -718,15 +718,15 @@
   },
   "Bitcoin": {
    "symbol": "BTC-USD",
-   "price": 80749.3828125,
-   "change": -324.8046875,
-   "percent": -0.40062650951636114,
+   "price": 79476.0625,
+   "change": -1314.7734375,
+   "percent": -1.6273794202564165,
    "color": "red",
    "arrow": "↓",
-   "percent_7d": -1.3489413685056568,
+   "percent_7d": -4.177593108354132,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": -4.73575490947339,
+   "percent_1m": -8.099233938652398,
    "color_1m": "red",
    "arrow_1m": "↓"
   },
@@ -744,7 +744,7 @@
    "color_1m": "green",
    "arrow_1m": "↑"
   },
-  "average_percent": 0.07001239266817778
+  "average_percent": -0.08333172117432913
  },
  "space_news": [
   {
@@ -784,68 +784,37 @@
    "source": "SpaceNews"
   }
  ],
- "copenhagen": [
-  {
-   "headline": "Inside Denmark: Mixing English into Danish often signals true fluency.",
-   "ai_summary": "Inside Denmark: Mixing English into Danish often signals true fluency.",
-   "link": "https://www.thelocal.dk/20261024/inside-denmark-why-mixing-english-into-danish-can-actually-be-a-sign-of-fluency",
-   "source": "The Local Denmark"
-  },
-  {
-   "headline": "On the Agenda: Book festivals, huge hunting event, health summits, flea markets and Halloween next week.",
-   "ai_summary": "On the Agenda: Book festivals, huge hunting event, health summits, flea markets and Halloween next week.",
-   "link": "https://www.thelocal.dk/20261024/on-the-agenda-whats-happening-in-denmark-next-week-7",
-   "source": "The Local Denmark"
-  },
-  {
-   "headline": "LISTED: Best places in Denmark to celebrate Halloween this year.",
-   "ai_summary": "LISTED: Best places in Denmark to celebrate Halloween this year.",
-   "link": "https://www.thelocal.dk/20261012/the-best-places-to-celebrate-halloween-in-denmark",
-   "source": "The Local Denmark"
-  },
-  {
-   "headline": "Danish word of the day: gerne. This polite word is used many times every day.",
-   "ai_summary": "Danish word of the day: gerne. This polite word is used many times every day.",
-   "link": "https://www.thelocal.dk/20230503/danish-word-of-the-day-gerne",
-   "source": "The Local Denmark"
-  },
-  {
-   "headline": "EU parliament approves more safeguards for travellers in Europe.",
-   "ai_summary": "EU parliament approves more safeguards for travellers in Europe.",
-   "link": "https://www.thelocal.dk/20261023/eu-parliament-approves-more-safeguards-for-travellers-in-europe",
-   "source": "The Local Denmark"
-  },
-  {
-   "headline": "Hundreds of passengers' flights rebooked due to huge queues at Copenhagen Airport.",
-   "ai_summary": "Hundreds of passengers' flights rebooked due to huge queues at Copenhagen Airport.",
-   "link": "https://www.thelocal.dk/20261023/hundreds-of-passengers-flights-rebooked-due-to-queues-at-copenhagen-airport",
-   "source": "The Local Denmark"
-  }
- ],
+ "copenhagen": [],
  "south_africa": [
   {
-   "headline": "OFFLINE: Presidency website down after global cyber attack.",
-   "ai_summary": "OFFLINE: Presidency website down after global cyber attack.",
-   "link": "https://www.dailymaverick.co.za/article/2026-10-23-sas-presidency-website-taken-down-as-cybersecurity-flaw-sparks-warnings-across-the-world/",
-   "source": "Daily Maverick - Latest News"
+   "headline": "South Africa BRICS Astronomy. South Africa will participate in the 12th BRICS Astronomy Working Group Meeting in India from 26-30 October 2026 to advance joint research.",
+   "ai_summary": "South Africa BRICS Astronomy. South Africa will participate in the 12th BRICS Astronomy Working Group Meeting in India from 26-30 October 2026 to advance joint research.",
+   "link": "https://www.sanews.gov.za/south-africa/south-africa-boost-brics-astronomy-cooperation",
+   "source": "https://www.sanews.gov.za/rss.xml"
   },
   {
-   "headline": "Ramaphosa praises improving service delivery and cleanliness in Mangaung.",
-   "ai_summary": "Ramaphosa praises improving service delivery and cleanliness in Mangaung.",
-   "link": "https://www.sabcnews.com/sabcnews/ramaphosa-says-service-delivery-cleanliness-improving-in-mangaung/",
+   "headline": "Ramaphosa Skilled South Africans. Ramaphosa urges skilled South Africans abroad to return home to help tackle inequality through quality education and healthcare.",
+   "ai_summary": "Ramaphosa Skilled South Africans. Ramaphosa urges skilled South Africans abroad to return home to help tackle inequality through quality education and healthcare.",
+   "link": "https://www.sabcnews.com/sabcnews/ramaphosa-urges-skilled-south-africans-to-help-tackle-inequality/",
    "source": "SABC News – Breaking news, special reports, world, business, sport coverage of all South African current events. Africa's news leader."
   },
   {
-   "headline": "Mandela Bay welcomes major step forward for Thyspunt nuclear power plant.",
-   "ai_summary": "Mandela Bay welcomes major step forward for Thyspunt nuclear power plant.",
-   "link": "https://www.sanews.gov.za/south-africa/mandela-bay-welcomes-progress-proposed-nuclear-power-plant",
+   "headline": "Climate Transition Framework. National Treasury invites public comments on the proposed Climate Transition Planning and Disclosure Framework for South African financial institutions.",
+   "ai_summary": "Climate Transition Framework. National Treasury invites public comments on the proposed Climate Transition Planning and Disclosure Framework for South African financial institutions.",
+   "link": "https://www.sanews.gov.za/south-africa/have-your-say-climate-transition-planning-and-disclosure-framework",
    "source": "https://www.sanews.gov.za/rss.xml"
+  },
+  {
+   "headline": "Global Financial Centre. South Africa plans to become a global financial centre by attracting back an estimated R5 trillion in offshore assets managed from home.",
+   "ai_summary": "Global Financial Centre. South Africa plans to become a global financial centre by attracting back an estimated R5 trillion in offshore assets managed from home.",
+   "link": "https://www.moneyweb.co.za/news/economy/south-africas-bold-plan-to-become-a-global-financial-centre/",
+   "source": "Moneyweb"
   }
  ],
  "scripture": {
-  "text": "Then shalt thou understand righteousness, and judgment, and equity; yea, every good path.",
-  "focus": "Proverbs 2:9",
-  "ref": "Proverbs 2:9",
+  "text": "For they are life unto those that find them, and health to all their flesh.",
+  "focus": "Proverbs 4:22",
+  "ref": "Proverbs 4:22",
   "book": "Proverbs",
   "translation": "Kjv",
   "translation_label": "King James Version",
@@ -853,120 +822,120 @@
    "name": "King James Version",
    "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
   },
-  "link": "https://www.biblegateway.com/passage/?search=Proverbs%202%3A9&version=KJV"
+  "link": "https://www.biblegateway.com/passage/?search=Proverbs%204%3A22&version=KJV"
  },
  "x_trending": {
   "topics": [
    {
-    "name": "AI Startups Eye GPU Resale Profits Amid Compute Crunch",
-    "headline": "AI Startups Eye GPU Resale Profits Amid Compute Crunch",
+    "name": "Jamie Dimon Pushes Back on CEO Fear Claims in Davos Interview",
+    "headline": "Jamie Dimon Pushes Back on CEO Fear Claims in Davos Interview",
     "summary": "",
     "why": "",
     "sentiment": null,
     "accounts": [],
-    "search_term": "AI Startups Eye GPU",
-    "post_count": "792 posts",
-    "category": "News",
-    "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
-    "trending_since": "Now",
-    "link": "https://x.com/search?q=AI%20Startups%20Eye%20GPU&src=typed_query",
-    "source": "News"
-   },
-   {
-    "name": "Bukele Rejects Reports of Dead Salvadoran Soldiers in Haiti Ambush",
-    "headline": "Bukele Rejects Reports of Dead Salvadoran Soldiers in Haiti Ambush",
-    "summary": "",
-    "why": "",
-    "sentiment": null,
-    "accounts": [],
-    "search_term": "Bukele Rejects Reports",
-    "post_count": "94K posts",
+    "search_term": "Jamie Dimon Pushes Back",
+    "post_count": "2.1K posts",
     "category": "News",
     "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
     "trending_since": null,
-    "link": "https://x.com/search?q=Bukele%20Rejects%20Reports&src=typed_query",
+    "link": "https://x.com/search?q=Jamie%20Dimon%20Pushes%20Back&src=typed_query",
     "source": "News"
    },
    {
-    "name": "Elon Musk Reportedly Invests $1 Billion in Skydance, New Owner of CNN and CBS",
-    "headline": "Elon Musk Reportedly Invests $1 Billion in Skydance, New Owner of CNN and CBS",
+    "name": "Elon Musk Warns of AI Cloud Shakeout Amid Debt Crunch",
+    "headline": "Elon Musk Warns of AI Cloud Shakeout Amid Debt Crunch",
     "summary": "",
     "why": "",
     "sentiment": null,
     "accounts": [],
-    "search_term": "Elon Musk Reportedly Invests",
-    "post_count": "15K posts",
+    "search_term": "Elon Musk Warns",
+    "post_count": "56K posts",
     "category": "News",
     "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
     "trending_since": null,
-    "link": "https://x.com/search?q=Elon%20Musk%20Reportedly%20Invests&src=typed_query",
+    "link": "https://x.com/search?q=Elon%20Musk%20Warns&src=typed_query",
     "source": "News"
    },
    {
-    "name": "Trump Defends Musk Over Ukraine Starlink Speed Limits",
-    "headline": "Trump Defends Musk Over Ukraine Starlink Speed Limits",
+    "name": "Musk Accuses Ukraine of Misusing Starlink, Calls for Zelensky to Step Aside",
+    "headline": "Musk Accuses Ukraine of Misusing Starlink, Calls for Zelensky to Step Aside",
     "summary": "",
     "why": "",
     "sentiment": null,
     "accounts": [],
-    "search_term": "Trump Defends Musk Over",
-    "post_count": "358K posts",
+    "search_term": "Musk Accuses Ukraine",
+    "post_count": "281K posts",
     "category": "News",
     "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
     "trending_since": null,
-    "link": "https://x.com/search?q=Trump%20Defends%20Musk%20Over&src=typed_query",
+    "link": "https://x.com/search?q=Musk%20Accuses%20Ukraine&src=typed_query",
     "source": "News"
    },
    {
-    "name": "OpenAI Seeks Builders to Scale Dots AI Agents Amid Muse's App Store Lead",
-    "headline": "OpenAI Seeks Builders to Scale Dots AI Agents Amid Muse's App Store Lead",
+    "name": "Talarico Faces Scrutiny Over Transgender Stance in Tight Texas Senate Race",
+    "headline": "Talarico Faces Scrutiny Over Transgender Stance in Tight Texas Senate Race",
     "summary": "",
     "why": "",
     "sentiment": null,
     "accounts": [],
-    "search_term": "OpenAI Seeks Builders",
-    "post_count": "1K posts",
-    "category": "Other",
-    "category_style": "--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;",
+    "search_term": "Talarico Faces Scrutiny Over",
+    "post_count": "62K posts",
+    "category": "News",
+    "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
     "trending_since": null,
-    "link": "https://x.com/search?q=OpenAI%20Seeks%20Builders&src=typed_query",
-    "source": "Other"
+    "link": "https://x.com/search?q=Talarico%20Faces%20Scrutiny%20Over&src=typed_query",
+    "source": "News"
+   },
+   {
+    "name": "Researcher Banned by OpenAI After Exposing Samsung TV Tracking",
+    "headline": "Researcher Banned by OpenAI After Exposing Samsung TV Tracking",
+    "summary": "",
+    "why": "",
+    "sentiment": null,
+    "accounts": [],
+    "search_term": "Researcher Banned",
+    "post_count": "46K posts",
+    "category": "News",
+    "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
+    "trending_since": null,
+    "link": "https://x.com/search?q=Researcher%20Banned&src=typed_query",
+    "source": "News"
    }
   ],
   "source": "X Personalized Trends"
  },
  "sky_watch": [
   {
-   "name": "Long March 8A",
-   "post_count": "Mission SatNet LEO Group 28",
-   "trending_since": "Launch Today At 3:03 am",
-   "link": "https://spacelaunchnow.me/launch/6b95bcc8-1f88-4539-84fe-f63630138766/",
-   "category": "Sky Watch",
-   "sort_at": "2026-10-25T02:03:00+00:00"
-  },
-  {
    "name": "Quiet Aurora",
-   "post_count": "Geomagnetic Index Kp 0",
+   "post_count": "Geomagnetic Index Kp 0.3",
    "trending_since": "Visible Aurora Unlikely Tonight",
    "link": "https://www.swpc.noaa.gov/",
    "category": "Sky Watch",
-   "sort_at": "2026-10-25T03:57:00+00:00"
+   "sort_at": "2026-10-26T03:57:00+00:00"
   },
   {
-   "name": "Solar Class B3.8",
+   "name": "Solar Class B4.5",
    "post_count": "Goes Satellite X-Ray Reading",
    "trending_since": "Quiet Sun, No Major Flares",
    "link": "https://www.swpc.noaa.gov/products/goes-x-ray-flux",
    "category": "Sky Watch",
-   "sort_at": "2026-10-25T03:58:00+00:00"
+   "sort_at": "2026-10-26T03:58:00+00:00"
   },
   {
-   "name": "Waxing Gibbous",
-   "post_count": "Moon 99% Illuminated",
+   "name": "Full Moon",
+   "post_count": "Moon 100% Illuminated",
    "trending_since": "Visible Tonight Over Copenhagen",
    "link": "https://moon.nasa.gov/moon-in-motion/moon-phases/",
    "category": "Sky Watch",
-   "sort_at": "2026-10-25T21:00:00+01:00"
+   "sort_at": "2026-10-26T21:00:00+01:00"
+  },
+  {
+   "name": "Falcon 9 Block 5",
+   "post_count": "Mission Starlink Group 15-16",
+   "trending_since": "Launch Tomorrow At 5:45 am",
+   "link": "https://spacelaunchnow.me/launch/e2886a96-5ce9-4f45-872f-4e25a00be837/",
+   "category": "Sky Watch",
+   "sort_at": "2026-10-27T04:45:00+00:00"
   },
   {
    "name": "Annular Solar Eclipse",

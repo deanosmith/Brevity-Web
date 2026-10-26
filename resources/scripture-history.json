@@ -26,13 +26,14 @@
     "Proverbs 13:3",
     "Proverbs 31:22",
     "Ecclesiastes 2:4",
-    "Proverbs 2:9"
+    "Proverbs 2:9",
+    "Proverbs 4:22"
   ],
   "current": {
-    "date": "2026-10-25",
-    "text": "Then shalt thou understand righteousness, and judgment, and equity; yea, every good path.",
-    "focus": "Proverbs 2:9",
-    "ref": "Proverbs 2:9",
+    "date": "2026-10-26",
+    "text": "For they are life unto those that find them, and health to all their flesh.",
+    "focus": "Proverbs 4:22",
+    "ref": "Proverbs 4:22",
     "book": "Proverbs",
     "translation": "Kjv",
     "translation_label": "King James Version",
@@ -40,6 +41,6 @@
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%202%3A9&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%204%3A22&version=KJV"
   }
 }
