@@ -29,20 +29,21 @@
     "Proverbs 2:9",
     "Proverbs 4:22",
     "Proverbs 1:15",
-    "Proverbs 1:21"
+    "Proverbs 1:21",
+    "Ecclesiastes 3:12"
   ],
   "current": {
-    "date": "2026-10-28",
-    "text": "She crieth in the chief place of concourse, in the openings of the gates: in the city she uttereth her words, saying,",
-    "focus": "Proverbs 1:21",
-    "ref": "Proverbs 1:21",
-    "book": "Proverbs",
+    "date": "2026-10-29",
+    "text": "I know that there is no good in them, but for a man to rejoice, and to do good in his life.",
+    "focus": "Ecclesiastes 3:12",
+    "ref": "Ecclesiastes 3:12",
+    "book": "Ecclesiastes",
     "translation": "Kjv",
     "translation_label": "King James Version",
     "source": {
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%201%3A21&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%203%3A12&version=KJV"
   }
 }
