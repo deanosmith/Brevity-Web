@@ -162,47 +162,70 @@ SPACE_FEEDS = [
     "https://spaceflightnow.com/feed/",
     "https://www.nasaspaceflight.com/feed/",
 ]
-# National government, finance, and diplomacy. Crime and sport are filtered later.
+# Editorial business and energy desks, not government announcements or PR feeds.
 SOUTH_AFRICA_FEEDS = [
-    "https://www.sanews.gov.za/rss.xml",
-    "https://www.gov.za/rss.xml",
-    "https://www.gcis.gov.za/rss.xml",
-    "https://www.moneyweb.co.za/feed/",
-    "https://www.dailymaverick.co.za/dmrss/",
-    "https://mg.co.za/rss/",
-    "https://www.sabcnews.com/sabcnews/feed/",
+    "https://www.moneyweb.co.za/category/news/economy/feed/",
+    "https://www.moneyweb.co.za/category/news/companies-and-deals/feed/",
+    "https://www.engineeringnews.co.za/page/electricity/feed",
+    "https://www.engineeringnews.co.za/page/renewable-energy/feed",
+    "https://www.engineeringnews.co.za/page/energy/feed",
 ]
 SOUTH_AFRICA_SKIP_RE = re.compile(
     r"\b(murder|hijack|rape|assault|robbery|shooting|pothole|lotto|"
-    r"soccer|rugby|cricket|bafana|banyana|springbok|celebrity)\b",
+    r"soccer|rugby|cricket|bafana|banyana|springbok|celebrity|"
+    r"sponsored|advertorial|press release|partner content)\b",
     re.I,
 )
 SOUTH_AFRICA_PETTY_RE = re.compile(
     r"\b("
-    r"ethekwini|hammarsdale|pothole|traders|informal economy|"
+    r"pothole|traders|informal economy|"
     r"heritage month|public service month|tourism month|"
     r"apply for ids?|identity documents?|"
     r"women['’]?s struggle|sport awards|commemorat|"
-    r"load.?shedding schedule"
+    r"load.?shedding schedule|rooftop|homeowners?|"
+    r"exec(?:utive)? bonuses|calls for|urges|hails|commends|vows|pledges|"
+    r"welcomes|applauds|celebrates"
     r")\b",
     re.I,
 )
 SOUTH_AFRICA_GEO_RE = re.compile(
-    r"\b(south africa|south african|pretoria|ramaphosa|gnu|"
-    r"reserve bank|sarb|dirco|agoa|the rand)\b",
+    r"\b(south africa(?:n)?|(?-i:SA)|pretoria|johannesburg|cape town|"
+    r"durban|richards bay|northern cape|western cape|eastern cape|"
+    r"eskom|ntcsa|nersa|koeberg|kusile|medupi|transnet|sasol|sappi|"
+    r"renergen|absa|firstrand|standard bank|nedbank|naspers|"
+    r"sibanye|impala platinum|anglo american|sarb|the rand)\b",
     re.I,
 )
-SOUTH_AFRICA_KEEP_RE = re.compile(
-    r"\b(cabinet|parliament|presidency|ramaphosa|gnu|"
-    r"government of national unity|treasury|"
-    r"sarb|reserve bank|repo rate|the rand|zar|"
-    r"gdp|inflation|unemployment|budget|current account|"
-    r"credit rating|fatf|investment|"
-    r"brics|sadc|dirco|diplomat|agoa|trade|export|imf|world bank|"
-    r"election|eskom)\b",
+SOUTH_AFRICA_BUSINESS_RE = re.compile(
+    r"\b(agoa|afcfta|cross.border|trade|tariffs?|exports?|imports?|"
+    r"foreign|international|global|overseas|offshore|"
+    r"us|usa|uk|united states|britain|british|china|chinese|"
+    r"europe(?:an)?|eu|india|indian|japan|dubai|middle east)\b",
     re.I,
 )
-SOUTH_AFRICA_WEAK_TERMS = frozenset({"minister", "policy", "election"})
+SOUTH_AFRICA_IMPACT_RE = re.compile(
+    r"\b(agoa|afcfta|trade|tariffs?|exports?|imports?|investment|invests?|"
+    r"acqui(?:sition|res?|ring)|merger|takeover|deal|expan(?:sion|ds?)|"
+    r"opens?|operations?|production|manufactur\w*|"
+    r"supply chain|freight|ports?|rail|critical minerals)\b",
+    re.I,
+)
+SOUTH_AFRICA_ENERGY_RE = re.compile(
+    r"\b(energy|electricity|power|solar|wind|nuclear|hydrogen|"
+    r"gas|lng|renewables?|grid|eskom|ntcsa|nersa|wheeling)\b",
+    re.I,
+)
+SOUTH_AFRICA_SCALE_RE = re.compile(
+    r"\b(koeberg|kusile|medupi|"
+    r"power (?:stations?|plants?|purchase agreements?)|"
+    r"national grid|transmission|grid (?:capacity|expansion|access|connection|stability)|"
+    r"utility.scale|wheeling|bid window|independent power|"
+    r"integrated (?:resource|energy) plan|electricity market|"
+    r"gas (?:fields?|projects?|terminals?)|lng terminal|"
+    r"import tariffs?|export tariffs?)\b",
+    re.I,
+)
+SOUTH_AFRICA_CAPACITY_RE = re.compile(r"\b(\d+(?:,\d{3})*(?:\.\d+)?)\s*(GW|MW)\b", re.I)
 
 COPENHAGEN_TZ = ZoneInfo("Europe/Copenhagen")
 # Next notable eclipses after the Aug 2026 events. Used by Sky Watch.
@@ -1720,6 +1743,9 @@ def _rss_entries(url, limit=5):
                 "link": entry.get("link", ""),
                 "source": source,
                 "feed_url": url,
+                "published": entry.get("published") or entry.get("updated") or "",
+                "published_parsed": entry.get("published_parsed") or entry.get("updated_parsed"),
+                "categories": [tag.get("term", "") for tag in entry.get("tags", [])],
             })
         except Exception as exc:
             logger.warning("Error parsing feed entry from %s: %s", url, exc)
@@ -1777,35 +1803,26 @@ def _story_key(title):
     return re.sub(r"[^a-z0-9]+", "", (title or "").lower())[:80]
 
 
-def _is_sa_trusted_feed(url):
-    host = urlparse(url or "").netloc.lower()
-    return host.endswith("gov.za") or host.endswith("moneyweb.co.za")
-
-
-def _sa_brief_score(entry):
-    """Score national government, finance, and diplomacy; reject petty local stories."""
+def _sa_brief_topic(entry):
+    """Require an explicit SA connection and material business or energy impact."""
     title = entry.get("title") or ""
-    text = entry.get("content_text") or ""
-    if not _is_sa_trusted_feed(entry.get("feed_url")):
-        if not SOUTH_AFRICA_GEO_RE.search(f"{title} {text[:320]}"):
-            return -1
-    title_hits = {hit.lower() for hit in SOUTH_AFRICA_KEEP_RE.findall(title)}
-    if SOUTH_AFRICA_PETTY_RE.search(title) and not title_hits:
-        return -1
-    if SOUTH_AFRICA_SKIP_RE.search(title) and not title_hits:
-        return -1
-    if title_hits:
-        return 10 + len(title_hits)
-
-    body_hits = {hit.lower() for hit in SOUTH_AFRICA_KEEP_RE.findall(text)}
-    body_hits -= SOUTH_AFRICA_WEAK_TERMS
-    if SOUTH_AFRICA_PETTY_RE.search(text) and len(body_hits) < 2:
-        return -1
-    if SOUTH_AFRICA_SKIP_RE.search(text) and not body_hits:
-        return -1
-    if len(body_hits) >= 2:
-        return len(body_hits)
-    return -1
+    text = f"{title} {entry.get('content_text') or ''}"
+    categories = " ".join(entry.get("categories") or [])
+    if SOUTH_AFRICA_SKIP_RE.search(f"{title} {categories}") or SOUTH_AFRICA_PETTY_RE.search(title):
+        return None
+    if not SOUTH_AFRICA_GEO_RE.search(text):
+        return None
+    if SOUTH_AFRICA_ENERGY_RE.search(title):
+        large_capacity = any(
+            float(value.replace(",", "")) * (1000 if unit.lower() == "gw" else 1) >= 100
+            for value, unit in SOUTH_AFRICA_CAPACITY_RE.findall(text)
+        )
+        if large_capacity or SOUTH_AFRICA_SCALE_RE.search(text):
+            return "energy"
+        return None
+    if SOUTH_AFRICA_IMPACT_RE.search(title) and SOUTH_AFRICA_BUSINESS_RE.search(text):
+        return "business"
+    return None
 
 
 def _pick_diverse_stories(scored_items, limit=6, per_source=2):
@@ -1834,28 +1851,51 @@ def _pick_diverse_stories(scored_items, limit=6, per_source=2):
 
 
 def fetch_south_africa_news():
-    """Fetch national South Africa stories: government, finance, diplomacy."""
+    """Select recent SA international business and major energy news without AI."""
     logger.info("Fetching South Africa news...")
     seen = set()
     scored = []
+    now = time.time()
+    oldest = now - timedelta(days=7).total_seconds()
     for url in SOUTH_AFRICA_FEEDS:
         logger.info("Trying south africa feed: %s", url)
-        for entry in _rss_entries(url, limit=10):
-            key = _story_key(entry["title"])
-            if not key or key in seen:
+        for entry in _rss_entries(url, limit=30):
+            topic = _sa_brief_topic(entry)
+            if not topic or not entry["link"].startswith(("https://", "http://")):
                 continue
-            seen.add(key)
-            score = _sa_brief_score(entry)
-            scored.append((score, entry))
+            published = entry["published"]
+            if entry["published_parsed"]:
+                published_at = calendar.timegm(entry["published_parsed"])
+            elif published.isdigit():
+                published_at = int(published)
+            else:
+                logger.warning("Skipping undated South Africa story: %s", entry["link"])
+                continue
+            if not oldest <= published_at <= now:
+                continue
+            key = _story_key(entry["title"])
+            if not key or key in seen or entry["link"] in seen:
+                continue
+            seen.update((key, entry["link"]))
+            entry["topic"] = topic
+            entry["source"] = "Moneyweb" if urlparse(url).hostname == "www.moneyweb.co.za" else "Engineering News"
+            scored.append((published_at, entry))
 
     scored.sort(key=lambda pair: pair[0], reverse=True)
-    chosen = _pick_diverse_stories(scored, limit=6, per_source=2)
+    chosen = []
+    for topic in ("business", "energy"):
+        candidates = [pair for pair in scored if pair[1]["topic"] == topic]
+        chosen.extend(_pick_diverse_stories(candidates, limit=3, per_source=2))
+    chosen_ids = {id(entry) for entry in chosen}
+    remaining = [pair for pair in scored if id(pair[1]) not in chosen_ids]
+    if len(chosen) < 6:
+        chosen.extend(_pick_diverse_stories(remaining, limit=6 - len(chosen), per_source=2))
     if not chosen:
         logger.warning("No items found for south africa feeds")
         return []
 
-    # Scoring already dropped crime/sport/petty local; do not repeat that in the Grok prompt.
-    news_items = _build_news_items(chosen, hint="South Africa.")
+    # Selection already dropped crime/sport/petty local; use feed headlines, not a Grok prompt.
+    news_items = _build_news_items(chosen, summarize=False)
     logger.info("South Africa feed assembled %s items", len(news_items))
     return news_items
 
