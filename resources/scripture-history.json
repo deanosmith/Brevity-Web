@@ -30,20 +30,21 @@
     "Proverbs 4:22",
     "Proverbs 1:15",
     "Proverbs 1:21",
-    "Ecclesiastes 3:12"
+    "Ecclesiastes 3:12",
+    "Proverbs 8:19"
   ],
   "current": {
-    "date": "2026-10-29",
-    "text": "I know that there is no good in them, but for a man to rejoice, and to do good in his life.",
-    "focus": "Ecclesiastes 3:12",
-    "ref": "Ecclesiastes 3:12",
-    "book": "Ecclesiastes",
+    "date": "2026-10-30",
+    "text": "My fruit is better than gold, yea, than fine gold; and my revenue than choice silver.",
+    "focus": "Proverbs 8:19",
+    "ref": "Proverbs 8:19",
+    "book": "Proverbs",
     "translation": "Kjv",
     "translation_label": "King James Version",
     "source": {
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%203%3A12&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%208%3A19&version=KJV"
   }
 }
