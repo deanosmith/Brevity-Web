@@ -31,20 +31,21 @@
     "Proverbs 1:15",
     "Proverbs 1:21",
     "Ecclesiastes 3:12",
-    "Proverbs 8:19"
+    "Proverbs 8:19",
+    "Ecclesiastes 7:3"
   ],
   "current": {
-    "date": "2026-10-30",
-    "text": "My fruit is better than gold, yea, than fine gold; and my revenue than choice silver.",
-    "focus": "Proverbs 8:19",
-    "ref": "Proverbs 8:19",
-    "book": "Proverbs",
+    "date": "2026-10-31",
+    "text": "Sorrow is better than laughter: for by the sadness of the countenance the heart is made better.",
+    "focus": "Ecclesiastes 7:3",
+    "ref": "Ecclesiastes 7:3",
+    "book": "Ecclesiastes",
     "translation": "Kjv",
     "translation_label": "King James Version",
     "source": {
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%208%3A19&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%207%3A3&version=KJV"
   }
 }
