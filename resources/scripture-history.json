@@ -33,13 +33,14 @@
     "Ecclesiastes 3:12",
     "Proverbs 8:19",
     "Ecclesiastes 7:3",
-    "Proverbs 9:13"
+    "Proverbs 9:13",
+    "Proverbs 2:6"
   ],
   "current": {
-    "date": "2026-11-01",
-    "text": "A foolish woman is clamorous: she is simple, and knoweth nothing.",
-    "focus": "Proverbs 9:13",
-    "ref": "Proverbs 9:13",
+    "date": "2026-11-02",
+    "text": "For the Lord giveth wisdom: out of his mouth cometh knowledge and understanding.",
+    "focus": "Proverbs 2:6",
+    "ref": "Proverbs 2:6",
     "book": "Proverbs",
     "translation": "Kjv",
     "translation_label": "King James Version",
@@ -47,6 +48,6 @@
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%209%3A13&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%202%3A6&version=KJV"
   }
 }
