@@ -634,6 +634,12 @@
  "stocks": {
   "Tesla": {
    "symbol": "TSLA",
+   "link": "https://finance.yahoo.com/quote/TSLA/history/",
+   "source_name": "Tesla, Inc.",
+   "currency": "USD",
+   "currency_symbol": "$",
+   "as_of": "2026-11-03",
+   "as_of_label": "Nov 3, 2026",
    "price": 398.5,
    "change": -5.32000732421875,
    "percent": -1.3174204417136337,
@@ -642,12 +648,18 @@
    "percent_7d": -2.1989868067981715,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": 5.2200745756019735,
+   "percent_1m": 7.531235040856861,
    "color_1m": "green",
    "arrow_1m": "↑"
   },
   "SPCX": {
    "symbol": "SPCX",
+   "link": "https://finance.yahoo.com/quote/SPCX/history/",
+   "source_name": "Space Exploration Technologies Corp.",
+   "currency": "USD",
+   "currency_symbol": "$",
+   "as_of": "2026-11-03",
+   "as_of_label": "Nov 3, 2026",
    "price": 141.30999755859375,
    "change": 4.94000244140625,
    "percent": 3.622499536764765,
@@ -656,12 +668,18 @@
    "percent_7d": -4.892989758290227,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": -17.40604326186523,
+   "percent_1m": -11.103427535105723,
    "color_1m": "red",
    "arrow_1m": "↓"
   },
   "Nvidia": {
    "symbol": "NVDA",
+   "link": "https://finance.yahoo.com/quote/NVDA/history/",
+   "source_name": "NVIDIA Corporation",
+   "currency": "USD",
+   "currency_symbol": "$",
+   "as_of": "2026-11-03",
+   "as_of_label": "Nov 3, 2026",
    "price": 206.69000244140625,
    "change": 4.6300048828125,
    "percent": 2.29140103867906,
@@ -670,12 +688,18 @@
    "percent_7d": -5.161971126904338,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": -13.482625482625481,
+   "percent_1m": -11.652060210484546,
    "color_1m": "red",
    "arrow_1m": "↓"
   },
   "Oklo": {
    "symbol": "OKLO",
+   "link": "https://finance.yahoo.com/quote/OKLO/history/",
+   "source_name": "Oklo Inc.",
+   "currency": "USD",
+   "currency_symbol": "$",
+   "as_of": "2026-11-03",
+   "as_of_label": "Nov 3, 2026",
    "price": 23.489999771118164,
    "change": -0.030000686645507812,
    "percent": -0.1275539373367867,
@@ -684,12 +708,18 @@
    "percent_7d": -14.050494560217954,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": -34.6955825022377,
+   "percent_1m": -34.51351973629987,
    "color_1m": "red",
    "arrow_1m": "↓"
   },
   "Micron": {
    "symbol": "MU",
+   "link": "https://finance.yahoo.com/quote/MU/history/",
+   "source_name": "Micron Technology, Inc.",
+   "currency": "USD",
+   "currency_symbol": "$",
+   "as_of": "2026-11-03",
+   "as_of_label": "Nov 3, 2026",
    "price": 855.0999755859375,
    "change": 21.50994873046875,
    "percent": 2.5803990016063656,
@@ -698,12 +728,18 @@
    "percent_7d": -7.931008377317602,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": -19.617783422463575,
+   "percent_1m": -20.44767707088491,
    "color_1m": "red",
    "arrow_1m": "↓"
   },
   "Palantir": {
    "symbol": "PLTR",
+   "link": "https://finance.yahoo.com/quote/PLTR/history/",
+   "source_name": "Palantir Technologies Inc.",
+   "currency": "USD",
+   "currency_symbol": "$",
+   "as_of": "2026-11-03",
+   "as_of_label": "Nov 3, 2026",
    "price": 175.39999389648438,
    "change": -2.94000244140625,
    "percent": -1.64853790612174,
@@ -712,26 +748,38 @@
    "percent_7d": -11.73954729161287,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": -7.391763701772678,
+   "percent_1m": -7.072850915769868,
    "color_1m": "red",
    "arrow_1m": "↓"
   },
   "Bitcoin": {
    "symbol": "BTC-USD",
-   "price": 76324.453125,
-   "change": -352.84375,
-   "percent": -0.46016717383140016,
-   "color": "red",
-   "arrow": "↓",
-   "percent_7d": -1.8651934554093963,
+   "link": "https://finance.yahoo.com/quote/BTC-USD/history/",
+   "source_name": "Bitcoin USD",
+   "currency": "USD",
+   "currency_symbol": "$",
+   "as_of": "2026-11-03",
+   "as_of_label": "Nov 3, 2026",
+   "price": 77345.046875,
+   "change": 667.75,
+   "percent": 0.8708575122158674,
+   "color": "green",
+   "arrow": "↑",
+   "percent_7d": -4.28194778136043,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": -8.148097586952304,
+   "percent_1m": -8.752027007472439,
    "color_1m": "red",
    "arrow_1m": "↓"
   },
   "Vanguard S&P 500": {
    "symbol": "VUSA.AS",
+   "link": "https://finance.yahoo.com/quote/VUSA.AS/history/",
+   "source_name": "Vanguard S&P 500 UCITS ETF",
+   "currency": "EUR",
+   "currency_symbol": "€",
+   "as_of": "2026-11-02",
+   "as_of_label": "Nov 2, 2026",
    "price": 129.1529998779297,
    "change": 0.1089935302734375,
    "percent": 0.08446229573793536,
@@ -744,7 +792,7 @@
    "color_1m": "red",
    "arrow_1m": "↓"
   },
-  "average_percent": 0.6281353017230706
+  "average_percent": 0.7945133874789791
  },
  "space_news": [
   {
@@ -861,17 +909,17 @@
   }
  ],
  "scripture": {
-  "text": "These are also proverbs of Solomon, which the men of Hezekiah king of Judah copied out.",
+  "text": "These also are proverbs of Solomon which the men of Hezekiah king of Judah copied.",
   "focus": "Proverbs 25:1",
   "ref": "Proverbs 25:1",
   "book": "Proverbs",
-  "translation": "Kjv",
-  "translation_label": "King James Version",
+  "translation": "Esv",
+  "translation_label": "English Standard Version",
   "source": {
-   "name": "King James Version",
-   "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
+   "name": "English Standard Version",
+   "url": "https://www.esv.org/"
   },
-  "link": "https://www.biblegateway.com/passage/?search=Proverbs%2025%3A1&version=KJV"
+  "link": "https://www.biblegateway.com/passage/?search=Proverbs%2025%3A1&version=ESV"
  },
  "x_trending": {
   "topics": [
@@ -955,41 +1003,9 @@
  },
  "sky_watch": [
   {
-   "name": "Quiet Aurora",
-   "post_count": "Geomagnetic Index Kp 0",
-   "trending_since": "Visible Aurora Unlikely Tonight",
-   "link": "https://www.swpc.noaa.gov/",
-   "category": "Sky Watch",
-   "sort_at": "2026-11-04T03:56:00+00:00"
-  },
-  {
-   "name": "Solar Class B4.7",
-   "post_count": "Goes Satellite X-Ray Reading",
-   "trending_since": "Quiet Sun, No Major Flares",
-   "link": "https://www.swpc.noaa.gov/products/goes-x-ray-flux",
-   "category": "Sky Watch",
-   "sort_at": "2026-11-04T03:58:00+00:00"
-  },
-  {
-   "name": "Waning Crescent",
-   "post_count": "Moon 33% Illuminated",
-   "trending_since": "Visible Tonight Over Copenhagen",
-   "link": "https://moon.nasa.gov/moon-in-motion/moon-phases/",
-   "category": "Sky Watch",
-   "sort_at": "2026-11-04T21:00:00+01:00"
-  },
-  {
-   "name": "Long March 2C",
-   "post_count": "Mission Unknown Payload",
-   "trending_since": "Launch Tomorrow At 5:00 pm",
-   "link": "https://spacelaunchnow.me/launch/711de6bc-f755-475b-a12f-ec5240da3a11/",
-   "category": "Sky Watch",
-   "sort_at": "2026-11-05T16:00:00+00:00"
-  },
-  {
    "name": "Annular Solar Eclipse",
-   "post_count": "Visible From South America and Africa",
-   "trending_since": "Next Visible On Feb 6, 2027",
+   "post_count": "Best Seen From South America and Africa",
+   "trending_since": "Next Eclipse On Feb 6, 2027",
    "link": "https://science.nasa.gov/eclipses/future-eclipses/eclipse-2027/",
    "category": "Sky Watch",
    "sort_at": "2027-02-06T16:00:00+00:00"

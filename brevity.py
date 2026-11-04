@@ -15,6 +15,9 @@ from urllib.parse import quote, urlparse
 from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
+from astral import Observer
+from astral.sun import elevation
+from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
@@ -233,7 +236,7 @@ UPCOMING_ECLIPSES = [
     {
         "when": datetime(2026, 8, 28, 4, 13, tzinfo=timezone.utc),
         "name": "Partial Lunar Eclipse",
-        "detail": "Visible from Europe",
+        "detail": "Europe",
         "link": "https://science.nasa.gov/eclipses/",
     },
     {
@@ -316,7 +319,7 @@ SCRIPTURE_FALLBACK = [
     },
 ]
 ESV_API_URL = "https://api.esv.org/v3/passage/text/"
-# ESV comes from Crossway's API; KJV is the bundled public-domain verse bank.
+# ESV comes from Crossway's API or passage pages; KJV supplies the reference bank.
 SCRIPTURE_TRANSLATIONS = {
     "Esv": {"name": "English Standard Version", "url": "https://www.esv.org/", "gateway": "ESV"},
     "Kjv": {"name": "King James Version", "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/", "gateway": "KJV"},
@@ -1201,19 +1204,14 @@ def _segment_stats(hourly, start_h, end_h):
     }
 
 
-def _percent_from_closes(closes, sessions_back):
-    """Percent change from N trading sessions ago to the latest close."""
+def _percent_from_closes(closes, target_date):
+    """Price change from the last close on or before a calendar boundary."""
     if not closes:
         return None
-    current = closes[-1]
-    if sessions_back <= 0:
-        return 0.0
-    if len(closes) <= sessions_back:
-        past = closes[0]
-    else:
-        past = closes[-(sessions_back + 1)]
-    if past in (None, 0) or current is None:
+    past = next((value for day, value in reversed(closes) if day <= target_date), None)
+    if past is None or past <= 0:
         return None
+    current = closes[-1][1]
     return ((current - past) / past) * 100
 
 
@@ -1424,29 +1422,53 @@ def fetch_weather():
 
 
 def fetch_stocks():
-    """Fetch general stock watchlist prices with day, 7-day, and 1-month change."""
+    """Fetch completed closes with day, calendar-week, and calendar-month price changes."""
     logger.info("Fetching stocks...")
     stock_data = {}
+    now_utc = datetime.now(timezone.utc)
 
     for name, symbol in STOCK_TICKERS.items():
         def _fetch_history(period="3mo"):
             ticker = yf.Ticker(symbol)
-            hist = ticker.history(period=period, auto_adjust=True)
+            hist = ticker.history(period=period, auto_adjust=False)
             if hist is None or hist.empty:
                 raise ValueError("No price history returned")
+            metadata = ticker.get_history_metadata()
+            market_tz = ZoneInfo(metadata.get("exchangeTimezoneName") or "UTC")
+            market_today = now_utc.astimezone(market_tz).date()
+            regular = (metadata.get("currentTradingPeriod") or {}).get("regular") or {}
+            end_stamp = safe_number(regular.get("end"))
+            session_end = datetime.fromtimestamp(end_stamp, timezone.utc) if end_stamp is not None else None
             # yfinance can return NaN rows around market close / holidays.
-            closes = [safe_number(value) for value in hist["Close"].tolist()]
-            closes = [value for value in closes if value is not None]
-            if len(closes) < 1:
-                raise ValueError("No finite closes returned")
-            return closes
+            closes = []
+            for stamp, value in hist["Close"].items():
+                day = stamp.date()
+                value = safe_number(value)
+                completed = day < market_today or (
+                    day == market_today
+                    and metadata.get("instrumentType") != "CRYPTOCURRENCY"
+                    and session_end is not None
+                    and session_end.astimezone(market_tz).date() == day
+                    and session_end <= now_utc
+                )
+                if completed and value is not None and value > 0:
+                    closes.append((day, value))
+            if not closes:
+                raise ValueError("No completed finite closes returned")
+            return closes, metadata
 
-        closes = retry_call(f"Stock fetch {name}", lambda: _fetch_history("3mo"))
-        if closes is None:
-            closes = retry_call(f"Stock fetch {name} (1mo)", lambda: _fetch_history("1mo"), attempts=2)
+        history = retry_call(f"Stock fetch {name}", lambda: _fetch_history("3mo"))
+        if history is None:
+            history = retry_call(f"Stock fetch {name} (1mo)", lambda: _fetch_history("1mo"), attempts=2)
 
         empty_row = {
             "symbol": symbol,
+            "link": f"https://finance.yahoo.com/quote/{quote(symbol, safe='')}/history/",
+            "source_name": None,
+            "currency": None,
+            "currency_symbol": None,
+            "as_of": None,
+            "as_of_label": None,
             "price": None,
             "change": None,
             "percent": None,
@@ -1459,23 +1481,32 @@ def fetch_stocks():
             "color_1m": "grey",
             "arrow_1m": "-",
         }
-        if not closes:
+        if not history:
             stock_data[name] = empty_row
             continue
 
         try:
-            current_close = closes[-1]
-            prev_close = closes[-2] if len(closes) > 1 else None
+            closes, metadata = history
+            latest_day, current_close = closes[-1]
+            prev_close = closes[-2][1] if len(closes) > 1 else None
             change = current_close - prev_close if prev_close else None
             percent_change = (change / prev_close) * 100 if prev_close else None
-            # Approximate calendar windows with trading sessions.
-            percent_7d = _percent_from_closes(closes, 5)
-            percent_1m = _percent_from_closes(closes, 21)
+            # Use completed sessions at or before each calendar boundary.
+            month_ago = latest_day.replace(day=1) - timedelta(days=1)
+            month_ago = month_ago.replace(day=min(latest_day.day, month_ago.day))
+            percent_7d = _percent_from_closes(closes, latest_day - timedelta(days=7))
+            percent_1m = _percent_from_closes(closes, month_ago)
             color_day, arrow_day = _change_style(percent_change)
             color_7d, arrow_7d = _change_style(percent_7d)
             color_1m, arrow_1m = _change_style(percent_1m)
+            currency = metadata.get("currency")
             stock_data[name] = {
-                "symbol": symbol,
+                **empty_row,
+                "source_name": metadata.get("longName") or metadata.get("shortName"),
+                "currency": currency,
+                "currency_symbol": {"USD": "$", "EUR": "€"}.get(currency, currency or ""),
+                "as_of": latest_day.isoformat(),
+                "as_of_label": latest_day.strftime("%b %d, %Y").replace(" 0", " "),
                 "price": current_close,
                 "change": change,
                 "percent": percent_change,
@@ -2220,54 +2251,73 @@ def _solar_flare_class(flux):
 
 
 def _sky_aurora_card():
-    kp_payload = fetch_json(
-        "https://services.swpc.noaa.gov/json/planetary_k_index_1m.json",
-        label="NOAA Kp",
+    now_utc = datetime.now(timezone.utc)
+    horizon = now_utc + timedelta(hours=24)
+    payload = fetch_json(
+        "https://services.swpc.noaa.gov/products/noaa-planetary-k-index-forecast.json",
+        label="NOAA Kp forecast",
     )
-    latest = (kp_payload or [])[-1] if isinstance(kp_payload, list) and kp_payload else {}
-    kp = safe_number((latest or {}).get("estimated_kp"), latest.get("kp_index") if isinstance(latest, dict) else None)
-    kp_label = f"Kp {kp:.1f}".replace(".0", "") if kp is not None else "Kp —"
-
-    aurora = None
-    ovation = fetch_json(
-        "https://services.swpc.noaa.gov/json/ovation_aurora_latest.json",
-        label="NOAA aurora",
-    )
-    if isinstance(ovation, dict):
-        best = None
-        best_dist = 10**9
-        for row in ovation.get("coordinates") or []:
-            if not isinstance(row, (list, tuple)) or len(row) < 3:
-                continue
-            lon, lat, value = row[0], row[1], row[2]
-            dist = abs((safe_number(lon) or 0) - 13) + abs((safe_number(lat) or 0) - 56)
-            if dist < best_dist:
-                best_dist = dist
-                best = safe_number(value)
-        aurora = best
-
-    if kp is None:
-        logger.warning("No Kp reading; skipping aurora card")
+    if not isinstance(payload, list):
         return None
-    if kp >= 6 or (aurora is not None and aurora >= 20):
-        chance = "Visible Aurora Possible Tonight"
-        name = "Aurora Watch"
-    elif kp >= 4:
-        chance = "Possible On The North Horizon"
-        name = "Unsettled Aurora"
-    else:
-        chance = "Visible Aurora Unlikely Tonight"
-        name = "Quiet Aurora"
+    periods = []
+    for row in payload:
+        if not isinstance(row, dict):
+            continue
+        start = as_utc(row.get("time_tag"))
+        kp = safe_number(row.get("kp"))
+        if start is None or kp is None or kp < 6:
+            continue
+        end = start + timedelta(hours=3)
+        if end > now_utc and start <= horizon:
+            periods.append((start, end, kp))
+    if not periods:
+        return None
 
-    observed = as_utc((latest or {}).get("time_tag")) or datetime.now(timezone.utc)
-    return {
-        "name": name,
-        "post_count": f"Geomagnetic Index {kp_label}",
-        "trending_since": chance,
-        "link": "https://www.swpc.noaa.gov/",
-        "category": "Sky Watch",
-        "sort_at": observed.isoformat(),
-    }
+    weather = fetch_json(
+        "https://api.open-meteo.com/v1/forecast",
+        params={
+            "latitude": WEATHER_LAT,
+            "longitude": WEATHER_LON,
+            "forecast_days": 2,
+            "timezone": "UTC",
+            "timeformat": "unixtime",
+            "hourly": ["cloud_cover", "visibility", "precipitation_probability"],
+        },
+        label="Aurora viewing weather",
+    )
+    hourly = (weather.get("hourly") or {}) if isinstance(weather, dict) else {}
+    observer = Observer(latitude=WEATHER_LAT, longitude=WEATHER_LON)
+    for stamp, cloud, visibility, rain in zip(
+        hourly.get("time") or [],
+        hourly.get("cloud_cover") or [],
+        hourly.get("visibility") or [],
+        hourly.get("precipitation_probability") or [],
+    ):
+        stamp = safe_number(stamp)
+        cloud = safe_number(cloud)
+        visibility = safe_number(visibility)
+        rain = safe_number(rain)
+        if stamp is None or cloud is None or visibility is None or rain is None:
+            continue
+        moment = datetime.fromtimestamp(stamp, timezone.utc)
+        if moment + timedelta(hours=1) <= now_utc or moment > horizon:
+            continue
+        moment = max(moment, now_utc)
+        if not 0 <= cloud <= 50 or visibility < 10000 or not 0 <= rain <= 20:
+            continue
+        kp = next((value for start, end, value in periods if start <= moment < end), None)
+        if kp is None or elevation(observer, moment) > -12:
+            continue
+        return {
+            "name": "Aurora Watch In Copenhagen",
+            "local_alert": True,
+            "post_count": f"Forecast Kp {kp:g}, {cloud:.0f}% Cloud Cover",
+            "trending_since": sky_when_label(moment, prefix="Look North"),
+            "link": "https://www.swpc.noaa.gov/products/3-day-geomagnetic-forecast",
+            "category": "Sky Watch",
+            "sort_at": moment.isoformat(),
+        }
+    return None
 
 
 def _sky_solar_card():
@@ -2355,17 +2405,17 @@ def _sky_eclipse_card(now_utc):
     event_local = chosen["when"].astimezone(COPENHAGEN_TZ).date()
     delta = (event_local - today_local).days
     if delta == 0:
-        when_label = "Visible This Morning" if chosen["when"] < now_utc else "Visible Today"
+        when_label = "Eclipse Earlier Today" if chosen["when"] < now_utc else "Eclipse Today"
     elif delta == 1:
-        when_label = "Visible Tomorrow"
+        when_label = "Eclipse Tomorrow"
     elif delta < 14:
-        when_label = sky_when_label(chosen["when"], prefix="Visible")
+        when_label = sky_when_label(chosen["when"], prefix="Eclipse")
     else:
         date_label = chosen["when"].astimezone(COPENHAGEN_TZ).strftime("%b %d, %Y").replace(" 0", " ")
-        when_label = f"Next Visible On {date_label}"
+        when_label = f"Next Eclipse On {date_label}"
     return {
         "name": chosen["name"],
-        "post_count": f"Visible From {chosen['detail']}",
+        "post_count": f"Best Seen From {chosen['detail']}",
         "trending_since": when_label,
         "link": chosen["link"],
         "category": "Sky Watch",
@@ -2401,7 +2451,7 @@ def _moon_milestone_cards(now_utc):
 
 def fetch_sky_watch(limit=5):
     """
-    Copenhagen-facing sky briefing: moon, aurora, solar weather, next launch, next eclipse.
+    Copenhagen-facing sky alerts and the next major eclipse, without routine filler.
 
     Fills the column that used to be United States X trends.
     """
@@ -2410,10 +2460,7 @@ def fetch_sky_watch(limit=5):
     cards = []
 
     builders = (
-        lambda: _moon_watch(now_utc),
         _sky_aurora_card,
-        _sky_solar_card,
-        lambda: _sky_launch_card(now_utc),
         lambda: _sky_eclipse_card(now_utc),
     )
     for builder in builders:
@@ -2426,11 +2473,6 @@ def fetch_sky_watch(limit=5):
             continue
         cards.append(card)
 
-    for backup in _moon_milestone_cards(now_utc):
-        if len(cards) >= limit:
-            break
-        cards.append(backup)
-
     far_future = datetime.max.replace(tzinfo=timezone.utc)
 
     def sort_key(card):
@@ -2441,7 +2483,7 @@ def fetch_sky_watch(limit=5):
     cards = cards[:limit]
 
     if not cards:
-        logger.warning("Sky Watch returned no items.")
+        logger.info("No notable Sky Watch events.")
     else:
         logger.info(
             "Sky Watch assembled %s items: %s",
@@ -2526,16 +2568,44 @@ def _fetch_esv_text(ref):
     return _clean_esv_passage(passages[0]) or None
 
 
+def _fetch_esv_page_text(ref):
+    """Fetch the matching verse from Crossway's public ESV passage page."""
+    try:
+        chapter_ref, verse_number = ref.rsplit(":", 1)
+        verse_suffix = f"{int(verse_number):03d}"
+    except (AttributeError, TypeError, ValueError):
+        return None
+
+    def _request():
+        response = HTTP_SESSION.get(
+            f"https://www.esv.org/{quote(ref, safe=':')}/",
+            timeout=REQUEST_TIMEOUT,
+            headers=DEFAULT_HEADERS,
+        )
+        response.raise_for_status()
+        page = BeautifulSoup(response.text, "html.parser")
+        chapter = page.find("section", attrs={"data-reference": chapter_ref})
+        verses = chapter.select(f'.verse[data-ref$="{verse_suffix}"]') if chapter else []
+        if not verses:
+            raise ValueError(f"No matching ESV verse for {ref}")
+        for verse in verses:
+            for annotation in verse.select(".verse-num, .chapter-num, sup"):
+                annotation.decompose()
+        text = _clean_esv_passage(" ".join(verse.get_text() for verse in verses))
+        if not text:
+            raise ValueError(f"Empty ESV verse for {ref}")
+        return text
+
+    return retry_call(f"ESV passage {ref}", _request, attempts=2)
+
+
 def _resolve_scripture_text(verse):
-    """Prefer ESV from Crossway; fall back to the bundled King James text."""
+    """Use ESV from Crossway's API or public passage page."""
     ref = str((verse or {}).get("ref") or "").strip()
     book = str((verse or {}).get("book") or "").strip()
-    esv_text = _fetch_esv_text(ref)
+    esv_text = _fetch_esv_text(ref) or _fetch_esv_page_text(ref)
     if esv_text:
         return _scripture_payload(ref, book=book, text=esv_text, translation="Esv")
-    kjv_text = str((verse or {}).get("text") or "").strip()
-    if kjv_text:
-        return _scripture_payload(ref, book=book, text=kjv_text, translation="Kjv")
     return None
 
 
@@ -2590,8 +2660,8 @@ def pick_scripture(seed_date=None):
     Choose a random Proverbs or Ecclesiastes verse.
 
     Verses are not reused until every verse in the bank has been shown.
-    Re-running on the same date keeps the same reference. ESV text is used when
-    ESV_API_KEY works, otherwise the bundled King James text.
+    Re-running on the same date keeps the same reference. ESV text comes from
+    Crossway's API, with its public passage page as the fallback.
     """
     today = seed_date or date.today()
     today_iso = today.isoformat() if hasattr(today, "isoformat") else str(today)
@@ -2607,7 +2677,7 @@ def pick_scripture(seed_date=None):
         current.get("date") == today_iso
         and current.get("ref")
         and current.get("text")
-        and (_is_esv_scripture(current) or not ESV_API_KEY)
+        and _is_esv_scripture(current)
     ):
         logger.info("Reusing today's scripture: %s", current.get("ref"))
         return _scripture_payload(
@@ -2809,7 +2879,7 @@ def main():
     if ESV_API_KEY:
         logger.info("Scripture will use the English Standard Version API.")
     else:
-        logger.warning("ESV_API_KEY missing; scripture will use the bundled King James text.")
+        logger.info("ESV_API_KEY missing; scripture will use Crossway's public ESV passage pages.")
 
     data = build_brief_data()
 

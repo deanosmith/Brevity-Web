@@ -189,6 +189,24 @@
         </header>
 
         <main class="layout">
+            <section class="panel scripture-panel" id="scripture">
+                {{ panel_head("Scripture", scripture.translation_label if scripture else "ESV",
+                "scripture") }}
+                <div class="panel-body">
+                    {%- if scripture and scripture.text %}
+                    <figure class="verse">
+                        <blockquote class="verse-text">{{ scripture.text }}</blockquote>
+                        <figcaption class="verse-caption">
+                            <a class="verse-ref" href="{{ scripture.link or '#' }}" target="_blank"
+                                rel="noopener noreferrer">{{ scripture.ref }}</a>
+                        </figcaption>
+                    </figure>
+                    {%- else %}
+                    <div class="empty-state">Scripture Unavailable</div>
+                    {%- endif %}
+                </div>
+            </section>
+
             <section class="panel weather-panel" id="weather">
                 {{ panel_head("Weather", weather.location if weather and weather.location else "Copenhagen", "weather",
                 source=weather.source if weather else None) }}
@@ -387,7 +405,7 @@
 
             <div class="stack">
                 <section class="panel markets-panel" id="markets">
-                    {{ panel_head("Markets", "Watchlist Close", "markets") }}
+                    {{ panel_head("Markets", "Latest Completed Close", "markets") }}
                     <div class="panel-body">
                         <div class="market-summary">
                             <span class="market-summary-label">Average Day Move</span>
@@ -399,8 +417,8 @@
                                 <div class="stock-identity">Name</div>
                                 <div class="stock-metrics">
                                     <div class="stock-metric-label">Day</div>
-                                    <div class="stock-metric-label">7D</div>
-                                    <div class="stock-metric-label">1M</div>
+                                    <div class="stock-metric-label">7 Days</div>
+                                    <div class="stock-metric-label">1 Month</div>
                                 </div>
                             </div>
                             {%- for name, data in (stocks.items() if stocks else []) %}
@@ -408,13 +426,19 @@
                             {%- set ns.has_stocks = true %}
                             <div class="stock-row">
                                 <div class="stock-identity">
-                                    <div class="stock-name">{{ name }}</div>
+                                    <div class="stock-name"><a href="{{ data.link or 'https://finance.yahoo.com/' }}"
+                                            title="{{ data.source_name or name }}" target="_blank"
+                                            rel="noopener noreferrer">{{ name }}</a></div>
                                     <div class="stock-sub">
                                         {%- if data.symbol %}<span class="stock-symbol">{{ data.symbol }}</span>{% endif
                                         %}
-                                        <span class="stock-price">{% if data.price is not none %}{{
+                                        <span class="stock-price">{% if data.price is not none %}{{ data.currency_symbol
+                                            or '' }}{{
                                             "{:,.2f}".format(data.price) }}{% else %}—{% endif %}</span>
                                     </div>
+                                    {%- if data.as_of_label %}
+                                    <div class="stock-as-of">Close {{ data.as_of_label }}</div>
+                                    {%- endif %}
                                 </div>
                                 <div class="stock-metrics">
                                     <div class="stock-change stock-change-day {{ data.color }}">{% if data.percent is
@@ -434,23 +458,6 @@
                     </div>
                 </section>
 
-                <section class="panel scripture-panel" id="scripture">
-                    {{ panel_head("Scripture", scripture.translation_label if scripture else "Proverbs And
-                    Ecclesiastes", "scripture") }}
-                    <div class="panel-body">
-                        {%- if scripture and scripture.text %}
-                        <figure class="verse">
-                            <blockquote class="verse-text">{{ scripture.text }}</blockquote>
-                            <figcaption class="verse-caption">
-                                <a class="verse-ref" href="{{ scripture.link or '#' }}" target="_blank"
-                                    rel="noopener noreferrer">{{ scripture.ref }}</a>
-                            </figcaption>
-                        </figure>
-                        {%- else %}
-                        <div class="empty-state">Scripture unavailable</div>
-                        {%- endif %}
-                    </div>
-                </section>
             </div>
 
             <section class="panel x-panel" id="x">
@@ -484,11 +491,16 @@
             </section>
 
             <section class="panel sky-panel" id="sky">
-                {{ panel_head("Sky Watch", "Over Copenhagen", "sky") }}
+                {{ panel_head("Sky Watch", "Local Alerts & Major Events", "sky") }}
                 <div class="panel-body">
                     <div class="trend-list">
                         {%- for item in (sky_watch or [])[:5] %}
-                        <a class="trend-card" href="{{ item.link }}" target="_blank" rel="noopener noreferrer">
+                        <a class="trend-card{% if item.local_alert %} sky-alert{% endif %}" href="{{ item.link }}"
+                            target="_blank" rel="noopener noreferrer">
+                            {%- if item.local_alert %}
+                            <span class="sky-alert-label">{{ "Example Alert" if item.is_demo else "Copenhagen Alert"
+                                }}</span>
+                            {%- endif %}
                             <div class="trend-name">{{ item.name }}</div>
                             <div class="trend-meta">
                                 <span class="trend-detail">{{ item.post_count }}</span>
@@ -498,15 +510,21 @@
                             </div>
                         </a>
                         {%- else %}
-                        <div class="empty-state">Sky data unavailable</div>
+                        <div class="empty-state">No Notable Sky Events</div>
                         {%- endfor %}
+                        <a class="trend-card sky-source-link"
+                            href="https://www.swpc.noaa.gov/products/aurora-30-minute-forecast" target="_blank"
+                            rel="noopener noreferrer">
+                            <div class="trend-name">Aurora Forecast</div>
+                        </a>
                     </div>
                 </div>
             </section>
 
             {{ news_panel("copenhagen", "Copenhagen Today", "Local News", "pin", copenhagen, "No Copenhagen stories
             available", "copenhagen-panel") }}
-            {{ news_panel("south-africa", "South Africa", "Global Business And Energy", "globe", south_africa, "No Recent
+            {{ news_panel("south-africa", "South Africa", "Global Business And Energy", "globe", south_africa, "No
+            Recent
             South Africa Business Or Energy Stories Available", "south-africa-panel") }}
             {{ news_panel("space", "Space News", "Orbit, Launch, Industry", "rocket", space_news, "No space stories
             available", "space-panel") }}

@@ -40,16 +40,16 @@
   ],
   "current": {
     "date": "2026-11-04",
-    "text": "These are also proverbs of Solomon, which the men of Hezekiah king of Judah copied out.",
+    "text": "These also are proverbs of Solomon which the men of Hezekiah king of Judah copied.",
     "focus": "Proverbs 25:1",
     "ref": "Proverbs 25:1",
     "book": "Proverbs",
-    "translation": "Kjv",
-    "translation_label": "King James Version",
+    "translation": "Esv",
+    "translation_label": "English Standard Version",
     "source": {
-      "name": "King James Version",
-      "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
+      "name": "English Standard Version",
+      "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2025%3A1&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2025%3A1&version=ESV"
   }
 }

@@ -126,6 +126,21 @@ a:focus-visible {
     color: var(--accent);
 }
 
+.sky-alert::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(110deg, transparent 38%, rgba(255, 218, 218, 0.06) 45%, rgba(255, 235, 235, 0.24) 50%, rgba(255, 218, 218, 0.06) 55%, transparent 62%);
+    transform: translateX(-120%);
+    animation: sky-alert-shimmer 5s ease-in-out infinite;
+}
+
+@keyframes sky-alert-shimmer {
+    0%, 45% { transform: translateX(-120%); }
+    85%, 100% { transform: translateX(120%); }
+}
+
 .x-accounts a:hover,
 .verse-ref:hover,
 .source-link:hover {
@@ -236,12 +251,20 @@ a:focus-visible {
         font-size: 13px;
     }
 
-    .verse {
-        padding-left: 40px;
+    .scripture-panel {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
     }
 
-    .verse::before {
-        font-size: 80px;
+    .verse {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .verse-text {
+        font-size: 20px;
     }
 }
 

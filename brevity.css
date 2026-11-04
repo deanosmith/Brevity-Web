@@ -353,7 +353,7 @@ h1, h2, h3, p {
 .weather-panel { grid-column: span 7; --accent: #60a5fa; }
 .stack { grid-column: span 5; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
 .markets-panel { --accent: #34d399; }
-.scripture-panel { flex: 1 1 auto; --accent: #c4a7ff; }
+.scripture-panel { grid-column: 1 / -1; --accent: #c4a7ff; }
 .x-panel { grid-column: span 7; --accent: #1d9bf0; }
 .sky-panel { grid-column: span 5; align-self: start; --accent: #fbbf24; }
 .copenhagen-panel { grid-column: span 6; --accent: #fb7185; }
@@ -957,6 +957,7 @@ h2 {
 
 .stock-sub {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 8px;
     margin-top: 2px;
@@ -976,6 +977,12 @@ h2 {
     font-family: var(--font-mono);
     font-size: 12px;
     font-variant-numeric: tabular-nums;
+}
+
+.stock-as-of {
+    margin-top: 3px;
+    color: var(--text-3);
+    font-size: 11px;
 }
 
 .stock-metrics {
@@ -1006,23 +1013,39 @@ h2 {
 
 /* ------------------------------------------------------------ Scripture */
 
+.scripture-panel {
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+}
+
+.scripture-panel .panel-head {
+    flex: 0 0 auto;
+    margin-bottom: 0;
+}
+
 .scripture-panel .panel-body {
+    flex: 1 1 auto;
+    min-width: 0;
     justify-content: center;
 }
 
 .verse {
     position: relative;
+    display: flex;
+    align-items: center;
+    gap: 24px;
     margin: 0;
-    padding: 6px 8px 4px 64px;
+    padding: 0 0 0 32px;
 }
 
 .verse::before {
     content: "\201C";
     position: absolute;
-    top: -18px;
+    top: -10px;
     left: 0;
     font-family: var(--font-serif);
-    font-size: 110px;
+    font-size: 64px;
     line-height: 1;
     color: var(--accent);
     opacity: 0.35;
@@ -1030,9 +1053,9 @@ h2 {
 
 .verse-text {
     margin: 0;
-    max-width: 62ch;
+    min-width: 0;
     font-family: var(--font-serif);
-    font-size: clamp(20px, 2.3vw, 28px);
+    font-size: 22px;
     font-style: italic;
     font-weight: 400;
     line-height: 1.45;
@@ -1040,7 +1063,8 @@ h2 {
 }
 
 .verse-caption {
-    margin-top: 16px;
+    flex: 0 0 auto;
+    margin-top: 0;
 }
 
 .verse-ref {
@@ -1202,6 +1226,42 @@ h2 {
 .trend-when {
     color: var(--accent);
     text-align: right;
+}
+
+.sky-source-link {
+    color: var(--text-3);
+}
+
+.sky-source-link:hover {
+    color: var(--text-2);
+    border-color: var(--border-strong);
+}
+
+.trend-card.sky-alert,
+.trend-card.sky-alert:hover {
+    position: relative;
+    overflow: hidden;
+    border-color: var(--red);
+    background: color-mix(in srgb, var(--red) 12%, var(--surface-soft));
+    box-shadow: 0 0 20px rgba(248, 113, 113, 0.14);
+}
+
+.sky-alert-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--red);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.sky-alert .trend-name {
+    color: #fecaca;
+    font-weight: 700;
+}
+
+.sky-alert .trend-meta,
+.sky-alert .trend-when {
+    color: #fca5a5;
 }
 
 /* ------------------------------------------------------------ News */
