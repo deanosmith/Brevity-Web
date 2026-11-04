@@ -35,13 +35,14 @@
     "Ecclesiastes 7:3",
     "Proverbs 9:13",
     "Proverbs 2:6",
-    "Proverbs 9:5"
+    "Proverbs 9:5",
+    "Proverbs 25:1"
   ],
   "current": {
-    "date": "2026-11-03",
-    "text": "Come, eat of my bread, and drink of the wine which I have mingled.",
-    "focus": "Proverbs 9:5",
-    "ref": "Proverbs 9:5",
+    "date": "2026-11-04",
+    "text": "These are also proverbs of Solomon, which the men of Hezekiah king of Judah copied out.",
+    "focus": "Proverbs 25:1",
+    "ref": "Proverbs 25:1",
     "book": "Proverbs",
     "translation": "Kjv",
     "translation_label": "King James Version",
@@ -49,6 +50,6 @@
       "name": "King James Version",
       "url": "https://www.biblegateway.com/versions/King-James-Version-KJV-Bible/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%209%3A5&version=KJV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2025%3A1&version=KJV"
   }
 }
