@@ -36,13 +36,14 @@
     "Proverbs 9:13",
     "Proverbs 2:6",
     "Proverbs 9:5",
-    "Proverbs 25:1"
+    "Proverbs 25:1",
+    "Proverbs 4:15"
   ],
   "current": {
-    "date": "2026-11-04",
-    "text": "These also are proverbs of Solomon which the men of Hezekiah king of Judah copied.",
-    "focus": "Proverbs 25:1",
-    "ref": "Proverbs 25:1",
+    "date": "2026-11-05",
+    "text": "Avoid it; do not go on it; turn away from it and pass on.",
+    "focus": "Proverbs 4:15",
+    "ref": "Proverbs 4:15",
     "book": "Proverbs",
     "translation": "Esv",
     "translation_label": "English Standard Version",
@@ -50,6 +51,6 @@
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2025%3A1&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%204%3A15&version=ESV"
   }
 }
