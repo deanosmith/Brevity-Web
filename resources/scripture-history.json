@@ -37,20 +37,21 @@
     "Proverbs 2:6",
     "Proverbs 9:5",
     "Proverbs 25:1",
-    "Proverbs 4:15"
+    "Proverbs 4:15",
+    "Ecclesiastes 2:7"
   ],
   "current": {
-    "date": "2026-11-05",
-    "text": "Avoid it; do not go on it; turn away from it and pass on.",
-    "focus": "Proverbs 4:15",
-    "ref": "Proverbs 4:15",
-    "book": "Proverbs",
+    "date": "2026-11-06",
+    "text": "I bought male and female slaves, and had slaves who were born in my house. I had also great possessions of herds and flocks, more than any who had been before me in Jerusalem.",
+    "focus": "Ecclesiastes 2:7",
+    "ref": "Ecclesiastes 2:7",
+    "book": "Ecclesiastes",
     "translation": "Esv",
     "translation_label": "English Standard Version",
     "source": {
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%204%3A15&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%202%3A7&version=ESV"
   }
 }
