@@ -38,20 +38,21 @@
     "Proverbs 9:5",
     "Proverbs 25:1",
     "Proverbs 4:15",
-    "Ecclesiastes 2:7"
+    "Ecclesiastes 2:7",
+    "Proverbs 11:23"
   ],
   "current": {
-    "date": "2026-11-06",
-    "text": "I bought male and female slaves, and had slaves who were born in my house. I had also great possessions of herds and flocks, more than any who had been before me in Jerusalem.",
-    "focus": "Ecclesiastes 2:7",
-    "ref": "Ecclesiastes 2:7",
-    "book": "Ecclesiastes",
+    "date": "2026-11-07",
+    "text": "The desire of the righteous ends only in good, the expectation of the wicked in wrath.",
+    "focus": "Proverbs 11:23",
+    "ref": "Proverbs 11:23",
+    "book": "Proverbs",
     "translation": "Esv",
     "translation_label": "English Standard Version",
     "source": {
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%202%3A7&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2011%3A23&version=ESV"
   }
 }
