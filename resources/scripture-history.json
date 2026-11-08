@@ -39,13 +39,14 @@
     "Proverbs 25:1",
     "Proverbs 4:15",
     "Ecclesiastes 2:7",
-    "Proverbs 11:23"
+    "Proverbs 11:23",
+    "Proverbs 19:2"
   ],
   "current": {
-    "date": "2026-11-07",
-    "text": "The desire of the righteous ends only in good, the expectation of the wicked in wrath.",
-    "focus": "Proverbs 11:23",
-    "ref": "Proverbs 11:23",
+    "date": "2026-11-08",
+    "text": "Desire without knowledge is not good, and whoever makes haste with his feet misses his way.",
+    "focus": "Proverbs 19:2",
+    "ref": "Proverbs 19:2",
     "book": "Proverbs",
     "translation": "Esv",
     "translation_label": "English Standard Version",
@@ -53,6 +54,6 @@
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2011%3A23&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2019%3A2&version=ESV"
   }
 }

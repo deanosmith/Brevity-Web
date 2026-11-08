@@ -1,11 +1,11 @@
 {
- "date": "Saturday, November 7",
- "iso_date": "2026-11-07",
- "generated_at": "2026-11-07 05:01 CET",
- "generated_iso": "2026-11-07T05:01:07+01:00",
+ "date": "Sunday, November 8",
+ "iso_date": "2026-11-08",
+ "generated_at": "2026-11-08 05:01 CET",
+ "generated_iso": "2026-11-08T05:01:07+01:00",
  "generated_clock": "5:01 am",
- "year_percent": 85.2054794520548,
- "day_of_year": 311,
+ "year_percent": 85.47945205479452,
+ "day_of_year": 312,
  "days_in_year": 365,
  "weather": {
   "location": "Copenhagen",
@@ -16,10 +16,10 @@
    "location": "Copenhagen"
   },
   "today": {
-   "date": "2026-11-07",
+   "date": "2026-11-08",
    "label": "Today",
-   "high": 10,
-   "low": 8,
+   "high": 8,
+   "low": 7,
    "rain_chance": 0,
    "rain_sum_mm": 0.0,
    "rain_peak_time": null,
@@ -138,70 +138,70 @@
     "peak_time": null,
     "color": "#374e6e"
    },
-   "wind_max": 14,
-   "wind_dir": 139,
-   "wind_color": "#89129d",
-   "uv_max": 1.45,
-   "sunrise": "7:28 am",
-   "sunset": "4:18 pm",
+   "wind_max": 15,
+   "wind_dir": 155,
+   "wind_color": "#8e159c",
+   "uv_max": 1.4,
+   "sunrise": "7:30 am",
+   "sunset": "4:16 pm",
    "code": 3,
    "condition": "Overcast",
    "icon": "☁️",
    "color": "#87CEEB",
    "current": {
-    "temp": 8,
-    "feels_like": 6,
+    "temp": 7,
+    "feels_like": 4,
     "code": 3,
     "condition": "Overcast",
     "icon": "☁️",
     "color": "#87CEEB",
-    "wind": 2,
-    "wind_dir": 239,
+    "wind": 14,
+    "wind_dir": 147,
     "precip": 0
    },
    "morning": {
-    "temp": 9,
-    "feels_like": 7,
+    "temp": 7,
+    "feels_like": 3,
     "precip": 0,
-    "wind": 6,
-    "wind_dir": 151,
-    "wind_color": "#43039a",
+    "wind": 15,
+    "wind_dir": 162,
+    "wind_color": "#8e159c",
     "color": "#87CEEB",
     "condition": "Overcast",
     "icon": "☁️",
     "code": 3
    },
    "afternoon": {
-    "temp": 10,
-    "feels_like": 6,
-    "precip": 0,
-    "wind": 12,
-    "wind_dir": 135,
-    "wind_color": "#7a09a3",
-    "color": "#87CEEB",
-    "condition": "Partly Cloudy",
-    "icon": "⛅️",
-    "code": 2
-   },
-   "evening": {
-    "temp": 8,
+    "temp": 7,
     "feels_like": 4,
     "precip": 0,
-    "wind": 14,
-    "wind_dir": 122,
-    "wind_color": "#89129d",
+    "wind": 12,
+    "wind_dir": 174,
+    "wind_color": "#7708a3",
     "color": "#87CEEB",
-    "condition": "Partly Cloudy",
-    "icon": "⛅️",
-    "code": 2
+    "condition": "Overcast",
+    "icon": "☁️",
+    "code": 3
+   },
+   "evening": {
+    "temp": 7,
+    "feels_like": 5,
+    "precip": 0,
+    "wind": 9,
+    "wind_dir": 152,
+    "wind_color": "#5d01a3",
+    "color": "#87CEEB",
+    "condition": "Overcast",
+    "icon": "☁️",
+    "code": 3
    },
    "sun_path": {
-    "sunrise": "7:28 am",
-    "sunset": "4:18 pm",
+    "sunrise": "7:30 am",
+    "sunset": "4:16 pm",
     "sun_x": 20.0,
     "sun_y": 66.0,
     "is_day": false,
-    "daylight": "8h 50m",
+    "daylight": "8h 46m",
     "rain_peak": null,
     "rain_on_arc": false,
     "rain_x": null,
@@ -227,407 +227,407 @@
      "label": "Rain"
     },
     "wind": {
-     "progress": 0.28,
-     "color": "#86119e",
-     "value": "14 km/h",
+     "progress": 0.3,
+     "color": "#8e159c",
+     "value": "15 km/h",
      "label": "Wind"
     },
     "uv": {
-     "progress": 0.1318181818181818,
-     "color": "#8fc648",
+     "progress": 0.12727272727272726,
+     "color": "#8dc548",
      "value": "1.4",
      "label": "UV"
     },
     "temp": {
-     "high": 10,
-     "low": 8,
-     "high_color": "#c9d198",
-     "low_color": "#9fcebf",
-     "high_progress": 0.42857142857142855,
-     "low_progress": 0.37142857142857144,
+     "high": 8,
+     "low": 7,
+     "high_color": "#9fcebf",
+     "low_color": "#89ccd3",
+     "high_progress": 0.37142857142857144,
+     "low_progress": 0.34285714285714286,
      "label": "Temp"
     }
    },
-   "high_color": "#c9d198",
-   "low_color": "#9fcebf",
+   "high_color": "#9fcebf",
+   "low_color": "#89ccd3",
    "rain_color": "#374e6e"
   },
   "upcoming": [
    {
-    "date": "2026-11-08",
+    "date": "2026-11-09",
     "label": "Tomorrow",
     "high": 8,
     "low": 7,
-    "rain_chance": 0,
-    "wind_max": 16,
+    "rain_chance": 8,
+    "wind_max": 11,
+    "code": 51,
+    "condition": "Light Drizzle",
+    "icon": "🌦️",
+    "color": "#4682B4",
+    "high_color": "#a9cfb5",
+    "low_color": "#83cbd9",
+    "rain_color": "#38577a",
+    "rain_progress": 0.08,
+    "rain_timeline": {
+     "points": [
+      {
+       "hour": 0,
+       "precip": 0,
+       "label": "12 am",
+       "clock": "12:00 am"
+      },
+      {
+       "hour": 1,
+       "precip": 0,
+       "label": null,
+       "clock": "1:00 am"
+      },
+      {
+       "hour": 2,
+       "precip": 0,
+       "label": null,
+       "clock": "2:00 am"
+      },
+      {
+       "hour": 3,
+       "precip": 0,
+       "label": null,
+       "clock": "3:00 am"
+      },
+      {
+       "hour": 4,
+       "precip": 0,
+       "label": null,
+       "clock": "4:00 am"
+      },
+      {
+       "hour": 5,
+       "precip": 1,
+       "label": null,
+       "clock": "5:00 am"
+      },
+      {
+       "hour": 6,
+       "precip": 3,
+       "label": null,
+       "clock": "6:00 am"
+      },
+      {
+       "hour": 7,
+       "precip": 4,
+       "label": null,
+       "clock": "7:00 am"
+      },
+      {
+       "hour": 8,
+       "precip": 3,
+       "label": null,
+       "clock": "8:00 am"
+      },
+      {
+       "hour": 9,
+       "precip": 2,
+       "label": "9 am",
+       "clock": "9:00 am"
+      },
+      {
+       "hour": 10,
+       "precip": 2,
+       "label": null,
+       "clock": "10:00 am"
+      },
+      {
+       "hour": 11,
+       "precip": 4,
+       "label": null,
+       "clock": "11:00 am"
+      },
+      {
+       "hour": 12,
+       "precip": 7,
+       "label": "12 pm",
+       "clock": "12:00 pm"
+      },
+      {
+       "hour": 13,
+       "precip": 8,
+       "label": null,
+       "clock": "1:00 pm"
+      },
+      {
+       "hour": 14,
+       "precip": 7,
+       "label": null,
+       "clock": "2:00 pm"
+      },
+      {
+       "hour": 15,
+       "precip": 4,
+       "label": "3 pm",
+       "clock": "3:00 pm"
+      },
+      {
+       "hour": 16,
+       "precip": 2,
+       "label": null,
+       "clock": "4:00 pm"
+      },
+      {
+       "hour": 17,
+       "precip": 1,
+       "label": null,
+       "clock": "5:00 pm"
+      },
+      {
+       "hour": 18,
+       "precip": 0,
+       "label": "6 pm",
+       "clock": "6:00 pm"
+      },
+      {
+       "hour": 19,
+       "precip": 0,
+       "label": null,
+       "clock": "7:00 pm"
+      },
+      {
+       "hour": 20,
+       "precip": 1,
+       "label": null,
+       "clock": "8:00 pm"
+      },
+      {
+       "hour": 21,
+       "precip": 2,
+       "label": "9 pm",
+       "clock": "9:00 pm"
+      },
+      {
+       "hour": 22,
+       "precip": 4,
+       "label": null,
+       "clock": "10:00 pm"
+      },
+      {
+       "hour": 23,
+       "precip": 5,
+       "label": "11 pm",
+       "clock": "11:00 pm"
+      }
+     ],
+     "max_precip": 8,
+     "peak_time": "1:00 pm",
+     "color": "#38577a"
+    },
+    "rain_peak_time": "1:00 pm"
+   },
+   {
+    "date": "2026-11-10",
+    "label": "In 2 Days",
+    "high": 7,
+    "low": 4,
+    "rain_chance": 13,
+    "wind_max": 8,
     "code": 3,
     "condition": "Overcast",
     "icon": "☁️",
     "color": "#87CEEB",
-    "high_color": "#a7cfb7",
-    "low_color": "#8dcccf",
-    "rain_color": "#374e6e",
-    "rain_progress": 0.0,
+    "high_color": "#87ccd5",
+    "low_color": "#57c2ff",
+    "rain_color": "#385d81",
+    "rain_progress": 0.13,
     "rain_timeline": {
      "points": [
       {
        "hour": 0,
-       "precip": 0,
+       "precip": 7,
        "label": "12 am",
        "clock": "12:00 am"
       },
       {
        "hour": 1,
-       "precip": 0,
+       "precip": 8,
        "label": null,
        "clock": "1:00 am"
       },
       {
        "hour": 2,
-       "precip": 0,
+       "precip": 9,
        "label": null,
        "clock": "2:00 am"
       },
       {
        "hour": 3,
-       "precip": 0,
+       "precip": 11,
        "label": null,
        "clock": "3:00 am"
       },
       {
        "hour": 4,
-       "precip": 0,
+       "precip": 12,
        "label": null,
        "clock": "4:00 am"
       },
       {
        "hour": 5,
-       "precip": 0,
+       "precip": 13,
        "label": null,
        "clock": "5:00 am"
       },
       {
        "hour": 6,
-       "precip": 0,
+       "precip": 13,
        "label": null,
        "clock": "6:00 am"
       },
       {
        "hour": 7,
-       "precip": 0,
+       "precip": 12,
        "label": null,
        "clock": "7:00 am"
       },
       {
        "hour": 8,
-       "precip": 0,
+       "precip": 10,
        "label": null,
        "clock": "8:00 am"
       },
       {
        "hour": 9,
-       "precip": 0,
+       "precip": 8,
        "label": "9 am",
        "clock": "9:00 am"
       },
       {
        "hour": 10,
-       "precip": 0,
+       "precip": 6,
        "label": null,
        "clock": "10:00 am"
       },
       {
        "hour": 11,
-       "precip": 0,
+       "precip": 4,
        "label": null,
        "clock": "11:00 am"
       },
       {
        "hour": 12,
-       "precip": 0,
+       "precip": 3,
        "label": "12 pm",
        "clock": "12:00 pm"
       },
       {
        "hour": 13,
-       "precip": 0,
-       "label": null,
-       "clock": "1:00 pm"
-      },
-      {
-       "hour": 14,
-       "precip": 0,
-       "label": null,
-       "clock": "2:00 pm"
-      },
-      {
-       "hour": 15,
-       "precip": 0,
-       "label": "3 pm",
-       "clock": "3:00 pm"
-      },
-      {
-       "hour": 16,
-       "precip": 0,
-       "label": null,
-       "clock": "4:00 pm"
-      },
-      {
-       "hour": 17,
-       "precip": 0,
-       "label": null,
-       "clock": "5:00 pm"
-      },
-      {
-       "hour": 18,
-       "precip": 0,
-       "label": "6 pm",
-       "clock": "6:00 pm"
-      },
-      {
-       "hour": 19,
-       "precip": 0,
-       "label": null,
-       "clock": "7:00 pm"
-      },
-      {
-       "hour": 20,
-       "precip": 0,
-       "label": null,
-       "clock": "8:00 pm"
-      },
-      {
-       "hour": 21,
-       "precip": 0,
-       "label": "9 pm",
-       "clock": "9:00 pm"
-      },
-      {
-       "hour": 22,
-       "precip": 0,
-       "label": null,
-       "clock": "10:00 pm"
-      },
-      {
-       "hour": 23,
-       "precip": 0,
-       "label": "11 pm",
-       "clock": "11:00 pm"
-      }
-     ],
-     "max_precip": 0,
-     "peak_time": null,
-     "color": "#374e6e"
-    },
-    "rain_peak_time": null
-   },
-   {
-    "date": "2026-11-09",
-    "label": "In 2 Days",
-    "high": 9,
-    "low": 7,
-    "rain_chance": 7,
-    "wind_max": 11,
-    "code": 53,
-    "condition": "Drizzle",
-    "icon": "🌦️",
-    "color": "#4682B4",
-    "high_color": "#b2cfae",
-    "low_color": "#83cbd9",
-    "rain_color": "#385678",
-    "rain_progress": 0.07,
-    "rain_timeline": {
-     "points": [
-      {
-       "hour": 0,
-       "precip": 0,
-       "label": "12 am",
-       "clock": "12:00 am"
-      },
-      {
-       "hour": 1,
-       "precip": 0,
-       "label": null,
-       "clock": "1:00 am"
-      },
-      {
-       "hour": 2,
-       "precip": 0,
-       "label": null,
-       "clock": "2:00 am"
-      },
-      {
-       "hour": 3,
-       "precip": 0,
-       "label": null,
-       "clock": "3:00 am"
-      },
-      {
-       "hour": 4,
-       "precip": 0,
-       "label": null,
-       "clock": "4:00 am"
-      },
-      {
-       "hour": 5,
-       "precip": 0,
-       "label": null,
-       "clock": "5:00 am"
-      },
-      {
-       "hour": 6,
-       "precip": 0,
-       "label": null,
-       "clock": "6:00 am"
-      },
-      {
-       "hour": 7,
-       "precip": 0,
-       "label": null,
-       "clock": "7:00 am"
-      },
-      {
-       "hour": 8,
-       "precip": 0,
-       "label": null,
-       "clock": "8:00 am"
-      },
-      {
-       "hour": 9,
-       "precip": 0,
-       "label": "9 am",
-       "clock": "9:00 am"
-      },
-      {
-       "hour": 10,
-       "precip": 0,
-       "label": null,
-       "clock": "10:00 am"
-      },
-      {
-       "hour": 11,
        "precip": 2,
        "label": null,
-       "clock": "11:00 am"
-      },
-      {
-       "hour": 12,
-       "precip": 4,
-       "label": "12 pm",
-       "clock": "12:00 pm"
-      },
-      {
-       "hour": 13,
-       "precip": 6,
-       "label": null,
        "clock": "1:00 pm"
       },
       {
        "hour": 14,
-       "precip": 6,
+       "precip": 2,
        "label": null,
        "clock": "2:00 pm"
       },
       {
        "hour": 15,
-       "precip": 5,
+       "precip": 2,
        "label": "3 pm",
        "clock": "3:00 pm"
       },
       {
        "hour": 16,
-       "precip": 4,
+       "precip": 2,
        "label": null,
        "clock": "4:00 pm"
       },
       {
        "hour": 17,
-       "precip": 4,
+       "precip": 2,
        "label": null,
        "clock": "5:00 pm"
       },
       {
        "hour": 18,
-       "precip": 5,
+       "precip": 2,
        "label": "6 pm",
        "clock": "6:00 pm"
       },
       {
        "hour": 19,
-       "precip": 6,
+       "precip": 2,
        "label": null,
        "clock": "7:00 pm"
       },
       {
        "hour": 20,
-       "precip": 6,
+       "precip": 2,
        "label": null,
        "clock": "8:00 pm"
       },
       {
        "hour": 21,
-       "precip": 6,
+       "precip": 2,
        "label": "9 pm",
        "clock": "9:00 pm"
       },
       {
        "hour": 22,
-       "precip": 6,
+       "precip": 2,
        "label": null,
        "clock": "10:00 pm"
       },
       {
        "hour": 23,
-       "precip": 7,
+       "precip": 1,
        "label": "11 pm",
        "clock": "11:00 pm"
       }
      ],
-     "max_precip": 7,
-     "peak_time": "11:00 pm",
-     "color": "#385678"
+     "max_precip": 13,
+     "peak_time": "5:00 am",
+     "color": "#385d81"
     },
-    "rain_peak_time": "11:00 pm"
+    "rain_peak_time": "5:00 am"
    }
   ],
   "morning": {
-   "temp": 9,
-   "feels_like": 7,
+   "temp": 7,
+   "feels_like": 3,
    "precip": 0,
-   "wind": 6,
-   "wind_dir": 151,
-   "wind_color": "#43039a",
+   "wind": 15,
+   "wind_dir": 162,
+   "wind_color": "#8e159c",
    "color": "#87CEEB",
    "condition": "Overcast",
    "icon": "☁️",
    "code": 3
   },
   "afternoon": {
-   "temp": 10,
-   "feels_like": 6,
-   "precip": 0,
-   "wind": 12,
-   "wind_dir": 135,
-   "wind_color": "#7a09a3",
-   "color": "#87CEEB",
-   "condition": "Partly Cloudy",
-   "icon": "⛅️",
-   "code": 2
-  },
-  "evening": {
-   "temp": 8,
+   "temp": 7,
    "feels_like": 4,
    "precip": 0,
-   "wind": 14,
-   "wind_dir": 122,
-   "wind_color": "#89129d",
+   "wind": 12,
+   "wind_dir": 174,
+   "wind_color": "#7708a3",
    "color": "#87CEEB",
-   "condition": "Partly Cloudy",
-   "icon": "⛅️",
-   "code": 2
+   "condition": "Overcast",
+   "icon": "☁️",
+   "code": 3
   },
-  "sunrise": "7:28 am",
-  "sunset": "4:18 pm",
+  "evening": {
+   "temp": 7,
+   "feels_like": 5,
+   "precip": 0,
+   "wind": 9,
+   "wind_dir": 152,
+   "wind_color": "#5d01a3",
+   "color": "#87CEEB",
+   "condition": "Overcast",
+   "icon": "☁️",
+   "code": 3
+  },
+  "sunrise": "7:30 am",
+  "sunset": "4:16 pm",
   "daily_precip": 0,
   "rain_peak_time": null
  },
@@ -758,17 +758,17 @@
    "source_name": "Bitcoin USD",
    "currency": "USD",
    "currency_symbol": "$",
-   "as_of": "2026-11-05",
-   "as_of_label": "Nov 5, 2026",
-   "price": 75942.125,
-   "change": -4463.1640625,
-   "percent": -5.55083392465728,
+   "as_of": "2026-11-06",
+   "as_of_label": "Nov 6, 2026",
+   "price": 75746.9296875,
+   "change": -195.1953125,
+   "percent": -0.2570316704990807,
    "color": "red",
    "arrow": "↓",
-   "percent_7d": -2.3567750527512517,
+   "percent_7d": -1.8799415587169028,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": -11.47553285387322,
+   "percent_1m": -11.46670443363788,
    "color_1m": "red",
    "arrow_1m": "↓"
   },
@@ -778,21 +778,21 @@
    "source_name": "Vanguard S&P 500 UCITS ETF",
    "currency": "EUR",
    "currency_symbol": "€",
-   "as_of": "2026-11-05",
-   "as_of_label": "Nov 5, 2026",
-   "price": 126.28399658203125,
-   "change": -3.4770050048828125,
-   "percent": -2.6795454430535592,
-   "color": "red",
-   "arrow": "↓",
-   "percent_7d": -3.6183915552774044,
+   "as_of": "2026-11-06",
+   "as_of_label": "Nov 6, 2026",
+   "price": 126.34500122070312,
+   "change": 0.061004638671875,
+   "percent": 0.04830749764262312,
+   "color": "green",
+   "arrow": "↑",
+   "percent_7d": -2.091538540489638,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": -3.675007428507381,
+   "percent_1m": -4.183186482383787,
    "color_1m": "red",
    "arrow_1m": "↓"
   },
-  "average_percent": 4.830252398289088
+  "average_percent": 5.8329592976458855
  },
  "space_news": [
   {
@@ -834,39 +834,39 @@
  ],
  "copenhagen": [
   {
-   "headline": "Trailing Spouse Challenges: When two careers become one, the hidden struggles of accompanying partners in Denmark often remain overlooked.",
-   "ai_summary": "Trailing Spouse Challenges: When two careers become one, the hidden struggles of accompanying partners in Denmark often remain overlooked.",
-   "link": "https://cphpost.dk/2026-11-06/business-education/career/expert-insights-when-two-careers-become-one-the-idhden-challenges-of-being-a-trailing-spouse-in-denmark/",
+   "headline": "**Alaska Election Lawsuit**",
+   "ai_summary": "**Alaska Election Lawsuit**",
+   "link": "https://cphpost.dk/2026-11-07/global/democratic-senate-candidate-sues-alaska-election-board/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "Danish Activists Protest: Danish environmental activists joined 200 others in breaking into a Microsoft data center construction site in Amsterdam.",
-   "ai_summary": "Danish Activists Protest: Danish environmental activists joined 200 others in breaking into a Microsoft data center construction site in Amsterdam.",
-   "link": "https://cphpost.dk/2026-11-06/global/danish-activists-join-protest-at-microsoft-data-center-construction-site-in-amsterdam/",
+   "headline": "**Dems Attack Miller**",
+   "ai_summary": "**Dems Attack Miller**",
+   "link": "https://cphpost.dk/2026-11-07/global/dems-target-trumps-new-chief-blood-on-his-hands/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "Europe Bomb Threats: Bomb threats hit flights across Europe for the third time this week, including multiple routes involving Denmark.",
-   "ai_summary": "Europe Bomb Threats: Bomb threats hit flights across Europe for the third time this week, including multiple routes involving Denmark.",
-   "link": "https://cphpost.dk/2026-11-06/news/round-up/bomb-threats-target-flights-across-europe-for-third-time-this-week/",
+   "headline": "**Trump Appoints Miller**",
+   "ai_summary": "**Trump Appoints Miller**",
+   "link": "https://cphpost.dk/2026-11-07/global/trump-promotes-stephen-miller-to-wh-chief-of-staff/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "Copenhagen Airport Threats: Copenhagen Airport received new bomb threats for the second consecutive day, prompting precautionary police investigations.",
-   "ai_summary": "Copenhagen Airport Threats: Copenhagen Airport received new bomb threats for the second consecutive day, prompting precautionary police investigations.",
-   "link": "https://cphpost.dk/2026-11-06/news/round-up/copenhagen-airport-faces-new-threats-against-flights-for-second-consecutive-day/",
+   "headline": "**Protest at Microsoft**",
+   "ai_summary": "**Protest at Microsoft**",
+   "link": "https://cphpost.dk/2026-11-07/news/round-up/protesters-fight-danish-data-centers-on-saturday/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "Bird Flu Alert Raised: Denmark raised its bird flu threat level to high after new outbreaks on poultry farms and rising wild bird infections.",
-   "ai_summary": "Bird Flu Alert Raised: Denmark raised its bird flu threat level to high after new outbreaks on poultry farms and rising wild bird infections.",
-   "link": "https://cphpost.dk/2026-11-06/news/round-up/denmark-raises-bird-flu-threat-level-to-high-as-infections-increase/",
+   "headline": "**AI Info Request Wave**",
+   "ai_summary": "**AI Info Request Wave**",
+   "link": "https://cphpost.dk/2026-11-07/news/round-up/danish-utilities-hit-by-wave-of-suspected-ai-generated-information-requests/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "Hamas Endorsement Acquittals: Danish court acquitted four people accused of endorsing the Hamas attack on Israel via social media comments.",
-   "ai_summary": "Hamas Endorsement Acquittals: Danish court acquitted four people accused of endorsing the Hamas attack on Israel via social media comments.",
-   "link": "https://cphpost.dk/2026-11-06/news/round-up/danish-court-acquits-four-people-accused-of-endorsing-hamas-attack-on-social-media/",
+   "headline": "**Russian Hacker Freed**",
+   "ai_summary": "**Russian Hacker Freed**",
+   "link": "https://cphpost.dk/2026-11-07/news/round-up/secret-danish-hack-case-russian-freed-after-146-days/",
    "source": "The Copenhagen Post"
   }
  ],
@@ -903,9 +903,9 @@
   }
  ],
  "scripture": {
-  "text": "The desire of the righteous ends only in good, the expectation of the wicked in wrath.",
-  "focus": "Proverbs 11:23",
-  "ref": "Proverbs 11:23",
+  "text": "Desire without knowledge is not good, and whoever makes haste with his feet misses his way.",
+  "focus": "Proverbs 19:2",
+  "ref": "Proverbs 19:2",
   "book": "Proverbs",
   "translation": "Esv",
   "translation_label": "English Standard Version",
@@ -913,83 +913,83 @@
    "name": "English Standard Version",
    "url": "https://www.esv.org/"
   },
-  "link": "https://www.biblegateway.com/passage/?search=Proverbs%2011%3A23&version=ESV"
+  "link": "https://www.biblegateway.com/passage/?search=Proverbs%2019%3A2&version=ESV"
  },
  "x_trending": {
   "topics": [
    {
-    "name": "Minecraft's C418 and Notch Clash Over Billionaire Criticism",
-    "headline": "Minecraft's C418 and Notch Clash Over Billionaire Criticism",
+    "name": "C418 Questions Support for Billionaires Amid Rape Convictions, Notch Replies Briefly",
+    "headline": "C418 Questions Support for Billionaires Amid Rape Convictions, Notch Replies Briefly",
     "summary": "",
     "why": "",
     "sentiment": null,
     "accounts": [],
-    "search_term": "Minecraft's C418",
-    "post_count": "23K posts",
-    "category": "Other",
+    "search_term": "C418 Questions Support",
+    "post_count": "54K posts",
+    "category": "Entertainment",
     "category_style": "--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;",
     "trending_since": null,
-    "link": "https://x.com/search?q=Minecraft%27s%20C418&src=typed_query",
-    "source": "Other"
+    "link": "https://x.com/search?q=C418%20Questions%20Support&src=typed_query",
+    "source": "Entertainment"
    },
    {
-    "name": "Krispy Kreme Stock Surges 43% on National Donut Day Earnings Beat",
-    "headline": "Krispy Kreme Stock Surges 43% on National Donut Day Earnings Beat",
+    "name": "US Lawmakers Demand Nvidia CEO Briefing on Alleged Chinese Spy Ties",
+    "headline": "US Lawmakers Demand Nvidia CEO Briefing on Alleged Chinese Spy Ties",
     "summary": "",
     "why": "",
     "sentiment": null,
     "accounts": [],
-    "search_term": "Krispy Kreme Stock Surges",
-    "post_count": "13K posts",
+    "search_term": "US Lawmakers Demand Nvidia",
+    "post_count": "64K posts",
     "category": "News",
     "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
     "trending_since": null,
-    "link": "https://x.com/search?q=Krispy%20Kreme%20Stock%20Surges&src=typed_query",
+    "link": "https://x.com/search?q=US%20Lawmakers%20Demand%20Nvidia&src=typed_query",
     "source": "News"
    },
    {
-    "name": "Trump Names Stephen Miller as New White House Chief of Staff",
-    "headline": "Trump Names Stephen Miller as New White House Chief of Staff",
+    "name": "Anthropic CEO Testifies He Doesn't Know His Home Address",
+    "headline": "Anthropic CEO Testifies He Doesn't Know His Home Address",
     "summary": "",
     "why": "",
     "sentiment": null,
     "accounts": [],
-    "search_term": "Trump Names Stephen Miller",
-    "post_count": "24K posts",
-    "category": "News",
-    "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
-    "trending_since": "Now",
-    "link": "https://x.com/search?q=Trump%20Names%20Stephen%20Miller&src=typed_query",
-    "source": "News"
-   },
-   {
-    "name": "Turbo Encabulator Meme Captures Vibe Coding Trend",
-    "headline": "Turbo Encabulator Meme Captures Vibe Coding Trend",
-    "summary": "",
-    "why": "",
-    "sentiment": null,
-    "accounts": [],
-    "search_term": "Turbo Encabulator Meme Captures",
-    "post_count": "1.2K posts",
-    "category": "Other",
-    "category_style": "--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;",
-    "trending_since": "Now",
-    "link": "https://x.com/search?q=Turbo%20Encabulator%20Meme%20Captures&src=typed_query",
-    "source": "Other"
-   },
-   {
-    "name": "SpaceX Targets Dual Booster and Starship Catch on Flight 15",
-    "headline": "SpaceX Targets Dual Booster and Starship Catch on Flight 15",
-    "summary": "",
-    "why": "",
-    "sentiment": null,
-    "accounts": [],
-    "search_term": "SpaceX Targets Dual Booster",
-    "post_count": "19K posts",
+    "search_term": "Anthropic CEO Testifies He",
+    "post_count": "1.6K posts",
     "category": "News",
     "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
     "trending_since": null,
-    "link": "https://x.com/search?q=SpaceX%20Targets%20Dual%20Booster&src=typed_query",
+    "link": "https://x.com/search?q=Anthropic%20CEO%20Testifies%20He&src=typed_query",
+    "source": "News"
+   },
+   {
+    "name": "Michael Knowles Changes Bio to 'Airline Passenger' After NY Post Story",
+    "headline": "Michael Knowles Changes Bio to 'Airline Passenger' After NY Post Story",
+    "summary": "",
+    "why": "",
+    "sentiment": null,
+    "accounts": [],
+    "search_term": "Airline Passenger",
+    "post_count": "1.9K posts",
+    "category": "News",
+    "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
+    "trending_since": null,
+    "link": "https://x.com/search?q=Airline%20Passenger&src=typed_query",
+    "source": "News"
+   },
+   {
+    "name": "Alphabet Adds Millions More SpaceX Shares in Major Stake Expansion",
+    "headline": "Alphabet Adds Millions More SpaceX Shares in Major Stake Expansion",
+    "summary": "",
+    "why": "",
+    "sentiment": null,
+    "accounts": [],
+    "search_term": "Alphabet Adds Millions More",
+    "post_count": "5.5K posts",
+    "category": "News",
+    "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
+    "trending_since": null,
+    "link": "https://x.com/search?q=Alphabet%20Adds%20Millions%20More&src=typed_query",
     "source": "News"
    }
   ],
