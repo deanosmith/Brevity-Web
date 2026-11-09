@@ -40,13 +40,14 @@
     "Proverbs 4:15",
     "Ecclesiastes 2:7",
     "Proverbs 11:23",
-    "Proverbs 19:2"
+    "Proverbs 19:2",
+    "Proverbs 29:25"
   ],
   "current": {
-    "date": "2026-11-08",
-    "text": "Desire without knowledge is not good, and whoever makes haste with his feet misses his way.",
-    "focus": "Proverbs 19:2",
-    "ref": "Proverbs 19:2",
+    "date": "2026-11-09",
+    "text": "The fear of man lays a snare, but whoever trusts in the Lord is safe.",
+    "focus": "Proverbs 29:25",
+    "ref": "Proverbs 29:25",
     "book": "Proverbs",
     "translation": "Esv",
     "translation_label": "English Standard Version",
@@ -54,6 +55,6 @@
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2019%3A2&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2029%3A25&version=ESV"
   }
 }

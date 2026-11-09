@@ -1,11 +1,11 @@
 {
- "date": "Sunday, November 8",
- "iso_date": "2026-11-08",
- "generated_at": "2026-11-08 05:01 CET",
- "generated_iso": "2026-11-08T05:01:07+01:00",
+ "date": "Monday, November 9",
+ "iso_date": "2026-11-09",
+ "generated_at": "2026-11-09 05:01 CET",
+ "generated_iso": "2026-11-09T05:01:04+01:00",
  "generated_clock": "5:01 am",
- "year_percent": 85.47945205479452,
- "day_of_year": 312,
+ "year_percent": 85.75342465753425,
+ "day_of_year": 313,
  "days_in_year": 365,
  "weather": {
   "location": "Copenhagen",
@@ -16,168 +16,168 @@
    "location": "Copenhagen"
   },
   "today": {
-   "date": "2026-11-08",
+   "date": "2026-11-09",
    "label": "Today",
    "high": 8,
-   "low": 7,
-   "rain_chance": 0,
-   "rain_sum_mm": 0.0,
-   "rain_peak_time": null,
+   "low": 6,
+   "rain_chance": 24,
+   "rain_sum_mm": 3.1,
+   "rain_peak_time": "11:00 pm",
    "rain_timeline": {
     "points": [
      {
       "hour": 6,
-      "precip": 0,
+      "precip": 3,
       "label": "6 am",
       "clock": "6:00 am"
      },
      {
       "hour": 7,
-      "precip": 0,
+      "precip": 4,
       "label": null,
       "clock": "7:00 am"
      },
      {
       "hour": 8,
-      "precip": 0,
+      "precip": 5,
       "label": null,
       "clock": "8:00 am"
      },
      {
       "hour": 9,
-      "precip": 0,
+      "precip": 7,
       "label": "9 am",
       "clock": "9:00 am"
      },
      {
       "hour": 10,
-      "precip": 0,
+      "precip": 8,
       "label": null,
       "clock": "10:00 am"
      },
      {
       "hour": 11,
-      "precip": 0,
+      "precip": 10,
       "label": null,
       "clock": "11:00 am"
      },
      {
       "hour": 12,
-      "precip": 0,
+      "precip": 13,
       "label": "12 pm",
       "clock": "12:00 pm"
      },
      {
       "hour": 13,
-      "precip": 0,
+      "precip": 14,
       "label": null,
       "clock": "1:00 pm"
      },
      {
       "hour": 14,
-      "precip": 0,
+      "precip": 12,
       "label": null,
       "clock": "2:00 pm"
      },
      {
       "hour": 15,
-      "precip": 0,
+      "precip": 9,
       "label": "3 pm",
       "clock": "3:00 pm"
      },
      {
       "hour": 16,
-      "precip": 0,
+      "precip": 6,
       "label": null,
       "clock": "4:00 pm"
      },
      {
       "hour": 17,
-      "precip": 0,
+      "precip": 4,
       "label": null,
       "clock": "5:00 pm"
      },
      {
       "hour": 18,
-      "precip": 0,
+      "precip": 3,
       "label": "6 pm",
       "clock": "6:00 pm"
      },
      {
       "hour": 19,
-      "precip": 0,
+      "precip": 4,
       "label": null,
       "clock": "7:00 pm"
      },
      {
       "hour": 20,
-      "precip": 0,
+      "precip": 8,
       "label": null,
       "clock": "8:00 pm"
      },
      {
       "hour": 21,
-      "precip": 0,
+      "precip": 15,
       "label": "9 pm",
       "clock": "9:00 pm"
      },
      {
       "hour": 22,
-      "precip": 0,
+      "precip": 20,
       "label": null,
       "clock": "10:00 pm"
      },
      {
       "hour": 23,
-      "precip": 0,
+      "precip": 24,
       "label": "11 pm",
       "clock": "11:00 pm"
      }
     ],
-    "max_precip": 0,
-    "peak_time": null,
-    "color": "#374e6e"
+    "max_precip": 24,
+    "peak_time": "11:00 pm",
+    "color": "#396a91"
    },
-   "wind_max": 15,
-   "wind_dir": 155,
-   "wind_color": "#8e159c",
-   "uv_max": 1.4,
-   "sunrise": "7:30 am",
-   "sunset": "4:16 pm",
-   "code": 3,
-   "condition": "Overcast",
-   "icon": "☁️",
-   "color": "#87CEEB",
+   "wind_max": 9,
+   "wind_dir": 170,
+   "wind_color": "#6400a6",
+   "uv_max": 1.1,
+   "sunrise": "7:32 am",
+   "sunset": "4:14 pm",
+   "code": 53,
+   "condition": "Drizzle",
+   "icon": "🌦️",
+   "color": "#4682B4",
    "current": {
     "temp": 7,
-    "feels_like": 4,
+    "feels_like": 5,
     "code": 3,
     "condition": "Overcast",
     "icon": "☁️",
     "color": "#87CEEB",
-    "wind": 14,
-    "wind_dir": 147,
-    "precip": 0
+    "wind": 6,
+    "wind_dir": 179,
+    "precip": 1
    },
    "morning": {
-    "temp": 7,
-    "feels_like": 3,
-    "precip": 0,
-    "wind": 15,
-    "wind_dir": 162,
-    "wind_color": "#8e159c",
-    "color": "#87CEEB",
-    "condition": "Overcast",
-    "icon": "☁️",
-    "code": 3
+    "temp": 8,
+    "feels_like": 5,
+    "precip": 10,
+    "wind": 9,
+    "wind_dir": 165,
+    "wind_color": "#6400a6",
+    "color": "#4682B4",
+    "condition": "Light Drizzle",
+    "icon": "🌦️",
+    "code": 51
    },
    "afternoon": {
     "temp": 7,
-    "feels_like": 4,
-    "precip": 0,
-    "wind": 12,
-    "wind_dir": 174,
-    "wind_color": "#7708a3",
+    "feels_like": 5,
+    "precip": 14,
+    "wind": 6,
+    "wind_dir": 169,
+    "wind_color": "#49039c",
     "color": "#87CEEB",
     "condition": "Overcast",
     "icon": "☁️",
@@ -185,27 +185,27 @@
    },
    "evening": {
     "temp": 7,
-    "feels_like": 5,
-    "precip": 0,
-    "wind": 9,
-    "wind_dir": 152,
-    "wind_color": "#5d01a3",
-    "color": "#87CEEB",
-    "condition": "Overcast",
-    "icon": "☁️",
-    "code": 3
+    "feels_like": 4,
+    "precip": 24,
+    "wind": 8,
+    "wind_dir": 196,
+    "wind_color": "#5402a0",
+    "color": "#4682B4",
+    "condition": "Light Drizzle",
+    "icon": "🌦️",
+    "code": 51
    },
    "sun_path": {
-    "sunrise": "7:30 am",
-    "sunset": "4:16 pm",
+    "sunrise": "7:32 am",
+    "sunset": "4:14 pm",
     "sun_x": 20.0,
     "sun_y": 66.0,
     "is_day": false,
-    "daylight": "8h 46m",
-    "rain_peak": null,
+    "daylight": "8h 42m",
+    "rain_peak": "11:00 pm",
     "rain_on_arc": false,
-    "rain_x": null,
-    "rain_y": null,
+    "rain_x": 230.0,
+    "rain_y": 58.0,
     "cy": 58,
     "start_x": 20.0,
     "end_x": 220.0,
@@ -221,178 +221,178 @@
    },
    "dials": {
     "rain": {
-     "progress": 0.0,
-     "color": "#374e6e",
-     "value": "0%",
+     "progress": 0.24,
+     "color": "#396a91",
+     "value": "24%",
      "label": "Rain"
     },
     "wind": {
-     "progress": 0.3,
-     "color": "#8e159c",
-     "value": "15 km/h",
+     "progress": 0.18,
+     "color": "#6101a5",
+     "value": "9 km/h",
      "label": "Wind"
     },
     "uv": {
-     "progress": 0.12727272727272726,
-     "color": "#8dc548",
-     "value": "1.4",
+     "progress": 0.1,
+     "color": "#7fc04a",
+     "value": "1.1",
      "label": "UV"
     },
     "temp": {
      "high": 8,
-     "low": 7,
+     "low": 6,
      "high_color": "#9fcebf",
-     "low_color": "#89ccd3",
+     "low_color": "#74cae7",
      "high_progress": 0.37142857142857144,
-     "low_progress": 0.34285714285714286,
+     "low_progress": 0.3142857142857143,
      "label": "Temp"
     }
    },
    "high_color": "#9fcebf",
-   "low_color": "#89ccd3",
-   "rain_color": "#374e6e"
+   "low_color": "#74cae7",
+   "rain_color": "#396a91"
   },
   "upcoming": [
    {
-    "date": "2026-11-09",
+    "date": "2026-11-10",
     "label": "Tomorrow",
     "high": 8,
-    "low": 7,
-    "rain_chance": 8,
-    "wind_max": 11,
+    "low": 6,
+    "rain_chance": 30,
+    "wind_max": 14,
     "code": 51,
     "condition": "Light Drizzle",
     "icon": "🌦️",
     "color": "#4682B4",
-    "high_color": "#a9cfb5",
-    "low_color": "#83cbd9",
-    "rain_color": "#38577a",
-    "rain_progress": 0.08,
+    "high_color": "#a1cebd",
+    "low_color": "#6fcaeb",
+    "rain_color": "#3a719a",
+    "rain_progress": 0.3,
     "rain_timeline": {
      "points": [
       {
        "hour": 0,
-       "precip": 0,
+       "precip": 27,
        "label": "12 am",
        "clock": "12:00 am"
       },
       {
        "hour": 1,
-       "precip": 0,
+       "precip": 29,
        "label": null,
        "clock": "1:00 am"
       },
       {
        "hour": 2,
-       "precip": 0,
+       "precip": 30,
        "label": null,
        "clock": "2:00 am"
       },
       {
        "hour": 3,
-       "precip": 0,
+       "precip": 30,
        "label": null,
        "clock": "3:00 am"
       },
       {
        "hour": 4,
-       "precip": 0,
+       "precip": 29,
        "label": null,
        "clock": "4:00 am"
       },
       {
        "hour": 5,
-       "precip": 1,
+       "precip": 26,
        "label": null,
        "clock": "5:00 am"
       },
       {
        "hour": 6,
-       "precip": 3,
+       "precip": 22,
        "label": null,
        "clock": "6:00 am"
       },
       {
        "hour": 7,
-       "precip": 4,
+       "precip": 18,
        "label": null,
        "clock": "7:00 am"
       },
       {
        "hour": 8,
-       "precip": 3,
+       "precip": 15,
        "label": null,
        "clock": "8:00 am"
       },
       {
        "hour": 9,
-       "precip": 2,
+       "precip": 13,
        "label": "9 am",
        "clock": "9:00 am"
       },
       {
        "hour": 10,
-       "precip": 2,
+       "precip": 10,
        "label": null,
        "clock": "10:00 am"
       },
       {
        "hour": 11,
-       "precip": 4,
+       "precip": 7,
        "label": null,
        "clock": "11:00 am"
       },
       {
        "hour": 12,
-       "precip": 7,
+       "precip": 4,
        "label": "12 pm",
        "clock": "12:00 pm"
       },
       {
        "hour": 13,
-       "precip": 8,
+       "precip": 2,
        "label": null,
        "clock": "1:00 pm"
       },
       {
        "hour": 14,
-       "precip": 7,
+       "precip": 2,
        "label": null,
        "clock": "2:00 pm"
       },
       {
        "hour": 15,
-       "precip": 4,
+       "precip": 3,
        "label": "3 pm",
        "clock": "3:00 pm"
       },
       {
        "hour": 16,
-       "precip": 2,
+       "precip": 4,
        "label": null,
        "clock": "4:00 pm"
       },
       {
        "hour": 17,
-       "precip": 1,
+       "precip": 4,
        "label": null,
        "clock": "5:00 pm"
       },
       {
        "hour": 18,
-       "precip": 0,
+       "precip": 3,
        "label": "6 pm",
        "clock": "6:00 pm"
       },
       {
        "hour": 19,
-       "precip": 0,
+       "precip": 2,
        "label": null,
        "clock": "7:00 pm"
       },
       {
        "hour": 20,
-       "precip": 1,
+       "precip": 2,
        "label": null,
        "clock": "8:00 pm"
       },
@@ -404,49 +404,49 @@
       },
       {
        "hour": 22,
-       "precip": 4,
+       "precip": 2,
        "label": null,
        "clock": "10:00 pm"
       },
       {
        "hour": 23,
-       "precip": 5,
+       "precip": 2,
        "label": "11 pm",
        "clock": "11:00 pm"
       }
      ],
-     "max_precip": 8,
-     "peak_time": "1:00 pm",
-     "color": "#38577a"
+     "max_precip": 30,
+     "peak_time": "2:00 am",
+     "color": "#3a719a"
     },
-    "rain_peak_time": "1:00 pm"
+    "rain_peak_time": "2:00 am"
    },
    {
-    "date": "2026-11-10",
+    "date": "2026-11-11",
     "label": "In 2 Days",
-    "high": 7,
-    "low": 4,
-    "rain_chance": 13,
-    "wind_max": 8,
-    "code": 3,
-    "condition": "Overcast",
-    "icon": "☁️",
-    "color": "#87CEEB",
-    "high_color": "#87ccd5",
-    "low_color": "#57c2ff",
-    "rain_color": "#385d81",
-    "rain_progress": 0.13,
+    "high": 8,
+    "low": 6,
+    "rain_chance": 28,
+    "wind_max": 18,
+    "code": 51,
+    "condition": "Light Drizzle",
+    "icon": "🌦️",
+    "color": "#4682B4",
+    "high_color": "#94cdc9",
+    "low_color": "#78cbe3",
+    "rain_color": "#3a6f97",
+    "rain_progress": 0.28,
     "rain_timeline": {
      "points": [
       {
        "hour": 0,
-       "precip": 7,
+       "precip": 2,
        "label": "12 am",
        "clock": "12:00 am"
       },
       {
        "hour": 1,
-       "precip": 8,
+       "precip": 4,
        "label": null,
        "clock": "1:00 am"
       },
@@ -458,91 +458,91 @@
       },
       {
        "hour": 3,
-       "precip": 11,
+       "precip": 16,
        "label": null,
        "clock": "3:00 am"
       },
       {
        "hour": 4,
-       "precip": 12,
+       "precip": 22,
        "label": null,
        "clock": "4:00 am"
       },
       {
        "hour": 5,
-       "precip": 13,
+       "precip": 26,
        "label": null,
        "clock": "5:00 am"
       },
       {
        "hour": 6,
-       "precip": 13,
+       "precip": 28,
        "label": null,
        "clock": "6:00 am"
       },
       {
        "hour": 7,
-       "precip": 12,
+       "precip": 27,
        "label": null,
        "clock": "7:00 am"
       },
       {
        "hour": 8,
-       "precip": 10,
+       "precip": 22,
        "label": null,
        "clock": "8:00 am"
       },
       {
        "hour": 9,
-       "precip": 8,
+       "precip": 14,
        "label": "9 am",
        "clock": "9:00 am"
       },
       {
        "hour": 10,
-       "precip": 6,
+       "precip": 8,
        "label": null,
        "clock": "10:00 am"
       },
       {
        "hour": 11,
-       "precip": 4,
+       "precip": 6,
        "label": null,
        "clock": "11:00 am"
       },
       {
        "hour": 12,
-       "precip": 3,
+       "precip": 6,
        "label": "12 pm",
        "clock": "12:00 pm"
       },
       {
        "hour": 13,
-       "precip": 2,
+       "precip": 6,
        "label": null,
        "clock": "1:00 pm"
       },
       {
        "hour": 14,
-       "precip": 2,
+       "precip": 5,
        "label": null,
        "clock": "2:00 pm"
       },
       {
        "hour": 15,
-       "precip": 2,
+       "precip": 5,
        "label": "3 pm",
        "clock": "3:00 pm"
       },
       {
        "hour": 16,
-       "precip": 2,
+       "precip": 4,
        "label": null,
        "clock": "4:00 pm"
       },
       {
        "hour": 17,
-       "precip": 2,
+       "precip": 3,
        "label": null,
        "clock": "5:00 pm"
       },
@@ -560,55 +560,55 @@
       },
       {
        "hour": 20,
-       "precip": 2,
+       "precip": 3,
        "label": null,
        "clock": "8:00 pm"
       },
       {
        "hour": 21,
-       "precip": 2,
+       "precip": 4,
        "label": "9 pm",
        "clock": "9:00 pm"
       },
       {
        "hour": 22,
-       "precip": 2,
+       "precip": 4,
        "label": null,
        "clock": "10:00 pm"
       },
       {
        "hour": 23,
-       "precip": 1,
+       "precip": 3,
        "label": "11 pm",
        "clock": "11:00 pm"
       }
      ],
-     "max_precip": 13,
-     "peak_time": "5:00 am",
-     "color": "#385d81"
+     "max_precip": 28,
+     "peak_time": "6:00 am",
+     "color": "#3a6f97"
     },
-    "rain_peak_time": "5:00 am"
+    "rain_peak_time": "6:00 am"
    }
   ],
   "morning": {
-   "temp": 7,
-   "feels_like": 3,
-   "precip": 0,
-   "wind": 15,
-   "wind_dir": 162,
-   "wind_color": "#8e159c",
-   "color": "#87CEEB",
-   "condition": "Overcast",
-   "icon": "☁️",
-   "code": 3
+   "temp": 8,
+   "feels_like": 5,
+   "precip": 10,
+   "wind": 9,
+   "wind_dir": 165,
+   "wind_color": "#6400a6",
+   "color": "#4682B4",
+   "condition": "Light Drizzle",
+   "icon": "🌦️",
+   "code": 51
   },
   "afternoon": {
    "temp": 7,
-   "feels_like": 4,
-   "precip": 0,
-   "wind": 12,
-   "wind_dir": 174,
-   "wind_color": "#7708a3",
+   "feels_like": 5,
+   "precip": 14,
+   "wind": 6,
+   "wind_dir": 169,
+   "wind_color": "#49039c",
    "color": "#87CEEB",
    "condition": "Overcast",
    "icon": "☁️",
@@ -616,20 +616,20 @@
   },
   "evening": {
    "temp": 7,
-   "feels_like": 5,
-   "precip": 0,
-   "wind": 9,
-   "wind_dir": 152,
-   "wind_color": "#5d01a3",
-   "color": "#87CEEB",
-   "condition": "Overcast",
-   "icon": "☁️",
-   "code": 3
+   "feels_like": 4,
+   "precip": 24,
+   "wind": 8,
+   "wind_dir": 196,
+   "wind_color": "#5402a0",
+   "color": "#4682B4",
+   "condition": "Light Drizzle",
+   "icon": "🌦️",
+   "code": 51
   },
-  "sunrise": "7:30 am",
-  "sunset": "4:16 pm",
-  "daily_precip": 0,
-  "rain_peak_time": null
+  "sunrise": "7:32 am",
+  "sunset": "4:14 pm",
+  "daily_precip": 24,
+  "rain_peak_time": "11:00 pm"
  },
  "stocks": {
   "Tesla": {
@@ -758,17 +758,17 @@
    "source_name": "Bitcoin USD",
    "currency": "USD",
    "currency_symbol": "$",
-   "as_of": "2026-11-06",
-   "as_of_label": "Nov 6, 2026",
-   "price": 75746.9296875,
-   "change": -195.1953125,
-   "percent": -0.2570316704990807,
-   "color": "red",
-   "arrow": "↓",
-   "percent_7d": -1.8799415587169028,
+   "as_of": "2026-11-07",
+   "as_of_label": "Nov 7, 2026",
+   "price": 75747.578125,
+   "change": 0.6484375,
+   "percent": 0.0008560578001975534,
+   "color": "green",
+   "arrow": "↑",
+   "percent_7d": -2.1788304023710285,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": -11.46670443363788,
+   "percent_1m": -9.040249194155837,
    "color_1m": "red",
    "arrow_1m": "↓"
   },
@@ -792,7 +792,7 @@
    "color_1m": "red",
    "arrow_1m": "↓"
   },
-  "average_percent": 5.8329592976458855
+  "average_percent": 5.865195263683296
  },
  "space_news": [
   {
@@ -834,38 +834,38 @@
  ],
  "copenhagen": [
   {
-   "headline": "**Alaska Election Lawsuit**",
-   "ai_summary": "**Alaska Election Lawsuit**",
+   "headline": "Peltola Sues Alaska Election Board. Democratic Senate candidate Mary Peltola’s campaign sued Alaska’s election board demanding immediate release of rejected mail-in ballot documents from Tuesday’s midterm elections.",
+   "ai_summary": "Peltola Sues Alaska Election Board. Democratic Senate candidate Mary Peltola’s campaign sued Alaska’s election board demanding immediate release of rejected mail-in ballot documents from Tuesday’s midterm elections.",
    "link": "https://cphpost.dk/2026-11-07/global/democratic-senate-candidate-sues-alaska-election-board/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "**Dems Attack Miller**",
-   "ai_summary": "**Dems Attack Miller**",
+   "headline": "Dems Attack Stephen Miller Appointment. Top Democrats vow to fight Trump’s new chief of staff Stephen Miller, accusing him of having “blood on his hands” over past inhumane immigration policies.",
+   "ai_summary": "Dems Attack Stephen Miller Appointment. Top Democrats vow to fight Trump’s new chief of staff Stephen Miller, accusing him of having “blood on his hands” over past inhumane immigration policies.",
    "link": "https://cphpost.dk/2026-11-07/global/dems-target-trumps-new-chief-blood-on-his-hands/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "**Trump Appoints Miller**",
-   "ai_summary": "**Trump Appoints Miller**",
+   "headline": "Trump Appoints Stephen Miller Chief of Staff. President Trump promoted deputy chief Stephen Miller to White House chief of staff following the Republicans’ heavy losses in this week’s midterm elections.",
+   "ai_summary": "Trump Appoints Stephen Miller Chief of Staff. President Trump promoted deputy chief Stephen Miller to White House chief of staff following the Republicans’ heavy losses in this week’s midterm elections.",
    "link": "https://cphpost.dk/2026-11-07/global/trump-promotes-stephen-miller-to-wh-chief-of-staff/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "**Protest at Microsoft**",
-   "ai_summary": "**Protest at Microsoft**",
+   "headline": "Protesters Target Microsoft Data Center. Demonstrators will gather outside Microsoft’s data center near Køge on Saturday in a Europe-wide protest against the massive environmental impact of data centers.",
+   "ai_summary": "Protesters Target Microsoft Data Center. Demonstrators will gather outside Microsoft’s data center near Køge on Saturday in a Europe-wide protest against the massive environmental impact of data centers.",
    "link": "https://cphpost.dk/2026-11-07/news/round-up/protesters-fight-danish-data-centers-on-saturday/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "**AI Info Request Wave**",
-   "ai_summary": "**AI Info Request Wave**",
+   "headline": "Danish Utilities Hit by AI Requests. Water and district heating companies face a surge of suspected AI-generated information requests believed to be mapping Denmark’s critical infrastructure.",
+   "ai_summary": "Danish Utilities Hit by AI Requests. Water and district heating companies face a surge of suspected AI-generated information requests believed to be mapping Denmark’s critical infrastructure.",
    "link": "https://cphpost.dk/2026-11-07/news/round-up/danish-utilities-hit-by-wave-of-suspected-ai-generated-information-requests/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "**Russian Hacker Freed**",
-   "ai_summary": "**Russian Hacker Freed**",
+   "headline": "Russian Hacker Freed After 146 Days. A Russian businessman arrested for hacking Danish companies was secretly released after 146 days in custody when Danish police dropped the case.",
+   "ai_summary": "Russian Hacker Freed After 146 Days. A Russian businessman arrested for hacking Danish companies was secretly released after 146 days in custody when Danish police dropped the case.",
    "link": "https://cphpost.dk/2026-11-07/news/round-up/secret-danish-hack-case-russian-freed-after-146-days/",
    "source": "The Copenhagen Post"
   }
@@ -888,24 +888,12 @@
    "ai_summary": null,
    "link": "https://www.moneyweb.co.za/news/economy/agoa-exit-puts-sa-citrus-and-us-supply-chain-jobs-at-risk/",
    "source": "Moneyweb"
-  },
-  {
-   "headline": "Growthpoint extends green power to Standard Bank branches",
-   "ai_summary": null,
-   "link": "https://www.moneyweb.co.za/news/companies-and-deals/growthpoint-extends-green-power-to-standard-bank-branches/",
-   "source": "Moneyweb"
-  },
-  {
-   "headline": "Cosatu’s Matthew Parks on Agoa, job losses and SA’s trade options",
-   "ai_summary": null,
-   "link": "https://www.moneyweb.co.za/news/economy/cosatus-matthew-parks-on-agoa-job-losses-and-sas-trade-options/",
-   "source": "Moneyweb"
   }
  ],
  "scripture": {
-  "text": "Desire without knowledge is not good, and whoever makes haste with his feet misses his way.",
-  "focus": "Proverbs 19:2",
-  "ref": "Proverbs 19:2",
+  "text": "The fear of man lays a snare, but whoever trusts in the Lord is safe.",
+  "focus": "Proverbs 29:25",
+  "ref": "Proverbs 29:25",
   "book": "Proverbs",
   "translation": "Esv",
   "translation_label": "English Standard Version",
@@ -913,83 +901,83 @@
    "name": "English Standard Version",
    "url": "https://www.esv.org/"
   },
-  "link": "https://www.biblegateway.com/passage/?search=Proverbs%2019%3A2&version=ESV"
+  "link": "https://www.biblegateway.com/passage/?search=Proverbs%2029%3A25&version=ESV"
  },
  "x_trending": {
   "topics": [
    {
-    "name": "C418 Questions Support for Billionaires Amid Rape Convictions, Notch Replies Briefly",
-    "headline": "C418 Questions Support for Billionaires Amid Rape Convictions, Notch Replies Briefly",
+    "name": "Nvidia CEO Jensen Huang Apologizes for Extramarital Affair Linked to Suspected Chinese Spy",
+    "headline": "Nvidia CEO Jensen Huang Apologizes for Extramarital Affair Linked to Suspected Chinese Spy",
     "summary": "",
     "why": "",
     "sentiment": null,
     "accounts": [],
-    "search_term": "C418 Questions Support",
-    "post_count": "54K posts",
-    "category": "Entertainment",
+    "search_term": "Nvidia CEO Jensen Huang",
+    "post_count": "221K posts",
+    "category": "News",
+    "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
+    "trending_since": null,
+    "link": "https://x.com/search?q=Nvidia%20CEO%20Jensen%20Huang&src=typed_query",
+    "source": "News"
+   },
+   {
+    "name": "Zuckerberg Called Last Wife Guy Standing in Online Chatter",
+    "headline": "Zuckerberg Called Last Wife Guy Standing in Online Chatter",
+    "summary": "",
+    "why": "",
+    "sentiment": null,
+    "accounts": [],
+    "search_term": "Zuckerberg Called Last Wife",
+    "post_count": "10K posts",
+    "category": "Other",
     "category_style": "--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;",
     "trending_since": null,
-    "link": "https://x.com/search?q=C418%20Questions%20Support&src=typed_query",
-    "source": "Entertainment"
+    "link": "https://x.com/search?q=Zuckerberg%20Called%20Last%20Wife&src=typed_query",
+    "source": "Other"
    },
    {
-    "name": "US Lawmakers Demand Nvidia CEO Briefing on Alleged Chinese Spy Ties",
-    "headline": "US Lawmakers Demand Nvidia CEO Briefing on Alleged Chinese Spy Ties",
+    "name": "More Billionaires Per Capita Linked to Less Poverty in 64 Countries",
+    "headline": "More Billionaires Per Capita Linked to Less Poverty in 64 Countries",
     "summary": "",
     "why": "",
     "sentiment": null,
     "accounts": [],
-    "search_term": "US Lawmakers Demand Nvidia",
-    "post_count": "64K posts",
+    "search_term": "More Billionaires Per Capita",
+    "post_count": "9.2K posts",
     "category": "News",
     "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
     "trending_since": null,
-    "link": "https://x.com/search?q=US%20Lawmakers%20Demand%20Nvidia&src=typed_query",
+    "link": "https://x.com/search?q=More%20Billionaires%20Per%20Capita&src=typed_query",
     "source": "News"
    },
    {
-    "name": "Anthropic CEO Testifies He Doesn't Know His Home Address",
-    "headline": "Anthropic CEO Testifies He Doesn't Know His Home Address",
+    "name": "Charlie Munger's Warning on Liquor, Ladies, and Leverage Resurfaces",
+    "headline": "Charlie Munger's Warning on Liquor, Ladies, and Leverage Resurfaces",
     "summary": "",
     "why": "",
     "sentiment": null,
     "accounts": [],
-    "search_term": "Anthropic CEO Testifies He",
-    "post_count": "1.6K posts",
-    "category": "News",
-    "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
-    "trending_since": null,
-    "link": "https://x.com/search?q=Anthropic%20CEO%20Testifies%20He&src=typed_query",
-    "source": "News"
+    "search_term": "Charlie Munger's Warning",
+    "post_count": "767 posts",
+    "category": "Other",
+    "category_style": "--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;",
+    "trending_since": "Now",
+    "link": "https://x.com/search?q=Charlie%20Munger%27s%20Warning&src=typed_query",
+    "source": "Other"
    },
    {
-    "name": "Michael Knowles Changes Bio to 'Airline Passenger' After NY Post Story",
-    "headline": "Michael Knowles Changes Bio to 'Airline Passenger' After NY Post Story",
+    "name": "Missing Memory Card Flips Georgia House Race to Republican",
+    "headline": "Missing Memory Card Flips Georgia House Race to Republican",
     "summary": "",
     "why": "",
     "sentiment": null,
     "accounts": [],
-    "search_term": "Airline Passenger",
-    "post_count": "1.9K posts",
+    "search_term": "Missing Memory Card Flips",
+    "post_count": "125K posts",
     "category": "News",
     "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
     "trending_since": null,
-    "link": "https://x.com/search?q=Airline%20Passenger&src=typed_query",
-    "source": "News"
-   },
-   {
-    "name": "Alphabet Adds Millions More SpaceX Shares in Major Stake Expansion",
-    "headline": "Alphabet Adds Millions More SpaceX Shares in Major Stake Expansion",
-    "summary": "",
-    "why": "",
-    "sentiment": null,
-    "accounts": [],
-    "search_term": "Alphabet Adds Millions More",
-    "post_count": "5.5K posts",
-    "category": "News",
-    "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
-    "trending_since": null,
-    "link": "https://x.com/search?q=Alphabet%20Adds%20Millions%20More&src=typed_query",
+    "link": "https://x.com/search?q=Missing%20Memory%20Card%20Flips&src=typed_query",
     "source": "News"
    }
   ],
