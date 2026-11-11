@@ -42,13 +42,14 @@
     "Proverbs 11:23",
     "Proverbs 19:2",
     "Proverbs 29:25",
-    "Proverbs 28:20"
+    "Proverbs 28:20",
+    "Proverbs 14:15"
   ],
   "current": {
-    "date": "2026-11-10",
-    "text": "A faithful man will abound with blessings, but whoever hastens to be rich will not go unpunished.",
-    "focus": "Proverbs 28:20",
-    "ref": "Proverbs 28:20",
+    "date": "2026-11-11",
+    "text": "The simple believes everything, but the prudent gives thought to his steps.",
+    "focus": "Proverbs 14:15",
+    "ref": "Proverbs 14:15",
     "book": "Proverbs",
     "translation": "Esv",
     "translation_label": "English Standard Version",
@@ -56,6 +57,6 @@
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2028%3A20&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2014%3A15&version=ESV"
   }
 }
