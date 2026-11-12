@@ -43,20 +43,21 @@
     "Proverbs 19:2",
     "Proverbs 29:25",
     "Proverbs 28:20",
-    "Proverbs 14:15"
+    "Proverbs 14:15",
+    "Ecclesiastes 2:14"
   ],
   "current": {
-    "date": "2026-11-11",
-    "text": "The simple believes everything, but the prudent gives thought to his steps.",
-    "focus": "Proverbs 14:15",
-    "ref": "Proverbs 14:15",
-    "book": "Proverbs",
+    "date": "2026-11-12",
+    "text": "The wise person has his eyes in his head, but the fool walks in darkness. And yet I perceived that the same event happens to all of them.",
+    "focus": "Ecclesiastes 2:14",
+    "ref": "Ecclesiastes 2:14",
+    "book": "Ecclesiastes",
     "translation": "Esv",
     "translation_label": "English Standard Version",
     "source": {
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2014%3A15&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%202%3A14&version=ESV"
   }
 }
