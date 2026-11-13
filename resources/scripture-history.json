@@ -44,20 +44,21 @@
     "Proverbs 29:25",
     "Proverbs 28:20",
     "Proverbs 14:15",
-    "Ecclesiastes 2:14"
+    "Ecclesiastes 2:14",
+    "Proverbs 21:23"
   ],
   "current": {
-    "date": "2026-11-12",
-    "text": "The wise person has his eyes in his head, but the fool walks in darkness. And yet I perceived that the same event happens to all of them.",
-    "focus": "Ecclesiastes 2:14",
-    "ref": "Ecclesiastes 2:14",
-    "book": "Ecclesiastes",
+    "date": "2026-11-13",
+    "text": "Whoever keeps his mouth and his tongue keeps himself out of trouble.",
+    "focus": "Proverbs 21:23",
+    "ref": "Proverbs 21:23",
+    "book": "Proverbs",
     "translation": "Esv",
     "translation_label": "English Standard Version",
     "source": {
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%202%3A14&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2021%3A23&version=ESV"
   }
 }
