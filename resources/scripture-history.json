@@ -46,20 +46,21 @@
     "Proverbs 14:15",
     "Ecclesiastes 2:14",
     "Proverbs 21:23",
-    "Ecclesiastes 10:12"
+    "Ecclesiastes 10:12",
+    "Proverbs 13:21"
   ],
   "current": {
-    "date": "2026-11-14",
-    "text": "The words of a wise man’s mouth win him favor, but the lips of a fool consume him.",
-    "focus": "Ecclesiastes 10:12",
-    "ref": "Ecclesiastes 10:12",
-    "book": "Ecclesiastes",
+    "date": "2026-11-15",
+    "text": "Disaster pursues sinners, but the righteous are rewarded with good.",
+    "focus": "Proverbs 13:21",
+    "ref": "Proverbs 13:21",
+    "book": "Proverbs",
     "translation": "Esv",
     "translation_label": "English Standard Version",
     "source": {
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%2010%3A12&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2013%3A21&version=ESV"
   }
 }

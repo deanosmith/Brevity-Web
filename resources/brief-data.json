@@ -1,13 +1,636 @@
 {
- "date": "Saturday, November 14",
- "iso_date": "2026-11-14",
- "generated_at": "2026-11-14 05:07 CET",
- "generated_iso": "2026-11-14T05:07:31+01:00",
- "generated_clock": "5:07 am",
- "year_percent": 87.12328767123287,
- "day_of_year": 318,
+ "date": "Sunday, November 15",
+ "iso_date": "2026-11-15",
+ "generated_at": "2026-11-15 05:01 CET",
+ "generated_iso": "2026-11-15T05:01:02+01:00",
+ "generated_clock": "5:01 am",
+ "year_percent": 87.3972602739726,
+ "day_of_year": 319,
  "days_in_year": 365,
- "weather": null,
+ "weather": {
+  "location": "Copenhagen",
+  "timezone": "Europe/Copenhagen",
+  "source": {
+   "name": "Open-Meteo",
+   "url": "https://open-meteo.com/",
+   "location": "Copenhagen"
+  },
+  "today": {
+   "date": "2026-11-15",
+   "label": "Today",
+   "high": 8,
+   "low": 6,
+   "rain_chance": 44,
+   "rain_sum_mm": 0.4,
+   "rain_peak_time": "8:00 pm",
+   "rain_timeline": {
+    "points": [
+     {
+      "hour": 6,
+      "precip": 0,
+      "label": "6 am",
+      "clock": "6:00 am"
+     },
+     {
+      "hour": 7,
+      "precip": 0,
+      "label": null,
+      "clock": "7:00 am"
+     },
+     {
+      "hour": 8,
+      "precip": 0,
+      "label": null,
+      "clock": "8:00 am"
+     },
+     {
+      "hour": 9,
+      "precip": 0,
+      "label": "9 am",
+      "clock": "9:00 am"
+     },
+     {
+      "hour": 10,
+      "precip": 0,
+      "label": null,
+      "clock": "10:00 am"
+     },
+     {
+      "hour": 11,
+      "precip": 0,
+      "label": null,
+      "clock": "11:00 am"
+     },
+     {
+      "hour": 12,
+      "precip": 0,
+      "label": "12 pm",
+      "clock": "12:00 pm"
+     },
+     {
+      "hour": 13,
+      "precip": 0,
+      "label": null,
+      "clock": "1:00 pm"
+     },
+     {
+      "hour": 14,
+      "precip": 0,
+      "label": null,
+      "clock": "2:00 pm"
+     },
+     {
+      "hour": 15,
+      "precip": 0,
+      "label": "3 pm",
+      "clock": "3:00 pm"
+     },
+     {
+      "hour": 16,
+      "precip": 2,
+      "label": null,
+      "clock": "4:00 pm"
+     },
+     {
+      "hour": 17,
+      "precip": 15,
+      "label": null,
+      "clock": "5:00 pm"
+     },
+     {
+      "hour": 18,
+      "precip": 32,
+      "label": "6 pm",
+      "clock": "6:00 pm"
+     },
+     {
+      "hour": 19,
+      "precip": 43,
+      "label": null,
+      "clock": "7:00 pm"
+     },
+     {
+      "hour": 20,
+      "precip": 44,
+      "label": null,
+      "clock": "8:00 pm"
+     },
+     {
+      "hour": 21,
+      "precip": 39,
+      "label": "9 pm",
+      "clock": "9:00 pm"
+     },
+     {
+      "hour": 22,
+      "precip": 33,
+      "label": null,
+      "clock": "10:00 pm"
+     },
+     {
+      "hour": 23,
+      "precip": 25,
+      "label": "11 pm",
+      "clock": "11:00 pm"
+     }
+    ],
+    "max_precip": 44,
+    "peak_time": "8:00 pm",
+    "color": "#3b82ae"
+   },
+   "wind_max": 22,
+   "wind_dir": 197,
+   "wind_color": "#bb3687",
+   "uv_max": 1.2,
+   "sunrise": "7:44 am",
+   "sunset": "4:03 pm",
+   "code": 51,
+   "condition": "Light Drizzle",
+   "icon": "🌦️",
+   "color": "#4682B4",
+   "current": {
+    "temp": 6,
+    "feels_like": 2,
+    "code": 3,
+    "condition": "Overcast",
+    "icon": "☁️",
+    "color": "#87CEEB",
+    "wind": 15,
+    "wind_dir": 205,
+    "precip": 0
+   },
+   "morning": {
+    "temp": 7,
+    "feels_like": 3,
+    "precip": 0,
+    "wind": 22,
+    "wind_dir": 188,
+    "wind_color": "#bb3687",
+    "color": "#87CEEB",
+    "condition": "Overcast",
+    "icon": "☁️",
+    "code": 3
+   },
+   "afternoon": {
+    "temp": 7,
+    "feels_like": 3,
+    "precip": 15,
+    "wind": 21,
+    "wind_dir": 182,
+    "wind_color": "#b7318a",
+    "color": "#87CEEB",
+    "condition": "Overcast",
+    "icon": "☁️",
+    "code": 3
+   },
+   "evening": {
+    "temp": 7,
+    "feels_like": 2,
+    "precip": 44,
+    "wind": 22,
+    "wind_dir": 205,
+    "wind_color": "#b93389",
+    "color": "#87CEEB",
+    "condition": "Overcast",
+    "icon": "☁️",
+    "code": 3
+   },
+   "sun_path": {
+    "sunrise": "7:44 am",
+    "sunset": "4:03 pm",
+    "sun_x": 20.0,
+    "sun_y": 66.0,
+    "is_day": false,
+    "daylight": "8h 19m",
+    "rain_peak": "8:00 pm",
+    "rain_on_arc": false,
+    "rain_x": 230.0,
+    "rain_y": 58.0,
+    "cy": 58,
+    "start_x": 20.0,
+    "end_x": 220.0,
+    "arc_d": "M20 58 A100 44 0 0 1 220 58",
+    "sky_d": "M20 58 A100 44 0 0 1 220 58 L220 58 L20 58 Z",
+    "horizon_x1": 8,
+    "horizon_x2": 232,
+    "tick_y1": 53,
+    "tick_y2": 62,
+    "sunrise_clock_x": 42.0,
+    "sunset_clock_x": 198.0,
+    "clock_y": 50
+   },
+   "dials": {
+    "rain": {
+     "progress": 0.44,
+     "color": "#3b82ae",
+     "value": "44%",
+     "label": "Rain"
+    },
+    "wind": {
+     "progress": 0.44,
+     "color": "#bb3687",
+     "value": "22 km/h",
+     "label": "Wind"
+    },
+    "uv": {
+     "progress": 0.10909090909090909,
+     "color": "#84c249",
+     "value": "1.2",
+     "label": "UV"
+    },
+    "temp": {
+     "high": 8,
+     "low": 6,
+     "high_color": "#9fcebf",
+     "low_color": "#74cae7",
+     "high_progress": 0.37142857142857144,
+     "low_progress": 0.3142857142857143,
+     "label": "Temp"
+    }
+   },
+   "high_color": "#9fcebf",
+   "low_color": "#74cae7",
+   "rain_color": "#3b82ae"
+  },
+  "upcoming": [
+   {
+    "date": "2026-11-16",
+    "label": "Tomorrow",
+    "high": 9,
+    "low": 6,
+    "rain_chance": 90,
+    "wind_max": 27,
+    "code": 55,
+    "condition": "Heavy Drizzle",
+    "icon": "🌧️",
+    "color": "#4682B4",
+    "high_color": "#bad0a6",
+    "low_color": "#6dcaed",
+    "rain_color": "#3fb8f0",
+    "rain_progress": 0.9,
+    "rain_timeline": {
+     "points": [
+      {
+       "hour": 0,
+       "precip": 17,
+       "label": "12 am",
+       "clock": "12:00 am"
+      },
+      {
+       "hour": 1,
+       "precip": 16,
+       "label": null,
+       "clock": "1:00 am"
+      },
+      {
+       "hour": 2,
+       "precip": 29,
+       "label": null,
+       "clock": "2:00 am"
+      },
+      {
+       "hour": 3,
+       "precip": 50,
+       "label": null,
+       "clock": "3:00 am"
+      },
+      {
+       "hour": 4,
+       "precip": 67,
+       "label": null,
+       "clock": "4:00 am"
+      },
+      {
+       "hour": 5,
+       "precip": 79,
+       "label": null,
+       "clock": "5:00 am"
+      },
+      {
+       "hour": 6,
+       "precip": 87,
+       "label": null,
+       "clock": "6:00 am"
+      },
+      {
+       "hour": 7,
+       "precip": 90,
+       "label": null,
+       "clock": "7:00 am"
+      },
+      {
+       "hour": 8,
+       "precip": 84,
+       "label": null,
+       "clock": "8:00 am"
+      },
+      {
+       "hour": 9,
+       "precip": 73,
+       "label": "9 am",
+       "clock": "9:00 am"
+      },
+      {
+       "hour": 10,
+       "precip": 65,
+       "label": null,
+       "clock": "10:00 am"
+      },
+      {
+       "hour": 11,
+       "precip": 64,
+       "label": null,
+       "clock": "11:00 am"
+      },
+      {
+       "hour": 12,
+       "precip": 67,
+       "label": "12 pm",
+       "clock": "12:00 pm"
+      },
+      {
+       "hour": 13,
+       "precip": 67,
+       "label": null,
+       "clock": "1:00 pm"
+      },
+      {
+       "hour": 14,
+       "precip": 63,
+       "label": null,
+       "clock": "2:00 pm"
+      },
+      {
+       "hour": 15,
+       "precip": 58,
+       "label": "3 pm",
+       "clock": "3:00 pm"
+      },
+      {
+       "hour": 16,
+       "precip": 51,
+       "label": null,
+       "clock": "4:00 pm"
+      },
+      {
+       "hour": 17,
+       "precip": 41,
+       "label": null,
+       "clock": "5:00 pm"
+      },
+      {
+       "hour": 18,
+       "precip": 30,
+       "label": "6 pm",
+       "clock": "6:00 pm"
+      },
+      {
+       "hour": 19,
+       "precip": 22,
+       "label": null,
+       "clock": "7:00 pm"
+      },
+      {
+       "hour": 20,
+       "precip": 18,
+       "label": null,
+       "clock": "8:00 pm"
+      },
+      {
+       "hour": 21,
+       "precip": 17,
+       "label": "9 pm",
+       "clock": "9:00 pm"
+      },
+      {
+       "hour": 22,
+       "precip": 16,
+       "label": null,
+       "clock": "10:00 pm"
+      },
+      {
+       "hour": 23,
+       "precip": 16,
+       "label": "11 pm",
+       "clock": "11:00 pm"
+      }
+     ],
+     "max_precip": 90,
+     "peak_time": "7:00 am",
+     "color": "#3fb8f0"
+    },
+    "rain_peak_time": "7:00 am"
+   },
+   {
+    "date": "2026-11-17",
+    "label": "In 2 Days",
+    "high": 6,
+    "low": 5,
+    "rain_chance": 55,
+    "wind_max": 19,
+    "code": 51,
+    "condition": "Light Drizzle",
+    "icon": "🌦️",
+    "color": "#4682B4",
+    "high_color": "#7ecbdd",
+    "low_color": "#5ac7ff",
+    "rain_color": "#3c8fbe",
+    "rain_progress": 0.55,
+    "rain_timeline": {
+     "points": [
+      {
+       "hour": 0,
+       "precip": 16,
+       "label": "12 am",
+       "clock": "12:00 am"
+      },
+      {
+       "hour": 1,
+       "precip": 16,
+       "label": null,
+       "clock": "1:00 am"
+      },
+      {
+       "hour": 2,
+       "precip": 16,
+       "label": null,
+       "clock": "2:00 am"
+      },
+      {
+       "hour": 3,
+       "precip": 16,
+       "label": null,
+       "clock": "3:00 am"
+      },
+      {
+       "hour": 4,
+       "precip": 16,
+       "label": null,
+       "clock": "4:00 am"
+      },
+      {
+       "hour": 5,
+       "precip": 16,
+       "label": null,
+       "clock": "5:00 am"
+      },
+      {
+       "hour": 6,
+       "precip": 15,
+       "label": null,
+       "clock": "6:00 am"
+      },
+      {
+       "hour": 7,
+       "precip": 14,
+       "label": null,
+       "clock": "7:00 am"
+      },
+      {
+       "hour": 8,
+       "precip": 12,
+       "label": null,
+       "clock": "8:00 am"
+      },
+      {
+       "hour": 9,
+       "precip": 8,
+       "label": "9 am",
+       "clock": "9:00 am"
+      },
+      {
+       "hour": 10,
+       "precip": 6,
+       "label": null,
+       "clock": "10:00 am"
+      },
+      {
+       "hour": 11,
+       "precip": 4,
+       "label": null,
+       "clock": "11:00 am"
+      },
+      {
+       "hour": 12,
+       "precip": 3,
+       "label": "12 pm",
+       "clock": "12:00 pm"
+      },
+      {
+       "hour": 13,
+       "precip": 4,
+       "label": null,
+       "clock": "1:00 pm"
+      },
+      {
+       "hour": 14,
+       "precip": 7,
+       "label": null,
+       "clock": "2:00 pm"
+      },
+      {
+       "hour": 15,
+       "precip": 13,
+       "label": "3 pm",
+       "clock": "3:00 pm"
+      },
+      {
+       "hour": 16,
+       "precip": 18,
+       "label": null,
+       "clock": "4:00 pm"
+      },
+      {
+       "hour": 17,
+       "precip": 23,
+       "label": null,
+       "clock": "5:00 pm"
+      },
+      {
+       "hour": 18,
+       "precip": 29,
+       "label": "6 pm",
+       "clock": "6:00 pm"
+      },
+      {
+       "hour": 19,
+       "precip": 35,
+       "label": null,
+       "clock": "7:00 pm"
+      },
+      {
+       "hour": 20,
+       "precip": 42,
+       "label": null,
+       "clock": "8:00 pm"
+      },
+      {
+       "hour": 21,
+       "precip": 50,
+       "label": "9 pm",
+       "clock": "9:00 pm"
+      },
+      {
+       "hour": 22,
+       "precip": 55,
+       "label": null,
+       "clock": "10:00 pm"
+      },
+      {
+       "hour": 23,
+       "precip": 55,
+       "label": "11 pm",
+       "clock": "11:00 pm"
+      }
+     ],
+     "max_precip": 55,
+     "peak_time": "10:00 pm",
+     "color": "#3c8fbe"
+    },
+    "rain_peak_time": "10:00 pm"
+   }
+  ],
+  "morning": {
+   "temp": 7,
+   "feels_like": 3,
+   "precip": 0,
+   "wind": 22,
+   "wind_dir": 188,
+   "wind_color": "#bb3687",
+   "color": "#87CEEB",
+   "condition": "Overcast",
+   "icon": "☁️",
+   "code": 3
+  },
+  "afternoon": {
+   "temp": 7,
+   "feels_like": 3,
+   "precip": 15,
+   "wind": 21,
+   "wind_dir": 182,
+   "wind_color": "#b7318a",
+   "color": "#87CEEB",
+   "condition": "Overcast",
+   "icon": "☁️",
+   "code": 3
+  },
+  "evening": {
+   "temp": 7,
+   "feels_like": 2,
+   "precip": 44,
+   "wind": 22,
+   "wind_dir": 205,
+   "wind_color": "#b93389",
+   "color": "#87CEEB",
+   "condition": "Overcast",
+   "icon": "☁️",
+   "code": 3
+  },
+  "sunrise": "7:44 am",
+  "sunset": "4:03 pm",
+  "daily_precip": 44,
+  "rain_peak_time": "8:00 pm"
+ },
  "stocks": {
   "Tesla": {
    "symbol": "TSLA",
@@ -135,17 +758,17 @@
    "source_name": "Bitcoin USD",
    "currency": "USD",
    "currency_symbol": "$",
-   "as_of": "2026-11-12",
-   "as_of_label": "Nov 12, 2026",
-   "price": 71342.96875,
-   "change": -2621.5,
-   "percent": -3.5442693556830287,
+   "as_of": "2026-11-13",
+   "as_of_label": "Nov 13, 2026",
+   "price": 68249.2734375,
+   "change": -3093.6953125,
+   "percent": -4.336370306288943,
    "color": "red",
    "arrow": "↓",
-   "percent_7d": -6.056133206701815,
+   "percent_7d": -9.898297239151711,
    "color_7d": "red",
    "arrow_7d": "↓",
-   "percent_1m": -12.7437221038663,
+   "percent_1m": -17.86609209926575,
    "color_1m": "red",
    "arrow_1m": "↓"
   },
@@ -155,21 +778,21 @@
    "source_name": "Vanguard S&P 500 UCITS ETF",
    "currency": "EUR",
    "currency_symbol": "€",
-   "as_of": "2026-11-12",
-   "as_of_label": "Nov 12, 2026",
-   "price": 130.8159942626953,
-   "change": 0.761993408203125,
-   "percent": 0.5859053956022953,
-   "color": "green",
-   "arrow": "↑",
-   "percent_7d": 3.588734759214069,
+   "as_of": "2026-11-13",
+   "as_of_label": "Nov 13, 2026",
+   "price": 129.4250030517578,
+   "change": -1.3909912109375,
+   "percent": -1.0633189150741085,
+   "color": "red",
+   "arrow": "↓",
+   "percent_7d": 2.437771024810432,
    "color_7d": "green",
    "arrow_7d": "↑",
-   "percent_1m": -1.2880788971640502,
+   "percent_1m": -1.8630295733469984,
    "color_1m": "red",
    "arrow_1m": "↓"
   },
-  "average_percent": -1.7701870954039869
+  "average_percent": -2.075352753064277
  },
  "space_news": [
   {
@@ -211,132 +834,132 @@
  ],
  "copenhagen": [
   {
-   "headline": "EU demands ceasefire before Russia talks. Europe must insist on an immediate ceasefire in Ukraine before any broader negotiations with Russia, EU foreign policy chief Kaja Kallas warned.",
-   "ai_summary": "EU demands ceasefire before Russia talks. Europe must insist on an immediate ceasefire in Ukraine before any broader negotiations with Russia, EU foreign policy chief Kaja Kallas warned.",
-   "link": "https://cphpost.dk/2026-11-13/global/eu-foreign-policy-chief-says-ceasefire-must-precede-wider-talks-with-russia/",
+   "headline": "US flight chaos. Thousands of travelers risk spending the night at American airports after the longest flight ban since 9/11.",
+   "ai_summary": "US flight chaos. Thousands of travelers risk spending the night at American airports after the longest flight ban since 9/11.",
+   "link": "https://cphpost.dk/2026-11-14/global/thousands-stranded-at-airports-across-the-us/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "Russia open to Europe in Ukraine talks. Kremlin says European countries can join Ukraine peace negotiations only if they show genuine willingness to contribute to the process.",
-   "ai_summary": "Russia open to Europe in Ukraine talks. Kremlin says European countries can join Ukraine peace negotiations only if they show genuine willingness to contribute to the process.",
-   "link": "https://cphpost.dk/2026-11-13/global/russia-says-europe-could-join-ukraine-peace-talks-under-conditions/",
+   "headline": "Von der Leyen AI push. Europe must invest 500 billion euros in computing power to compete in artificial intelligence, says EU Commission chief.",
+   "ai_summary": "Von der Leyen AI push. Europe must invest 500 billion euros in computing power to compete in artificial intelligence, says EU Commission chief.",
+   "link": "https://cphpost.dk/2026-11-14/global/von-der-leyen-europe-must-invest-e500-billion-in-ai/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "Danish MP slammed for Russia Today interview. Independent MP Jacob Harris faces criticism after appearing on Kremlin-backed Russia Today and calling for understanding Russia’s security interests.",
-   "ai_summary": "Danish MP slammed for Russia Today interview. Independent MP Jacob Harris faces criticism after appearing on Kremlin-backed Russia Today and calling for understanding Russia’s security interests.",
-   "link": "https://cphpost.dk/2026-11-13/news/round-up/danish-lawmaker-criticized-after-interview-with-russia-today/",
+   "headline": "Trump-Putin-Xi summit. US President Trump will hold historic trilateral meeting with Putin and Xi next week, White House confirms.",
+   "ai_summary": "Trump-Putin-Xi summit. US President Trump will hold historic trilateral meeting with Putin and Xi next week, White House confirms.",
+   "link": "https://cphpost.dk/2026-11-14/global/trump-in-historic-meeting-with-putin-and-xi-thursday/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "Microsoft stabilizes after major global outage. Services are recovering after a worldwide Microsoft outage hit Outlook, Teams and Copilot on Thursday evening Danish time.",
-   "ai_summary": "Microsoft stabilizes after major global outage. Services are recovering after a worldwide Microsoft outage hit Outlook, Teams and Copilot on Thursday evening Danish time.",
-   "link": "https://cphpost.dk/2026-11-13/news/round-up/microsoft-reports-improvements-during-major-global-service-outage/",
+   "headline": "Europe unites on Ukraine. France, UK, Germany, Poland and Italy will represent Europe in upcoming Ukraine peace negotiations.",
+   "ai_summary": "Europe unites on Ukraine. France, UK, Germany, Poland and Italy will represent Europe in upcoming Ukraine peace negotiations.",
+   "link": "https://cphpost.dk/2026-11-14/global/europe-has-set-its-team-for-ukraine-peace-talks/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "Denmark’s electric car fleet tops 750,000. Fully electric vehicles in Denmark have now passed 750,000, with Tesla Model Y remaining the most popular model.",
-   "ai_summary": "Denmark’s electric car fleet tops 750,000. Fully electric vehicles in Denmark have now passed 750,000, with Tesla Model Y remaining the most popular model.",
-   "link": "https://cphpost.dk/2026-11-13/news/round-up/denmarks-electric-car-fleet-passes-750000-vehicles/",
+   "headline": "FAA ban overview. US flight ban became longest since 9/11, grounding takeoffs for over four hours and stranding thousands.",
+   "ai_summary": "FAA ban overview. US flight ban became longest since 9/11, grounding takeoffs for over four hours and stranding thousands.",
+   "link": "https://cphpost.dk/2026-11-14/global/overview-us-flight-ban-was-longest-since-9-11/",
    "source": "The Copenhagen Post"
   },
   {
-   "headline": "Denmark launches 40M DKK green economy project. Denmark is funding a 40 million DKK initiative to help developing countries model the economic impact of climate policies.",
-   "ai_summary": "Denmark launches 40M DKK green economy project. Denmark is funding a 40 million DKK initiative to help developing countries model the economic impact of climate policies.",
-   "link": "https://cphpost.dk/2026-11-13/news/round-up/denmark-launches-40-million-dkk-project-for-green-economic-models/",
+   "headline": "Novo hemophilia approval. Novo Nordisk wins EU approval for new hemophilia A drug Frehemgo developed with Genmab.",
+   "ai_summary": "Novo hemophilia approval. Novo Nordisk wins EU approval for new hemophilia A drug Frehemgo developed with Genmab.",
+   "link": "https://cphpost.dk/2026-11-14/business-education/business-business-education/novo-wins-eu-approval-for-hemophilia-drug/",
    "source": "The Copenhagen Post"
   }
  ],
  "south_africa": [],
  "scripture": {
-  "text": "The words of a wise man’s mouth win him favor, but the lips of a fool consume him.",
-  "focus": "Ecclesiastes 10:12",
-  "ref": "Ecclesiastes 10:12",
-  "book": "Ecclesiastes",
+  "text": "Disaster pursues sinners, but the righteous are rewarded with good.",
+  "focus": "Proverbs 13:21",
+  "ref": "Proverbs 13:21",
+  "book": "Proverbs",
   "translation": "Esv",
   "translation_label": "English Standard Version",
   "source": {
    "name": "English Standard Version",
    "url": "https://www.esv.org/"
   },
-  "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%2010%3A12&version=ESV"
+  "link": "https://www.biblegateway.com/passage/?search=Proverbs%2013%3A21&version=ESV"
  },
  "x_trending": {
   "topics": [
    {
-    "name": "Tesla Opens Cybercab Orders to Select Customers at $29,990",
-    "headline": "Tesla Opens Cybercab Orders to Select Customers at $29,990",
+    "name": "SpaceX Catches Starship Upper Stage with Tower Arms for First Time",
+    "headline": "SpaceX Catches Starship Upper Stage with Tower Arms for First Time",
     "summary": "",
     "why": "",
     "sentiment": null,
     "accounts": [],
-    "search_term": "Tesla Opens Cybercab Orders",
-    "post_count": "31K posts",
+    "search_term": "SpaceX Catches Starship Upper",
+    "post_count": "22K posts",
     "category": "News",
     "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
-    "trending_since": null,
-    "link": "https://x.com/search?q=Tesla%20Opens%20Cybercab%20Orders&src=typed_query",
-    "source": "News"
-   },
-   {
-    "name": "FAA Issues Nationwide Ground Stop After Air Traffic Telecom Outage",
-    "headline": "FAA Issues Nationwide Ground Stop After Air Traffic Telecom Outage",
-    "summary": "",
-    "why": "",
-    "sentiment": null,
-    "accounts": [],
-    "search_term": "FAA Issues Nationwide Ground",
-    "post_count": "16K posts",
-    "category": "Other",
-    "category_style": "--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;",
     "trending_since": "Now",
-    "link": "https://x.com/search?q=FAA%20Issues%20Nationwide%20Ground&src=typed_query",
-    "source": "Other"
-   },
-   {
-    "name": "Gen Z Switches to Cigarettes as Plant-Based Vape Alternative",
-    "headline": "Gen Z Switches to Cigarettes as Plant-Based Vape Alternative",
-    "summary": "",
-    "why": "",
-    "sentiment": null,
-    "accounts": [],
-    "search_term": "Gen Z Switches",
-    "post_count": "22K posts",
-    "category": "Other",
-    "category_style": "--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;",
-    "trending_since": null,
-    "link": "https://x.com/search?q=Gen%20Z%20Switches&src=typed_query",
-    "source": "Other"
-   },
-   {
-    "name": "Appeals Court Upholds Hamtramck's Flag Policy Limiting Pride Displays",
-    "headline": "Appeals Court Upholds Hamtramck's Flag Policy Limiting Pride Displays",
-    "summary": "",
-    "why": "",
-    "sentiment": null,
-    "accounts": [],
-    "search_term": "Appeals Court Upholds Hamtramck's",
-    "post_count": "12K posts",
-    "category": "News",
-    "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
-    "trending_since": null,
-    "link": "https://x.com/search?q=Appeals%20Court%20Upholds%20Hamtramck%27s&src=typed_query",
+    "link": "https://x.com/search?q=SpaceX%20Catches%20Starship%20Upper&src=typed_query",
     "source": "News"
    },
    {
-    "name": "Photos of Locked Toothpaste Spark Retail Theft Debate",
-    "headline": "Photos of Locked Toothpaste Spark Retail Theft Debate",
+    "name": "SpaceX Mechazilla Catches Orbital Starship for First Time",
+    "headline": "SpaceX Mechazilla Catches Orbital Starship for First Time",
     "summary": "",
     "why": "",
     "sentiment": null,
     "accounts": [],
-    "search_term": "Photos",
-    "post_count": "22K posts",
-    "category": "Other",
-    "category_style": "--kw-bg: #3b545a; --kw-border: #4f6f77; --kw-text: #e0f3f6;",
+    "search_term": "SpaceX Mechazilla Catches Orbital",
+    "post_count": "27K posts",
+    "category": "News",
+    "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
+    "trending_since": "Now",
+    "link": "https://x.com/search?q=SpaceX%20Mechazilla%20Catches%20Orbital&src=typed_query",
+    "source": "News"
+   },
+   {
+    "name": "SpaceX Catches Returning Starship with Tower Arms for First Time",
+    "headline": "SpaceX Catches Returning Starship with Tower Arms for First Time",
+    "summary": "",
+    "why": "",
+    "sentiment": null,
+    "accounts": [],
+    "search_term": "SpaceX Catches Returning Starship",
+    "post_count": "41K posts",
+    "category": "News",
+    "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
+    "trending_since": "Now",
+    "link": "https://x.com/search?q=SpaceX%20Catches%20Returning%20Starship&src=typed_query",
+    "source": "News"
+   },
+   {
+    "name": "SpaceX Catches Orbital Starship with Mechazilla Arms in Historic First",
+    "headline": "SpaceX Catches Orbital Starship with Mechazilla Arms in Historic First",
+    "summary": "",
+    "why": "",
+    "sentiment": null,
+    "accounts": [],
+    "search_term": "SpaceX Catches Orbital Starship",
+    "post_count": "29K posts",
+    "category": "News",
+    "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
+    "trending_since": "Now",
+    "link": "https://x.com/search?q=SpaceX%20Catches%20Orbital%20Starship&src=typed_query",
+    "source": "News"
+   },
+   {
+    "name": "SpaceX Catches Returning Starship Upper Stage for First Time",
+    "headline": "SpaceX Catches Returning Starship Upper Stage for First Time",
+    "summary": "",
+    "why": "",
+    "sentiment": null,
+    "accounts": [],
+    "search_term": "SpaceX Catches Returning Starship",
+    "post_count": "328K posts",
+    "category": "News",
+    "category_style": "--kw-bg: #294f3a; --kw-border: #3b6b4c; --kw-text: #d9f4e2;",
     "trending_since": null,
-    "link": "https://x.com/search?q=Photos&src=typed_query",
-    "source": "Other"
+    "link": "https://x.com/search?q=SpaceX%20Catches%20Returning%20Starship&src=typed_query",
+    "source": "News"
    }
   ],
   "source": "X Personalized Trends"
