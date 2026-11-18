@@ -49,20 +49,21 @@
     "Ecclesiastes 10:12",
     "Proverbs 13:21",
     "Proverbs 19:29",
-    "Proverbs 23:3"
+    "Proverbs 23:3",
+    "Ecclesiastes 7:15"
   ],
   "current": {
-    "date": "2026-11-17",
-    "text": "Do not desire his delicacies, for they are deceptive food.",
-    "focus": "Proverbs 23:3",
-    "ref": "Proverbs 23:3",
-    "book": "Proverbs",
+    "date": "2026-11-18",
+    "text": "In my vain life I have seen everything. There is a righteous man who perishes in his righteousness, and there is a wicked man who prolongs his life in his evildoing.",
+    "focus": "Ecclesiastes 7:15",
+    "ref": "Ecclesiastes 7:15",
+    "book": "Ecclesiastes",
     "translation": "Esv",
     "translation_label": "English Standard Version",
     "source": {
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2023%3A3&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%207%3A15&version=ESV"
   }
 }
