@@ -50,20 +50,21 @@
     "Proverbs 13:21",
     "Proverbs 19:29",
     "Proverbs 23:3",
-    "Ecclesiastes 7:15"
+    "Ecclesiastes 7:15",
+    "Proverbs 13:20"
   ],
   "current": {
-    "date": "2026-11-18",
-    "text": "In my vain life I have seen everything. There is a righteous man who perishes in his righteousness, and there is a wicked man who prolongs his life in his evildoing.",
-    "focus": "Ecclesiastes 7:15",
-    "ref": "Ecclesiastes 7:15",
-    "book": "Ecclesiastes",
+    "date": "2026-11-19",
+    "text": "Whoever walks with the wise becomes wise, but the companion of fools will suffer harm.",
+    "focus": "Proverbs 13:20",
+    "ref": "Proverbs 13:20",
+    "book": "Proverbs",
     "translation": "Esv",
     "translation_label": "English Standard Version",
     "source": {
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%207%3A15&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2013%3A20&version=ESV"
   }
 }
