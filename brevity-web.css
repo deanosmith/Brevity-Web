@@ -185,10 +185,6 @@ a:focus-visible {
     .south-africa-panel {
         grid-column: span 12;
     }
-
-    .space-panel .news-list {
-        grid-template-columns: 1fr;
-    }
 }
 
 @media (max-width: 720px) {

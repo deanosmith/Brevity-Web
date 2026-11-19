@@ -31,10 +31,6 @@
     {%- elif name == "globe" -%}
     <circle cx="12" cy="12" r="9" />
     <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
-    {%- elif name == "rocket" -%}
-    <path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2" />
-    <path d="M9 15l-3-3c1.5-4 5-9 12-9 0 7-5 10.5-9 12z" />
-    <circle cx="14.5" cy="9.5" r="1.5" />
     {%- elif name == "external" -%}
     <path d="M7 17L17 7" />
     <path d="M8 7h9v9" />
@@ -405,7 +401,7 @@
 
             <div class="stack">
                 <section class="panel markets-panel" id="markets">
-                    {{ panel_head("Markets", "Latest Completed Close", "markets") }}
+                    {{ panel_head("Markets", "Latest Daily Prices", "markets") }}
                     <div class="panel-body">
                         <div class="market-summary">
                             <span class="market-summary-label">Average Day Move</span>
@@ -437,7 +433,8 @@
                                             "{:,.2f}".format(data.price) }}{% else %}—{% endif %}</span>
                                     </div>
                                     {%- if data.as_of_label %}
-                                    <div class="stock-as-of">Close {{ data.as_of_label }}</div>
+                                    <div class="stock-as-of">{{ "Rate" if data.symbol == "XAG" else "Close" }} {{
+                                        data.as_of_label }}</div>
                                     {%- endif %}
                                 </div>
                                 <div class="stock-metrics">
@@ -526,8 +523,6 @@
             {{ news_panel("south-africa", "South Africa", "Global Business And Energy", "globe", south_africa, "No
             Recent
             South Africa Business Or Energy Stories Available", "south-africa-panel") }}
-            {{ news_panel("space", "Space News", "Orbit, Launch, Industry", "rocket", space_news, "No space stories
-            available", "space-panel") }}
         </main>
 
         <footer class="site-footer">

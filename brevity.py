@@ -141,16 +141,15 @@ WEATHER_ICONS = {
 }
 
 # General market watchlist. Prices only — no anchored portfolio baselines.
-# Display name -> Yahoo ticker.
+# Display name -> Yahoo ticker, or XAG for the spot silver reference rate.
 STOCK_TICKERS = {
+    "S&P": "VUSA.AS",
+    "Space X": "SPCX",
     "Tesla": "TSLA",
-    "SPCX": "SPCX",
     "Nvidia": "NVDA",
     "Oklo": "OKLO",
-    "Micron": "MU",
-    "Palantir": "PLTR",
-    "Bitcoin": "BTC-USD",
-    "Vanguard S&P 500": "VUSA.AS",
+    "Cleanspark Inc": "CLSK",
+    "Silver (XAG)": "XAG",
 }
 
 # Copenhagen local sources with fallbacks. World news intentionally removed.
@@ -159,11 +158,6 @@ COPENHAGEN_FEEDS = [
     "https://www.cphpost.dk/feed/",
     "https://cphpost.dk/category/news/feed/",
     "https://www.thelocal.dk/feeds/rss.php",
-]
-SPACE_FEEDS = [
-    "https://spacenews.com/feed/",
-    "https://spaceflightnow.com/feed/",
-    "https://www.nasaspaceflight.com/feed/",
 ]
 # Editorial business and energy desks, not government announcements or PR feeds.
 SOUTH_AFRICA_FEEDS = [
@@ -288,7 +282,7 @@ PLASMA_STOPS = (
 SITE_HTML_PATH = "index.html"
 # Snapshot of each run's data; `--render-only` rebuilds index.html from it with no API calls.
 BRIEF_DATA_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "resources", "brief-data.json")
-NEWS_KEYS = ("copenhagen", "south_africa", "space_news")
+NEWS_KEYS = ("copenhagen", "south_africa")
 # Refresh All in the browser dispatches this workflow (same as the 05:00 run).
 GITHUB_REPO = (os.getenv("GITHUB_REPOSITORY") or "deanosmith/Brevity-Web").strip()
 GITHUB_WORKFLOW = "main.yml"
@@ -1204,15 +1198,18 @@ def _segment_stats(hourly, start_h, end_h):
     }
 
 
-def _percent_from_closes(closes, target_date):
-    """Price change from the last close on or before a calendar boundary."""
-    if not closes:
-        return None
-    past = next((value for day, value in reversed(closes) if day <= target_date), None)
-    if past is None or past <= 0:
-        return None
-    current = closes[-1][1]
-    return ((current - past) / past) * 100
+def _close_on_or_before(closes, target_date):
+    """Find the last close on or before a calendar boundary."""
+    return next((value for day, value in reversed(closes) if day <= target_date), None)
+
+
+def _price_percent(current, past):
+    return ((current - past) / past) * 100 if past else None
+
+
+def _month_before(day):
+    prior_month = day.replace(day=1) - timedelta(days=1)
+    return prior_month.replace(day=min(day.day, prior_month.day))
 
 
 def _change_style(percent):
@@ -1421,8 +1418,41 @@ def fetch_weather():
         return None
 
 
+def _fetch_silver_rate(target_date):
+    """Read the most recent published weekday XAG/USD reference rate by date."""
+    for offset in range(7):
+        day = target_date - timedelta(days=offset)
+        if day.weekday() >= 5:
+            continue
+        stamp = day.isoformat()
+        urls = (
+            f"https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@{stamp}/v1/currencies/xag.json",
+            f"https://{stamp}.currency-api.pages.dev/v1/currencies/xag.json",
+        )
+        failed = False
+        for url in urls:
+            try:
+                response = HTTP_SESSION.get(url, timeout=REQUEST_TIMEOUT)
+                if response.status_code == 404:
+                    continue
+                response.raise_for_status()
+                data = response.json()
+                rates = data.get("xag") if isinstance(data, dict) else None
+                price = safe_number(rates.get("usd")) if isinstance(rates, dict) else None
+                if price is None or price <= 0 or data.get("date") != stamp:
+                    raise ValueError("Invalid dated XAG/USD reference rate")
+                return day, price
+            except (requests.RequestException, ValueError) as exc:
+                logger.warning("Silver rate fetch for %s failed: %s", stamp, exc)
+                failed = True
+        if failed:
+            return None
+    logger.warning("No published silver reference rate found on or just before %s", target_date)
+    return None
+
+
 def fetch_stocks():
-    """Fetch completed closes with day, calendar-week, and calendar-month price changes."""
+    """Fetch completed closes and spot silver rates with day, week, and month price changes."""
     logger.info("Fetching stocks...")
     stock_data = {}
     now_utc = datetime.now(timezone.utc)
@@ -1457,13 +1487,14 @@ def fetch_stocks():
                 raise ValueError("No completed finite closes returned")
             return closes, metadata
 
-        history = retry_call(f"Stock fetch {name}", lambda: _fetch_history("3mo"))
-        if history is None:
-            history = retry_call(f"Stock fetch {name} (1mo)", lambda: _fetch_history("1mo"), attempts=2)
-
+        is_silver = symbol == "XAG"
+        link = (
+            "https://www.tradingview.com/symbols/XAGUSD/"
+            if is_silver else f"https://finance.yahoo.com/quote/{quote(symbol, safe='')}/history/"
+        )
         empty_row = {
             "symbol": symbol,
-            "link": f"https://finance.yahoo.com/quote/{quote(symbol, safe='')}/history/",
+            "link": link,
             "source_name": None,
             "currency": None,
             "currency_symbol": None,
@@ -1481,34 +1512,51 @@ def fetch_stocks():
             "color_1m": "grey",
             "arrow_1m": "-",
         }
-        if not history:
-            stock_data[name] = empty_row
-            continue
-
         try:
-            closes, metadata = history
-            latest_day, current_close = closes[-1]
-            prev_close = closes[-2][1] if len(closes) > 1 else None
-            change = current_close - prev_close if prev_close else None
-            percent_change = (change / prev_close) * 100 if prev_close else None
-            # Use completed sessions at or before each calendar boundary.
-            month_ago = latest_day.replace(day=1) - timedelta(days=1)
-            month_ago = month_ago.replace(day=min(latest_day.day, month_ago.day))
-            percent_7d = _percent_from_closes(closes, latest_day - timedelta(days=7))
-            percent_1m = _percent_from_closes(closes, month_ago)
+            if is_silver:
+                latest = _fetch_silver_rate(now_utc.date() - timedelta(days=1))
+                if latest is None:
+                    stock_data[name] = empty_row
+                    continue
+                latest_day, current_close = latest
+                previous = _fetch_silver_rate(latest_day - timedelta(days=1))
+                week = _fetch_silver_rate(latest_day - timedelta(days=7))
+                month = _fetch_silver_rate(_month_before(latest_day))
+                prev_close = previous[1] if previous else None
+                week_close = week[1] if week else None
+                month_close = month[1] if month else None
+                source_name = "Silver Spot (USD) · Currency API Reference Rate"
+                currency = "USD"
+            else:
+                history = retry_call(f"Stock fetch {name}", lambda: _fetch_history("3mo"))
+                if history is None:
+                    history = retry_call(f"Stock fetch {name} (1mo)", lambda: _fetch_history("1mo"), attempts=2)
+                if history is None:
+                    stock_data[name] = empty_row
+                    continue
+                closes, metadata = history
+                latest_day, current_close = closes[-1]
+                prev_close = closes[-2][1] if len(closes) > 1 else None
+                # Use completed sessions at or before each calendar boundary.
+                week_close = _close_on_or_before(closes, latest_day - timedelta(days=7))
+                month_close = _close_on_or_before(closes, _month_before(latest_day))
+                source_name = metadata.get("longName") or metadata.get("shortName")
+                currency = metadata.get("currency")
+            percent_change = _price_percent(current_close, prev_close)
+            percent_7d = _price_percent(current_close, week_close)
+            percent_1m = _price_percent(current_close, month_close)
             color_day, arrow_day = _change_style(percent_change)
             color_7d, arrow_7d = _change_style(percent_7d)
             color_1m, arrow_1m = _change_style(percent_1m)
-            currency = metadata.get("currency")
             stock_data[name] = {
                 **empty_row,
-                "source_name": metadata.get("longName") or metadata.get("shortName"),
+                "source_name": source_name,
                 "currency": currency,
                 "currency_symbol": {"USD": "$", "EUR": "€"}.get(currency, currency or ""),
                 "as_of": latest_day.isoformat(),
                 "as_of_label": latest_day.strftime("%b %d, %Y").replace(" 0", " "),
                 "price": current_close,
-                "change": change,
+                "change": current_close - prev_close if prev_close else None,
                 "percent": percent_change,
                 "color": color_day,
                 "arrow": arrow_day,
@@ -1805,18 +1853,6 @@ def fetch_news(urls, limit=6, prompt="", label="feed", summarize=True):
     items = _build_news_items(chosen, summarize=summarize, hint=prompt)
     logger.info("%s assembled %s items", label, len(items))
     return items
-
-
-def fetch_space_news():
-    """Fetch space news. Headlines only, no AI summaries."""
-    logger.info("Fetching space news...")
-    return fetch_news(
-        SPACE_FEEDS,
-        limit=6,
-        label="space",
-        summarize=False,
-        prompt="",
-    )
 
 
 def fetch_copenhagen_events():
@@ -2812,7 +2848,6 @@ def build_brief_data(today=None):
     today = today or copenhagen_now().date()
     weather = fetch_weather()
     stocks = fetch_stocks()
-    space_news = fetch_space_news()
     copenhagen = fetch_copenhagen_events()
     south_africa = fetch_south_africa_news()
     x_trending = fetch_x_trending(limit=5)
@@ -2835,7 +2870,6 @@ def build_brief_data(today=None):
         "days_in_year": days_in_year,
         "weather": weather,
         "stocks": stocks,
-        "space_news": space_news,
         "copenhagen": copenhagen,
         "south_africa": south_africa,
         "scripture": scripture,

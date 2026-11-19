@@ -358,7 +358,6 @@ h1, h2, h3, p {
 .sky-panel { grid-column: span 5; align-self: start; --accent: #fbbf24; }
 .copenhagen-panel { grid-column: span 6; --accent: #fb7185; }
 .south-africa-panel { grid-column: span 6; --accent: #facc15; }
-.space-panel { grid-column: span 12; --accent: #22d3ee; }
 
 .panel {
     position: relative;
@@ -1271,10 +1270,6 @@ h2 {
     grid-template-columns: minmax(0, 1fr);
     gap: 10px;
     flex: 1 1 auto;
-}
-
-.space-panel .news-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .news-item {
