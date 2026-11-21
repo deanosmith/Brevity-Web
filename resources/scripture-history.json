@@ -52,13 +52,14 @@
     "Proverbs 23:3",
     "Ecclesiastes 7:15",
     "Proverbs 13:20",
-    "Proverbs 31:12"
+    "Proverbs 31:12",
+    "Proverbs 14:12"
   ],
   "current": {
-    "date": "2026-11-20",
-    "text": "She does him good, and not harm, all the days of her life.",
-    "focus": "Proverbs 31:12",
-    "ref": "Proverbs 31:12",
+    "date": "2026-11-21",
+    "text": "There is a way that seems right to a man, but its end is the way to death.",
+    "focus": "Proverbs 14:12",
+    "ref": "Proverbs 14:12",
     "book": "Proverbs",
     "translation": "Esv",
     "translation_label": "English Standard Version",
@@ -66,6 +67,6 @@
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2031%3A12&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2014%3A12&version=ESV"
   }
 }
