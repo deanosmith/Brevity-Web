@@ -54,20 +54,21 @@
     "Proverbs 13:20",
     "Proverbs 31:12",
     "Proverbs 14:12",
-    "Proverbs 1:25"
+    "Proverbs 1:25",
+    "Ecclesiastes 3:8"
   ],
   "current": {
-    "date": "2026-11-22",
-    "text": "because you have ignored all my counsel and would have none of my reproof,",
-    "focus": "Proverbs 1:25",
-    "ref": "Proverbs 1:25",
-    "book": "Proverbs",
+    "date": "2026-11-23",
+    "text": "a time to love, and a time to hate; a time for war, and a time for peace.",
+    "focus": "Ecclesiastes 3:8",
+    "ref": "Ecclesiastes 3:8",
+    "book": "Ecclesiastes",
     "translation": "Esv",
     "translation_label": "English Standard Version",
     "source": {
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%201%3A25&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%203%3A8&version=ESV"
   }
 }
