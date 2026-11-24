@@ -55,20 +55,21 @@
     "Proverbs 31:12",
     "Proverbs 14:12",
     "Proverbs 1:25",
-    "Ecclesiastes 3:8"
+    "Ecclesiastes 3:8",
+    "Proverbs 17:11"
   ],
   "current": {
-    "date": "2026-11-23",
-    "text": "a time to love, and a time to hate; a time for war, and a time for peace.",
-    "focus": "Ecclesiastes 3:8",
-    "ref": "Ecclesiastes 3:8",
-    "book": "Ecclesiastes",
+    "date": "2026-11-24",
+    "text": "An evil man seeks only rebellion, and a cruel messenger will be sent against him.",
+    "focus": "Proverbs 17:11",
+    "ref": "Proverbs 17:11",
+    "book": "Proverbs",
     "translation": "Esv",
     "translation_label": "English Standard Version",
     "source": {
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%203%3A8&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2017%3A11&version=ESV"
   }
 }
