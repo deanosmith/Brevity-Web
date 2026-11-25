@@ -56,20 +56,21 @@
     "Proverbs 14:12",
     "Proverbs 1:25",
     "Ecclesiastes 3:8",
-    "Proverbs 17:11"
+    "Proverbs 17:11",
+    "Ecclesiastes 2:1"
   ],
   "current": {
-    "date": "2026-11-24",
-    "text": "An evil man seeks only rebellion, and a cruel messenger will be sent against him.",
-    "focus": "Proverbs 17:11",
-    "ref": "Proverbs 17:11",
-    "book": "Proverbs",
+    "date": "2026-11-25",
+    "text": "I said in my heart, “Come now, I will test you with pleasure; enjoy yourself.” But behold, this also was vanity.",
+    "focus": "Ecclesiastes 2:1",
+    "ref": "Ecclesiastes 2:1",
+    "book": "Ecclesiastes",
     "translation": "Esv",
     "translation_label": "English Standard Version",
     "source": {
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2017%3A11&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%202%3A1&version=ESV"
   }
 }
