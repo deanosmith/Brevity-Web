@@ -57,20 +57,21 @@
     "Proverbs 1:25",
     "Ecclesiastes 3:8",
     "Proverbs 17:11",
-    "Ecclesiastes 2:1"
+    "Ecclesiastes 2:1",
+    "Proverbs 15:9"
   ],
   "current": {
-    "date": "2026-11-25",
-    "text": "I said in my heart, “Come now, I will test you with pleasure; enjoy yourself.” But behold, this also was vanity.",
-    "focus": "Ecclesiastes 2:1",
-    "ref": "Ecclesiastes 2:1",
-    "book": "Ecclesiastes",
+    "date": "2026-11-26",
+    "text": "The way of the wicked is an abomination to the Lord, but he loves him who pursues righteousness.",
+    "focus": "Proverbs 15:9",
+    "ref": "Proverbs 15:9",
+    "book": "Proverbs",
     "translation": "Esv",
     "translation_label": "English Standard Version",
     "source": {
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Ecclesiastes%202%3A1&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2015%3A9&version=ESV"
   }
 }
