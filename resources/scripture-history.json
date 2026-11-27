@@ -58,13 +58,14 @@
     "Ecclesiastes 3:8",
     "Proverbs 17:11",
     "Ecclesiastes 2:1",
-    "Proverbs 15:9"
+    "Proverbs 15:9",
+    "Proverbs 3:10"
   ],
   "current": {
-    "date": "2026-11-26",
-    "text": "The way of the wicked is an abomination to the Lord, but he loves him who pursues righteousness.",
-    "focus": "Proverbs 15:9",
-    "ref": "Proverbs 15:9",
+    "date": "2026-11-27",
+    "text": "then your barns will be filled with plenty, and your vats will be bursting with wine.",
+    "focus": "Proverbs 3:10",
+    "ref": "Proverbs 3:10",
     "book": "Proverbs",
     "translation": "Esv",
     "translation_label": "English Standard Version",
@@ -72,6 +73,6 @@
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2015%3A9&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%203%3A10&version=ESV"
   }
 }
