@@ -59,13 +59,14 @@
     "Proverbs 17:11",
     "Ecclesiastes 2:1",
     "Proverbs 15:9",
-    "Proverbs 3:10"
+    "Proverbs 3:10",
+    "Proverbs 24:6"
   ],
   "current": {
-    "date": "2026-11-27",
-    "text": "then your barns will be filled with plenty, and your vats will be bursting with wine.",
-    "focus": "Proverbs 3:10",
-    "ref": "Proverbs 3:10",
+    "date": "2026-11-28",
+    "text": "for by wise guidance you can wage your war, and in abundance of counselors there is victory.",
+    "focus": "Proverbs 24:6",
+    "ref": "Proverbs 24:6",
     "book": "Proverbs",
     "translation": "Esv",
     "translation_label": "English Standard Version",
@@ -73,6 +74,6 @@
       "name": "English Standard Version",
       "url": "https://www.esv.org/"
     },
-    "link": "https://www.biblegateway.com/passage/?search=Proverbs%203%3A10&version=ESV"
+    "link": "https://www.biblegateway.com/passage/?search=Proverbs%2024%3A6&version=ESV"
   }
 }
